@@ -1,31 +1,31 @@
 {
     "translate_JSON_file": {
-        "name":"中文简体",
+        "name":"English (United States)",
         "entertainment": false,
-        "translated_personnel": "lzy98276"
+        "translated_personnel": "MacrosMeng"
     },
     "home": {
         "title": {
-            "name": "主页",
-            "description": "软件主页"
+            "name": "Homepage",
+            "description": "The homepage of this software"
         }
     },
     "basic_settings": {
         "title": {
-            "name": "基础设置",
-            "description": "软件基础设置"
+            "name": "General Settings",
+            "description": "The general settings of this app"
         },
         "basic_function": {
-            "name": "基础功能",
-            "description": "软件基础功能"
+            "name": "Basic Features",
+            "description": "Features of this app"
         },
         "data_management": {
-            "name": "数据管理",
-            "description": "数据管理"
+            "name": "Data management",
+            "description": "Manage your data"
         },
         "personalised": {
-            "name": "个性化",
-            "description": "软件个性化设置"
+            "name": "Customize",
+            "description": "Customize your app"
         },
         "autostart": {
             "name": "开机自启",
