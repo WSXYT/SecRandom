@@ -147,7 +147,7 @@
 - **支付宝/微信支付**  
 <image src="app/resource/assets/contribution/Alipay.png" height="196"/> <image src="app/resource/assets/contribution/WeChat_Pay.png" height="196"/>
 - **爱发电**  
-[为黎泽懿_Aionflux发点](https://afdian.com/a/lzy0983/)
+[为黎泽懿_Aionflux发电](https://afdian.com/a/lzy0983/)
 
 ## 📞 联系方式
 
