@@ -144,14 +144,16 @@
 
 如果您觉得 SecRandom 对您有帮助，欢迎支持我们的开发工作！
 
-- **支付宝/微信支付**
-
-  <image src="app/resource/assets/contribution/Alipay.png" height="196"/> <image src="app/resource/assets/contribution/WeChat_Pay.png" height="196"/>
+- **支付宝/微信支付**  
+<image src="app/resource/assets/contribution/Alipay.png" height="196"/> <image src="app/resource/assets/contribution/WeChat_Pay.png" height="196"/>
+- **爱发电**  
+[为黎泽懿_Aionflux发点](https://afdian.com/a/lzy0983/)
 
 ## 📞 联系方式
 
 * 📧 [邮箱](mailto:lzy.12@foxmail.com)
 * 👥 [QQ群 833875216](https://qm.qq.com/q/iWcfaPHn7W)
+* #⃣️ [QQ频道](https://pd.qq.com/s/4x5dafd34?b=9）
 * 🎥 [B站主页](https://space.bilibili.com/520571577)
 * 🐛 [问题反馈](https://github.com/SECTL/SecRandom/issues)
 
