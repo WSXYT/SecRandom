@@ -6,7 +6,7 @@
 
 🚀 **Modern Educational Tool** | 🎯 **Intelligent Weighting Algorithm** | 🎨 **Elegant Interactive Experience**
 
-[简体中文](resources/README_ZH.md) | **✔English** | [繁體中文](resources/README_ZH_TW.md)
+[简体中文](../README_ZH.md) | **✔English** | [繁體中文](./README_ZH_TW.md)
 > The Readme you are currently reading is **translated by AI** and reviewed by our developers. If you find any errors, please report it.
 </div>
 
@@ -93,10 +93,10 @@
 >
 > The screenshots shown below are in **Chinese Simplified** language.
 
-![Selection Interface](./resources/ScreenShots/主界面_抽人_浅色.png)
-![Lottery Interface](./resources/ScreenShots/主界面_抽奖_浅色.png)
-![History Records](./resources/ScreenShots/主界面_抽人历史记录_浅色.png)
-![Settings Interface](./resources/ScreenShots/设置_抽人设置_浅色.png)
+![Selection Interface](./ScreenShots/主界面_抽人_浅色.png)
+![Lottery Interface](./ScreenShots/主界面_抽奖_浅色.png)
+![History Records](./ScreenShots/主界面_抽人历史记录_浅色.png)
+![Settings Interface](./ScreenShots/设置_抽人设置_浅色.png)
 
 </details>
 
