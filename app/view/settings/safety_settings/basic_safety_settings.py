@@ -1,12 +1,7 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
-from loguru import logger
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -88,19 +83,19 @@ class basic_safety_verification_method(GroupHeaderCardWidget):
         self.unbind_usb_button.clicked.connect(lambda: self.unbind_usb())
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_shield_keyhole_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_shield_keyhole_20_filled"),
                         get_content_name_async("basic_safety_settings", "safety_switch"), get_content_description_async("basic_safety_settings", "safety_switch"), self.safety_switch)
-        self.addGroup(get_theme_icon("ic_fluent_laptop_shield_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_laptop_shield_20_filled"),
                         get_content_name_async("basic_safety_settings", "set_password"), get_content_description_async("basic_safety_settings", "set_password"), self.set_password_button)
-        self.addGroup(get_theme_icon("ic_fluent_puzzle_piece_shield_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_puzzle_piece_shield_20_filled"),
                         get_content_name_async("basic_safety_settings", "totp_switch"), get_content_description_async("basic_safety_settings", "totp_switch"), self.totp_switch)
-        self.addGroup(get_theme_icon("ic_fluent_laptop_shield_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_laptop_shield_20_filled"),
                         get_content_name_async("basic_safety_settings", "set_totp"), get_content_description_async("basic_safety_settings", "set_totp"), self.set_totp_button)
-        self.addGroup(get_theme_icon("ic_fluent_puzzle_piece_shield_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_puzzle_piece_shield_20_filled"),
                         get_content_name_async("basic_safety_settings", "usb_switch"), get_content_description_async("basic_safety_settings", "usb_switch"), self.usb_switch)
-        self.addGroup(get_theme_icon("ic_fluent_usb_stick_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_usb_stick_20_filled"),
                         get_content_name_async("basic_safety_settings", "bind_usb"), get_content_description_async("basic_safety_settings", "bind_usb"), self.bind_usb_button)
-        self.addGroup(get_theme_icon("ic_fluent_usb_plug_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_usb_plug_20_filled"),
                         get_content_name_async("basic_safety_settings", "unbind_usb"), get_content_description_async("basic_safety_settings", "unbind_usb"), self.unbind_usb_button)
 
 
@@ -117,7 +112,7 @@ class basic_safety_verification_process(GroupHeaderCardWidget):
         self.verification_process_combo.currentIndexChanged.connect(lambda: update_settings("basic_safety_settings", "verification_process", self.verification_process_combo.currentIndex()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_calendar_shield_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_calendar_shield_20_filled"),
                         get_content_name_async("basic_safety_settings", "verification_process"), get_content_description_async("basic_safety_settings", "verification_process"), self.verification_process_combo)
 
 
@@ -149,9 +144,9 @@ class basic_safety_security_operations(GroupHeaderCardWidget):
         self.exit_switch.checkedChanged.connect(lambda: update_settings("basic_safety_settings", "exit_switch", self.exit_switch.isChecked()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_window_ad_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_window_ad_20_filled"),
                         get_content_name_async("basic_safety_settings", "show_hide_floating_window_switch"), get_content_description_async("basic_safety_settings", "show_hide_floating_window_switch"), self.show_hide_floating_window_switch)
-        self.addGroup(get_theme_icon("ic_fluent_arrow_reset_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_reset_20_filled"),
                         get_content_name_async("basic_safety_settings", "restart_switch"), get_content_description_async("basic_safety_settings", "restart_switch"), self.restart_switch)
-        self.addGroup(get_theme_icon("ic_fluent_arrow_exit_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_exit_20_filled"),
                         get_content_name_async("basic_safety_settings", "exit_switch"), get_content_description_async("basic_safety_settings", "exit_switch"), self.exit_switch)

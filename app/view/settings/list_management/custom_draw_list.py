@@ -1,12 +1,7 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
-from loguru import logger
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -37,5 +32,5 @@ class custom_draw_list(GroupHeaderCardWidget):
         self.autostart_switch.checkedChanged.connect(lambda: update_settings("basic_settings", "autostart", self.autostart_switch.isChecked()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_arrow_sync_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_sync_20_filled"),
                         get_content_name_async("basic_settings", "autostart"), get_content_description_async("basic_settings", "autostart"), self.autostart_switch)

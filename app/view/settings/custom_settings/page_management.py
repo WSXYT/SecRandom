@@ -1,12 +1,7 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
-from loguru import logger
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -63,7 +58,7 @@ class page_management_roll_call(GroupHeaderCardWidget):
         self.reset_roll_call_button_switch.setOffText(get_content_switchbutton_name_async("page_management", "reset_roll_call", "disable"))
         self.reset_roll_call_button_switch.setOnText(get_content_switchbutton_name_async("page_management", "reset_roll_call", "enable"))
         self.reset_roll_call_button_switch.setChecked(readme_settings_async("page_management", "reset_roll_call"))
-        self.reset_roll_call_button_switch.checkedChanged.connect(lambda: update_settings("page_management", "reset_roll_call", self.reset_roll_call_button_switch.isChecked()))  
+        self.reset_roll_call_button_switch.checkedChanged.connect(lambda: update_settings("page_management", "reset_roll_call", self.reset_roll_call_button_switch.isChecked()))
 
         # 增加/减少抽取数量控制条是否显示开关
         self.roll_call_quantity_control_switch = SwitchButton()
@@ -76,7 +71,7 @@ class page_management_roll_call(GroupHeaderCardWidget):
         self.roll_call_start_button_switch = SwitchButton()
         self.roll_call_start_button_switch.setOffText(get_content_switchbutton_name_async("page_management", "roll_call_start_button", "disable"))
         self.roll_call_start_button_switch.setOnText(get_content_switchbutton_name_async("page_management", "roll_call_start_button", "enable"))
-        self.roll_call_start_button_switch.setChecked(readme_settings_async("page_management", "roll_call_start_button")) 
+        self.roll_call_start_button_switch.setChecked(readme_settings_async("page_management", "roll_call_start_button"))
         self.roll_call_start_button_switch.checkedChanged.connect(lambda: update_settings("page_management", "roll_call_start_button", self.roll_call_start_button_switch.isChecked()))
 
         # 名单切换下拉框是否显示开关
@@ -85,7 +80,7 @@ class page_management_roll_call(GroupHeaderCardWidget):
         self.roll_call_list_combo_switch.setOnText(get_content_switchbutton_name_async("page_management", "roll_call_list", "enable"))
         self.roll_call_list_combo_switch.setChecked(readme_settings_async("page_management", "roll_call_list"))
         self.roll_call_list_combo_switch.checkedChanged.connect(lambda: update_settings("page_management", "roll_call_list", self.roll_call_list_combo_switch.isChecked()))
-        
+
         # 抽取范围下拉框是否显示开关
         self.roll_call_range_combo_switch = SwitchButton()
         self.roll_call_range_combo_switch.setOffText(get_content_switchbutton_name_async("page_management", "roll_call_range", "disable"))
@@ -108,23 +103,23 @@ class page_management_roll_call(GroupHeaderCardWidget):
         self.roll_call_quantity_label_switch.checkedChanged.connect(lambda: update_settings("page_management", "roll_call_quantity_label", self.roll_call_quantity_label_switch.isChecked()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_window_multiple_swap_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_window_multiple_swap_20_filled"),
                         get_content_name_async("page_management", "roll_call_method"), get_content_description_async("page_management", "roll_call_method"), self.roll_call_method_combo)
-        self.addGroup(get_theme_icon("ic_fluent_slide_text_edit_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_slide_text_edit_20_filled"),
                         get_content_name_async("page_management", "show_name"), get_content_description_async("page_management", "show_name"), self.show_name_button_switch)
-        self.addGroup(get_theme_icon("ic_fluent_arrow_reset_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_reset_20_filled"),
                         get_content_name_async("page_management", "reset_roll_call"), get_content_description_async("page_management", "reset_roll_call"), self.reset_roll_call_button_switch)
-        self.addGroup(get_theme_icon("ic_fluent_arrow_autofit_content_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_autofit_content_20_filled"),
                         get_content_name_async("page_management", "roll_call_quantity_control"), get_content_description_async("page_management", "roll_call_quantity_control"), self.roll_call_quantity_control_switch)
-        self.addGroup(get_theme_icon("ic_fluent_slide_play_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_slide_play_20_filled"),
                         get_content_name_async("page_management", "roll_call_start_button"), get_content_description_async("page_management", "roll_call_start_button"), self.roll_call_start_button_switch)
-        self.addGroup(get_theme_icon("ic_fluent_notepad_person_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_notepad_person_20_filled"),
                         get_content_name_async("page_management", "roll_call_list"), get_content_description_async("page_management", "roll_call_list"), self.roll_call_list_combo_switch)
-        self.addGroup(get_theme_icon("ic_fluent_convert_range_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_convert_range_20_filled"),
                         get_content_name_async("page_management", "roll_call_range"), get_content_description_async("page_management", "roll_call_range"), self.roll_call_range_combo_switch)
-        self.addGroup(get_theme_icon("ic_fluent_video_person_sparkle_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_video_person_sparkle_20_filled"),
                         get_content_name_async("page_management", "roll_call_gender"), get_content_description_async("page_management", "roll_call_gender"), self.roll_call_gender_combo_switch)
-        self.addGroup(get_theme_icon("ic_fluent_slide_text_person_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_slide_text_person_20_filled"),
                         get_content_name_async("page_management", "roll_call_quantity_label"), get_content_description_async("page_management", "roll_call_quantity_label"), self.roll_call_quantity_label_switch)
 
 class page_management_lottery(GroupHeaderCardWidget):
@@ -151,7 +146,7 @@ class page_management_lottery(GroupHeaderCardWidget):
         self.reset_lottery_button_switch.setOffText(get_content_switchbutton_name_async("page_management", "reset_lottery", "disable"))
         self.reset_lottery_button_switch.setOnText(get_content_switchbutton_name_async("page_management", "reset_lottery", "enable"))
         self.reset_lottery_button_switch.setChecked(readme_settings_async("page_management", "reset_lottery"))
-        self.reset_lottery_button_switch.checkedChanged.connect(lambda: update_settings("page_management", "reset_lottery", self.reset_lottery_button_switch.isChecked()))  
+        self.reset_lottery_button_switch.checkedChanged.connect(lambda: update_settings("page_management", "reset_lottery", self.reset_lottery_button_switch.isChecked()))
 
         # 增加/减少抽取数量控制条是否显示开关
         self.lottery_quantity_control_switch = SwitchButton()
@@ -173,7 +168,7 @@ class page_management_lottery(GroupHeaderCardWidget):
         self.lottery_list_combo_switch.setOnText(get_content_switchbutton_name_async("page_management", "lottery_list", "enable"))
         self.lottery_list_combo_switch.setChecked(readme_settings_async("page_management", "lottery_list"))
         self.lottery_list_combo_switch.checkedChanged.connect(lambda: update_settings("page_management", "lottery_list", self.lottery_list_combo_switch.isChecked()))
-        
+
         # 班级人数/组数标签是否显示开关
         self.lottery_quantity_label_switch = SwitchButton()
         self.lottery_quantity_label_switch.setOffText(get_content_switchbutton_name_async("page_management", "lottery_quantity_label", "disable"))
@@ -182,17 +177,17 @@ class page_management_lottery(GroupHeaderCardWidget):
         self.lottery_quantity_label_switch.checkedChanged.connect(lambda: update_settings("page_management", "lottery_quantity_label", self.lottery_quantity_label_switch.isChecked()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_window_multiple_swap_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_window_multiple_swap_20_filled"),
                         get_content_name_async("page_management", "lottery_method"), get_content_description_async("page_management", "lottery_method"), self.lottery_method_combo)
-        self.addGroup(get_theme_icon("ic_fluent_slide_text_edit_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_slide_text_edit_20_filled"),
                         get_content_name_async("page_management", "show_lottery_name"), get_content_description_async("page_management", "show_lottery_name"), self.show_lottery_name_button_switch)
-        self.addGroup(get_theme_icon("ic_fluent_arrow_reset_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_reset_20_filled"),
                         get_content_name_async("page_management", "reset_lottery"), get_content_description_async("page_management", "reset_lottery"), self.reset_lottery_button_switch)
-        self.addGroup(get_theme_icon("ic_fluent_arrow_autofit_content_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_autofit_content_20_filled"),
                         get_content_name_async("page_management", "lottery_quantity_control"), get_content_description_async("page_management", "lottery_quantity_control"), self.lottery_quantity_control_switch)
-        self.addGroup(get_theme_icon("ic_fluent_slide_play_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_slide_play_20_filled"),
                         get_content_name_async("page_management", "lottery_start_button"), get_content_description_async("page_management", "lottery_start_button"), self.lottery_start_button_switch)
-        self.addGroup(get_theme_icon("ic_fluent_notepad_person_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_notepad_person_20_filled"),
                         get_content_name_async("page_management", "lottery_list"), get_content_description_async("page_management", "lottery_list"), self.lottery_list_combo_switch)
-        self.addGroup(get_theme_icon("ic_fluent_slide_text_person_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_slide_text_person_20_filled"),
                         get_content_name_async("page_management", "lottery_quantity_label"), get_content_description_async("page_management", "lottery_quantity_label"), self.lottery_quantity_label_switch)

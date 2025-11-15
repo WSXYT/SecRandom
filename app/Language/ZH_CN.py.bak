@@ -1062,7 +1062,7 @@ ZH_CN = {
         "floating_window_enabled_monitor": {
             "name": "选择窗口显示的显示器",
             "description": "选择点名通知窗口显示的显示器"
-        }, 
+        },
         "floating_window_position": {
             "name": "窗口位置",
             "description": "设置点名通知窗口的位置",
@@ -1157,7 +1157,7 @@ ZH_CN = {
         "floating_window_enabled_monitor": {
             "name": "选择窗口显示的显示器",
             "description": "选择闪抽通知窗口显示的显示器"
-        }, 
+        },
         "floating_window_position": {
             "name": "窗口位置",
             "description": "设置闪抽通知窗口的位置",
@@ -1252,7 +1252,7 @@ ZH_CN = {
         "floating_window_enabled_monitor": {
             "name": "选择窗口显示的显示器",
             "description": "选择即抽通知窗口显示的显示器"
-        }, 
+        },
         "floating_window_position": {
             "name": "窗口位置",
             "description": "设置即抽通知窗口的位置",
@@ -1347,7 +1347,7 @@ ZH_CN = {
         "floating_window_enabled_monitor": {
             "name": "选择窗口显示的显示器",
             "description": "选择自定义抽通知窗口显示的显示器"
-        }, 
+        },
         "floating_window_position": {
             "name": "窗口位置",
             "description": "设置自定义抽通知窗口的位置",
@@ -1442,7 +1442,7 @@ ZH_CN = {
         "floating_window_enabled_monitor": {
             "name": "选择窗口显示的显示器",
             "description": "选择抽奖通知窗口显示的显示器"
-        }, 
+        },
         "floating_window_position": {
             "name": "窗口位置",
             "description": "设置抽奖通知窗口的位置",
@@ -2094,7 +2094,7 @@ ZH_CN = {
             "description": "选择Edge TTS语音",
             "combo_items": [
             "zh-CN-XiaoxiaoNeural",
-            "zh-CN-YunxiNeural", 
+            "zh-CN-YunxiNeural",
             "zh-CN-XiaoyiNeural",
             "en-US-JennyNeural",
             "en-US-GuyNeural"

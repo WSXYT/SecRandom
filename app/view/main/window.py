@@ -18,6 +18,7 @@ from app.tools.variable import *
 from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.Language.obtain_language import *
+from app.page_building.main_window_page import *
 from app.view.tray.tray import Tray
 
 from app.tools.extract import _is_non_class_time
@@ -97,6 +98,9 @@ class MainWindow(MSFluentWindow):
     def createSubInterface(self):
         """创建子界面
         搭建子界面导航系统"""
+        self.roll_call_page = roll_call_page(self)
+        self.roll_call_page.setObjectName("roll_call_page")
+
         self.settingsInterface = QWidget(self)
         self.settingsInterface.setObjectName("settingsInterface")
 
@@ -105,6 +109,8 @@ class MainWindow(MSFluentWindow):
     def initNavigation(self):
         """初始化导航系统
         根据用户设置构建个性化菜单导航"""
+        self.addSubInterface(self.roll_call_page, get_theme_icon("ic_fluent_people_20_filled"), get_content_name_async("roll_call", "title"), position=NavigationItemPosition.TOP)
+
         settings_item = self.addSubInterface(self.settingsInterface, get_theme_icon("ic_fluent_settings_20_filled"), '设置', position=NavigationItemPosition.BOTTOM)
         settings_item.clicked.connect(self.showSettingsRequested.emit)
 

@@ -1,14 +1,8 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
-import random
 import importlib
 
-from loguru import logger
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -26,26 +20,26 @@ class PageTemplate(QFrame):
     def __new__(cls, content_widget_class=None, parent: QFrame = None):
         # 直接创建新实例，不使用缓存
         return super(PageTemplate, cls).__new__(cls)
-    
+
     def __init__(self, content_widget_class=None, parent: QFrame = None):
         super().__init__(parent=parent)
-        
+
         self.ui_created = False
         self.content_created = False
         self.content_widget_class = content_widget_class
-        
+
         self.__connectSignalToSlot()
-        
+
         QTimer.singleShot(0, self.create_ui_components)
 
     def __connectSignalToSlot(self):
         qconfig.themeChanged.connect(setTheme)
-    
+
     def create_ui_components(self):
         """后台创建UI组件，避免堵塞进程"""
         if self.ui_created:
             return
-            
+
         self.scroll_area_personal = SingleDirectionScrollArea(self)
         self.scroll_area_personal.setWidgetResizable(True)
         self.scroll_area_personal.setStyleSheet("""
@@ -68,52 +62,52 @@ class PageTemplate(QFrame):
 
         self.main_layout = QVBoxLayout(self)
         self.main_layout.addWidget(self.scroll_area_personal)
-        
+
         self.ui_created = True
-        
+
         if self.content_widget_class:
             QTimer.singleShot(0, self.create_content)
-    
+
     def create_content(self):
         """后台创建内容组件，避免堵塞进程"""
         if not self.ui_created or self.content_created or not self.content_widget_class:
             return
-            
+
         self.contentWidget = self.content_widget_class(self)
         self.inner_layout_personal.addWidget(self.contentWidget)
         self.content_created = True
-    
+
     def create_empty_content(self, message="该页面正在开发中，敬请期待！"):
         """创建空页面内容"""
         if self.content_created:
             return
-            
+
         empty_widget = QWidget()
         empty_layout = QVBoxLayout(empty_widget)
-        
+
         center_container = QWidget()
         center_layout = QVBoxLayout(center_container)
         center_layout.setAlignment(Qt.AlignCenter)
         center_layout.setSpacing(20)
-        
+
         if message:
             custom_label = BodyLabel(message)
             custom_label.setAlignment(Qt.AlignCenter)
             custom_label.setFont(QFont(load_custom_font(), 12))
             center_layout.addWidget(custom_label)
-        
+
         empty_layout.addWidget(center_container)
         empty_layout.addStretch()
-        
+
         self.contentWidget = empty_widget
         self.inner_layout_personal.addWidget(self.contentWidget)
         self.content_created = True
-    
+
     @classmethod
     def clear_instance_cache(cls):
         """清除实例缓存，用于强制重新创建页面"""
         cls._instances.clear()
-    
+
     @classmethod
     def remove_instance(cls, content_widget_class=None, parent=None):
         """移除特定实例"""
@@ -124,83 +118,82 @@ class PageTemplate(QFrame):
                 content_class_name = content_widget_class.__name__
             else:
                 content_class_name = str(type(content_widget_class).__name__)
-                
+
         parent_id = id(parent) if parent else 'None'
         instance_key = f"{cls.__name__}_{content_class_name}_{parent_id}"
-        
+
         if instance_key in cls._instances:
             del cls._instances[instance_key]
 
 class PivotPageTemplate(QFrame):
     """Pivot 导航页面模板类，支持动态加载不同的页面组件"""
-    
+
     def __init__(self, page_config: dict, parent: QFrame = None):
         """
         初始化 Pivot 页面模板
-        
+
         Args:
             page_config: 页面配置字典，格式为 {"page_name": "display_name", ...}
             parent: 父窗口
         """
         super().__init__(parent=parent)
-        
+
         self.page_config = page_config  # 页面配置字典
         self.ui_created = False
         self.pages = {}  # 存储页面组件
         self.current_page = None  # 当前页面
         self.base_path = "app.view.settings.list_management"  # 默认基础路径
-        
+
         self.__connectSignalToSlot()
-        
+
         QTimer.singleShot(0, self.create_ui_components)
-    
+
     def __connectSignalToSlot(self):
         """连接信号与槽"""
         qconfig.themeChanged.connect(setTheme)
-    
+
     def create_ui_components(self):
         """创建UI组件"""
         if self.ui_created:
             return
-            
+
         # 创建主布局
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(0)
-        
+
         # 创建 Pivot 控件
         self.pivot = SegmentedWidget(self)
-        
+
         # 创建堆叠窗口控件
         self.stacked_widget = QStackedWidget(self)
-        
+
         # 添加到主布局
         self.main_layout.addWidget(self.pivot, 0, Qt.AlignmentFlag.AlignHCenter)
         self.main_layout.addWidget(self.stacked_widget)
-        
+
         # 连接信号
         self.stacked_widget.currentChanged.connect(self.on_current_index_changed)
-        self.pivot.currentItemChanged.connect(self.on_pivot_item_changed)
-        
+
         self.ui_created = True
-        
+
         # 添加页面
         self.add_pages()
-    
+
     def add_pages(self):
         """根据配置添加所有页面"""
         for page_name, display_name in self.page_config.items():
             self.add_page(page_name, display_name)
-        
+
         # 如果有页面，设置第一个页面为当前页面
         if self.pages:
             first_page_name = next(iter(self.pages))
             self.switch_to_page(first_page_name)
-    
+
     def add_page(self, page_name: str, display_name: str):
         """
         添加单个页面
-        
+
         Args:
             page_name: 页面名称，用于导入模块
             display_name: 在 Pivot 中显示的名称
@@ -209,7 +202,7 @@ class PivotPageTemplate(QFrame):
             # 如果UI尚未创建，延迟添加
             QTimer.singleShot(100, lambda: self.add_page(page_name, display_name))
             return
-            
+
         # 创建滑动区域
         scroll_area = SingleDirectionScrollArea(self)
         scroll_area.setWidgetResizable(True)
@@ -232,27 +225,27 @@ class PivotPageTemplate(QFrame):
 
         scroll_area.setWidget(inner_frame)
         scroll_area.setObjectName(page_name)
-        
+
         # 添加到堆叠窗口
         self.stacked_widget.addWidget(scroll_area)
-        
+
         # 添加到 Pivot
-        self.pivot.insertItem(
-            -1,  # 在末尾插入
+        self.pivot.addItem(
             routeKey=page_name,
-            text=display_name
+            text=display_name,
+            onClick=lambda: self.switch_to_page(page_name)
         )
-        
+
         # 存储滑动区域引用
         self.pages[page_name] = scroll_area
-        
+
         # 延迟加载实际页面组件
         QTimer.singleShot(0, lambda: self._load_page_content(page_name, display_name, scroll_area, inner_layout))
-    
+
     def _load_page_content(self, page_name: str, display_name: str, scroll_area: QScrollArea, inner_layout: QVBoxLayout):
         """
         后台加载页面内容，避免堵塞进程
-        
+
         Args:
             page_name: 页面名称
             display_name: 在 Pivot 中显示的名称
@@ -263,81 +256,77 @@ class PivotPageTemplate(QFrame):
             # 动态导入页面组件
             module = importlib.import_module(f"{self.base_path}.{page_name}")
             content_widget_class = getattr(module, page_name)
-            
+
             # 创建页面组件
             widget = content_widget_class(self)
             widget.setObjectName(page_name)
-            
+
             # 清除加载提示
             inner_layout.removeItem(inner_layout.itemAt(0))
-            
+
             # 添加实际内容到内部布局
             inner_layout.addWidget(widget)
-            
+
             # 如果当前页面就是正在加载的页面，确保滑动区域是当前可见的
             if self.current_page == page_name:
                 self.stacked_widget.setCurrentWidget(scroll_area)
-            
+
         except (ImportError, AttributeError) as e:
             print(f"无法导入页面组件 {page_name}: {e}")
-            
+
             # 清除加载提示
             inner_layout.removeItem(inner_layout.itemAt(0))
-            
+
             # 创建错误页面
             error_widget = QWidget()
             error_layout = QVBoxLayout(error_widget)
             error_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            
+
             error_title = BodyLabel("页面加载失败")
             error_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
             error_title.setFont(QFont(load_custom_font(), 16))
-            
+
             error_content = BodyLabel(f"无法加载页面 {page_name}: {str(e)}")
             error_content.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            
+
             error_layout.addWidget(error_title)
             error_layout.addWidget(error_content)
             error_layout.addStretch()
-            
+
             # 添加错误页面到内部布局
             inner_layout.addWidget(error_widget)
-            
+
             # 如果当前页面就是正在加载的页面，确保滑动区域是当前可见的
             if self.current_page == page_name:
                 self.stacked_widget.setCurrentWidget(scroll_area)
-            
+
             # 删除占位符
             placeholder_widget = inner_layout.itemAt(0).widget()
             if placeholder_widget:
                 placeholder_widget.deleteLater()
-    
+
     def switch_to_page(self, page_name: str):
         """切换到指定页面"""
         if page_name in self.pages:
             self.stacked_widget.setCurrentWidget(self.pages[page_name])
             self.pivot.setCurrentItem(page_name)
             self.current_page = page_name
-    
+
     def on_current_index_changed(self, index: int):
         """堆叠窗口索引改变时的处理"""
         widget = self.stacked_widget.widget(index)
         if widget:
             self.pivot.setCurrentItem(widget.objectName())
             self.current_page = widget.objectName()
-    
-    def on_pivot_item_changed(self, route_key: str):
-        """Pivot项改变时的处理"""
-        self.switch_to_page(route_key)
-    
+
     def get_current_page(self) -> str:
         """获取当前页面名称"""
         return self.current_page
-    
+
     def get_page(self, page_name: str):
         """根据页面名称获取页面组件"""
         return self.pages.get(page_name, None)
-    
+
     def set_base_path(self, base_path: str):
         """设置页面模块的基础路径"""
         self.base_path = base_path

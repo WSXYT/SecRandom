@@ -1605,7 +1605,7 @@
             "description": "选择Edge TTS语音",
             "combo_items": [
             "zh-CN-XiaoxiaoNeural",
-            "zh-CN-YunxiNeural", 
+            "zh-CN-YunxiNeural",
             "zh-CN-XiaoyiNeural",
             "en-US-JennyNeural",
             "en-US-GuyNeural"

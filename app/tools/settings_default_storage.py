@@ -1208,7 +1208,7 @@ DEFAULT_SETTINGS = {
             "default_value": 0
         },
         "select_mode": {
-            "default_value": None
+            "default_value": 0
         },
         "HeaderLabels_all_not_weight": {
             "default_value": None
@@ -1222,39 +1222,31 @@ DEFAULT_SETTINGS = {
         "HeaderLabels_Individual": {
             "default_value": None
         },
-        "select_weight": {
-            "default_value": False
+        "clear_history": {
+            "default_value": None
         },
+        "confirm_clear_title": {
+            "default_value": None
+        },
+        "confirm_clear_message": {
+            "default_value": None
+        },
+        "clear_success_title": {
+            "default_value": None
+        },
+        "clear_success_message": {
+            "default_value": None
+        },
+        "clear_error_title": {
+            "default_value": None
+        },
+        "clear_error_message": {
+            "default_value": None
+        }
     },
     "more_settings": {
         "title": {
             "default_value": None
-        },
-    },
-    "advanced_settings": {
-        "title": {
-            "default_value": None
-        },
-        "fair_draw": {
-            "default_value": True
-        },
-        "fair_draw_group": {
-            "default_value": True
-        },
-        "fair_draw_gender": {
-            "default_value": True
-        },
-        "fair_draw_time": {
-            "default_value": True
-        },
-        "base_weight": {
-            "default_value": 1.00
-        },
-        "min_weight": {
-            "default_value": 0.50
-        },
-        "max_weight": {
-            "default_value": 5.00
         },
     },
     "debug":{

@@ -3,10 +3,10 @@ voice_settings = {
     "ZH_CN": {"title": {"name": "语音设置", "description": "语音设置页面"}}
 }
 
-# 基本语音设置语言配置
+# 基础语音设置语言配置
 basic_voice_settings = {
     "ZH_CN": {
-        "title": {"name": "基本语音设置", "description": "基本语音设置"},
+        "title": {"name": "基础语音设置", "description": "基础语音设置"},
         "voice_engine_group": {"name": "语音引擎", "description": "选择语音合成引擎"},
         "volume_group": {"name": "音量设置", "description": "设置语音播放的音量大小"},
         "system_volume_group": {

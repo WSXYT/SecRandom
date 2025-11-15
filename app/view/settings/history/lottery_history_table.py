@@ -318,7 +318,6 @@ class lottery_history_table(GroupHeaderCardWidget):
             
             max_id_length = max(len(str(lottery[0])) for lottery in cleaned_lotterys) if cleaned_lotterys else 0
             max_total_count_length = max(len(str(history_data.get('lotterys', {}).get(name, {}).get('total_count', 0))) for _, name, _ in cleaned_lotterys) if cleaned_lotterys else 0
-            max_weight_length = max(len(str(lottery[2])) for lottery in cleaned_lotterys) if cleaned_lotterys else 0
 
             lotterys_data = []
             for lottery_id, name, weight in cleaned_lotterys:
@@ -330,6 +329,9 @@ class lottery_history_table(GroupHeaderCardWidget):
                     'total_count': total_count,
                     'total_count_str': str(total_count).zfill(max_total_count_length)
                 })
+
+            # 使用权重格式化函数
+            format_weight, _, _ = format_weight_for_display(lotterys_data, 'weight')
             
             # 根据排序状态对数据进行排序
             if self.sort_column >= 0:
@@ -374,7 +376,7 @@ class lottery_history_table(GroupHeaderCardWidget):
                 self.table.setItem(row, 2, total_count_item)
                 
                 # 权重
-                weight_item = create_table_item(str(lottery.get('weight', '')).zfill(max_weight_length))
+                weight_item = create_table_item(format_weight(lottery.get('weight', 0)))
                 self.table.setItem(row, 3, weight_item)
             
             # 更新当前行数
@@ -430,7 +432,8 @@ class lottery_history_table(GroupHeaderCardWidget):
                                 'weight': record.get('weight', '')
                             })
 
-            max_weight_length = max(len(str(lottery['weight'])) for lottery in lotterys_data) if lotterys_data else 0
+            # 使用权重格式化函数
+            format_weight, _, _ = format_weight_for_display(lotterys_data, 'weight')
 
             # 根据排序状态对数据进行排序
             if self.sort_column >= 0:
@@ -478,7 +481,7 @@ class lottery_history_table(GroupHeaderCardWidget):
                 self.table.setItem(row, 2, name_item)
 
                 # 权重
-                weight_item = create_table_item(str(lottery.get('weight', '')).zfill(max_weight_length))
+                weight_item = create_table_item(format_weight(lottery.get('weight', 0)))
                 self.table.setItem(row, 3, weight_item)
 
             # 更新当前行数

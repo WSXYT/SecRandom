@@ -1,10 +1,6 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
 from loguru import logger
 from PyQt6.QtWidgets import *
@@ -67,11 +63,11 @@ class roll_call_history(GroupHeaderCardWidget):
         self.clear_roll_call_history_button.clicked.connect(lambda: self.clear_roll_call_history)
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_history_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_history_20_filled"),
                         get_content_name_async("history_management", "show_roll_call_history"), get_content_description_async("history_management", "show_roll_call_history"), self.show_roll_call_history_button_switch)
-        self.addGroup(get_theme_icon("ic_fluent_class_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_class_20_filled"),
                         get_content_name_async("history_management", "select_class_name"), get_content_description_async("history_management", "select_class_name"), self.class_name_combo)
-        self.addGroup(get_theme_icon("ic_fluent_people_community_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_people_community_20_filled"),
                         get_content_name_async("history_management", "clear_roll_call_history"), get_content_description_async("history_management", "clear_roll_call_history"), self.clear_roll_call_history_button)
 
         # 设置文件系统监视器
@@ -85,25 +81,25 @@ class roll_call_history(GroupHeaderCardWidget):
         """设置文件系统监视器，监控班级名单文件夹的变化"""
         # 获取班级名单文件夹路径
         roll_call_list_dir = get_path("app/resources/list/roll_call_list")
-        
+
         # 确保目录存在
         if not roll_call_list_dir.exists():
             logger.warning(f"班级名单文件夹不存在: {roll_call_list_dir}")
             return
-            
+
         # 创建文件系统监视器
         self.file_watcher = QFileSystemWatcher()
-        
+
         # 监视目录
         self.file_watcher.addPath(str(roll_call_list_dir))
-        
+
         # 连接信号
         self.file_watcher.directoryChanged.connect(self.on_directory_changed)
         # logger.debug(f"已设置文件监视器，监控目录: {roll_call_list_dir}")
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法
-        
+
         Args:
             path: 发生变化的目录路径
         """
@@ -115,14 +111,14 @@ class roll_call_history(GroupHeaderCardWidget):
         """刷新班级下拉框列表"""
         # 保存当前选中的班级名称
         current_class_name = self.class_name_combo.currentText()
-        
+
         # 获取最新的班级列表
         class_list = get_class_name_list()
-        
+
         # 清空并重新添加班级列表
         self.class_name_combo.clear()
         self.class_name_combo.addItems(class_list)
-        
+
         # 尝试恢复之前选中的班级
         if current_class_name and current_class_name in class_list:
             index = class_list.index(current_class_name)
@@ -130,7 +126,7 @@ class roll_call_history(GroupHeaderCardWidget):
         elif not class_list:
             self.class_name_combo.setCurrentIndex(-1)
             self.class_name_combo.setPlaceholderText(get_content_name_async("roll_call_list", "select_class_name"))
-        
+
         # logger.debug(f"班级列表已刷新，共 {len(class_list)} 个班级")
 
 class lottery_history(GroupHeaderCardWidget):
@@ -142,7 +138,7 @@ class lottery_history(GroupHeaderCardWidget):
         # 是否开启抽奖历史记录
         self.show_lottery_history_button_switch = SwitchButton()
         self.show_lottery_history_button_switch.setOffText(get_content_switchbutton_name_async("history_management", "show_lottery_history", "disable"))
-        self.show_lottery_history_button_switch.setOnText(get_content_switchbutton_name_async("history_management", "show_lottery_history", "enable")) 
+        self.show_lottery_history_button_switch.setOnText(get_content_switchbutton_name_async("history_management", "show_lottery_history", "enable"))
         self.show_lottery_history_button_switch.setChecked(readme_settings_async("history_management", "show_lottery_history"))
         self.show_lottery_history_button_switch.checkedChanged.connect(lambda: update_settings("history_management", "show_lottery_history", self.show_lottery_history_button_switch.isChecked()))
 
@@ -160,11 +156,11 @@ class lottery_history(GroupHeaderCardWidget):
         self.clear_lottery_history_button.clicked.connect(self.clear_lottery_history)
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_history_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_history_20_filled"),
                         get_content_name_async("history_management", "show_lottery_history"), get_content_description_async("history_management", "show_lottery_history"), self.show_lottery_history_button_switch)
-        self.addGroup(get_theme_icon("ic_fluent_class_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_class_20_filled"),
                         get_content_name_async("history_management", "select_pool_name"), get_content_description_async("history_management", "select_pool_name"), self.pool_name_combo)
-        self.addGroup(get_theme_icon("ic_fluent_people_community_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_people_community_20_filled"),
                         get_content_name_async("history_management", "clear_lottery_history"), get_content_description_async("history_management", "clear_lottery_history"), self.clear_lottery_history_button)
 
         # 设置文件系统监视器
@@ -178,25 +174,25 @@ class lottery_history(GroupHeaderCardWidget):
         """设置文件系统监视器，监控奖池名单文件夹的变化"""
         # 获取奖池名单文件夹路径
         lottery_list_dir = get_path("app/resources/list/lottery_list")
-        
+
         # 确保目录存在
         if not lottery_list_dir.exists():
             logger.warning(f"奖池名单文件夹不存在: {lottery_list_dir}")
             return
-            
+
         # 创建文件系统监视器
         self.file_watcher = QFileSystemWatcher()
-        
+
         # 监视目录
         self.file_watcher.addPath(str(lottery_list_dir))
-        
+
         # 连接信号
         self.file_watcher.directoryChanged.connect(self.on_directory_changed)
         # logger.debug(f"已设置文件监视器，监控目录: {lottery_list_dir}")
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法
-        
+
         Args:
             path: 发生变化的目录路径
         """
@@ -208,14 +204,14 @@ class lottery_history(GroupHeaderCardWidget):
         """刷新奖池下拉框列表"""
         # 保存当前选中的奖池名称
         current_pool_name = self.pool_name_combo.currentText()
-        
+
         # 获取最新的奖池列表
         pool_list = get_pool_name_list()
-        
+
         # 清空并重新添加奖池列表
         self.pool_name_combo.clear()
         self.pool_name_combo.addItems(pool_list)
-        
+
         # 尝试恢复之前选中的奖池
         if current_pool_name and current_pool_name in pool_list:
             index = pool_list.index(current_pool_name)
@@ -223,5 +219,5 @@ class lottery_history(GroupHeaderCardWidget):
         elif not pool_list:
             self.pool_name_combo.setCurrentIndex(-1)
             self.pool_name_combo.setPlaceholderText(get_content_name_async("lottery_list", "select_pool_name"))
-        
+
         # logger.debug(f"奖池列表已刷新，共 {len(pool_list)} 个奖池")

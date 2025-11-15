@@ -1,6 +1,6 @@
 name: 构建
 
-on: 
+on:
   push:
   pull_request:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
   builder_matrix:
     # 仅在push或pull_request事件包含'进行打包'时执行，workflow_dispatch无条件执行
     if: |
-      github.event_name == 'workflow_dispatch' || 
+      github.event_name == 'workflow_dispatch' ||
       contains(github.event.head_commit.message, '进行打包') ||
       (github.event_name == 'pull_request' && contains(github.event.pull_request.title, '进行打包'))
     strategy:
@@ -58,21 +58,21 @@ jobs:
           echo "创建虚拟环境..."
           uv venv
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          
+
           # 激活虚拟环境
           echo "激活虚拟环境..."
           .venv/Scripts/activate
-          
+
           # 安装依赖
           echo "安装项目依赖..."
           uv pip install -r requirements-windows.txt
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          
+
           # 安装 pyinstaller
           echo "安装 PyInstaller..."
           uv pip install pyinstaller
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          
+
           # 清理之前的构建文件
           echo "清理之前的构建文件..."
           Remove-Item -Recurse -Force dist -ErrorAction SilentlyContinue
@@ -91,33 +91,33 @@ jobs:
               --add-data ./app/resources:app/resources `
               --add-data LICENSE:. `
               --version-file=version_info.txt
-            if ($LASTEXITCODE -ne 0) { 
+            if ($LASTEXITCODE -ne 0) {
               echo "目录模式打包失败"
-              exit $LASTEXITCODE 
+              exit $LASTEXITCODE
             }
             echo "目录模式打包完成"
           }
 
       - name: 打包操作
-        if: ${{ matrix.os == 'windows-2022'}} 
+        if: ${{ matrix.os == 'windows-2022'}}
         run: |
           echo "开始打包操作..."
-          
+
           # 创建zip_dist/SecRandom目录
           mkdir -p zip_dist/SecRandom
-          
+
           # 复制dist/SecRandom目录下的所有文件到zip_dist/SecRandom目录下
           Copy-Item -Recurse -Force dist/SecRandom/* zip_dist/SecRandom/
-          
+
           # 创建app目录
           mkdir -p zip_dist/SecRandom/app
-          
+
           # 复制app/resources文件夹到zip_dist/SecRandom目录下
           Copy-Item -Recurse -Force app/resources zip_dist/SecRandom/app
-          
+
           # 复制 LICENSE 文件到zip_dist/SecRandom目录下
           Copy-Item LICENSE zip_dist/SecRandom/
-          
+
           # 使用 zip 压缩文件
           mkdir zip -Force
           $outputZip = "zip/SecRandom-Windows-${{ github.ref_name }}-${{ matrix.arch }}-dir.zip"
@@ -163,7 +163,7 @@ jobs:
           path: artifacts
           run-id: ${{ github.run_id }}
 
-      - name: 准备 artifacts 
+      - name: 准备 artifacts
         run: |
           echo "整理构建产物..."
           # Windows 构建产物
@@ -185,7 +185,7 @@ jobs:
           done
           echo "SHA256校验值计算完成："
           cat SHA256SUMS.txt
-          
+
       - name: 验证 SHA256SUMS.txt 文件
         run: |
           echo "验证SHA256SUMS.txt文件..."
@@ -230,7 +230,7 @@ jobs:
           done < SHA256SUMS.txt
           rm SHA256SUMS.txt
           cd ..
-            
+
       - name: 确定发布类型
         id: release-type
         run: |

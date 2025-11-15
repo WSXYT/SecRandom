@@ -1,10 +1,6 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
 from loguru import logger
 from PyQt6.QtWidgets import *
@@ -68,7 +64,7 @@ class about(GroupHeaderCardWidget):
         self.channel_combo.addItems(get_content_combo_name_async("about", "channel"))
         self.channel_combo.setCurrentIndex(readme_settings_async("about", "channel"))
         self.channel_combo.currentIndexChanged.connect(lambda: update_settings("about", "channel", self.channel_combo.currentIndex()))
-            
+
         self.addGroup(get_theme_icon("ic_fluent_branch_fork_link_20_filled"), get_content_name_async("about", "bilibili"), get_content_description_async("about", "bilibili"), self.about_bilibili_Button)
         self.addGroup(FIF.GITHUB, get_content_name_async("about", "github"), get_content_description_async("about", "github"), self.about_github_Button)
         self.addGroup(get_theme_icon("ic_fluent_document_person_20_filled"), get_content_name_async("about", "contributor"), get_content_description_async("about", "contributor"), self.contributor_button)

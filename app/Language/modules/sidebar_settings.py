@@ -38,7 +38,7 @@ sidebar_management_settings = {
         "personal_settings": {
             "name": "个性设置",
             "description": "配置个性设置",
-            "combo_items": ["顶部", "底部", "不显示"],
+            "combo_items": ["顶部", "底部"],
         },
         "voice_settings": {
             "name": "语音设置",

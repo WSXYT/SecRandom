@@ -1,12 +1,7 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
-from loguru import logger
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -60,9 +55,9 @@ class advanced_safety_strong_protection(GroupHeaderCardWidget):
         self.encryption_strong_mode_combo.currentIndexChanged.connect(lambda: update_settings("advanced_safety_settings", "encryption_strong_mode", self.encryption_strong_mode_combo.currentIndex()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_lock_closed_key_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_lock_closed_key_20_filled"),
                         get_content_name_async("advanced_safety_settings", "encryption_strong_switch"), get_content_description_async("advanced_safety_settings", "encryption_strong_switch"), self.encryption_strong_switch)
-        self.addGroup(get_theme_icon("ic_fluent_haptic_strong_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_haptic_strong_20_filled"),
                         get_content_name_async("advanced_safety_settings", "encryption_strong_mode"), get_content_description_async("advanced_safety_settings", "encryption_strong_mode"), self.encryption_strong_mode_combo)
 
 class advanced_safety_data_encryption(GroupHeaderCardWidget):
@@ -93,9 +88,9 @@ class advanced_safety_data_encryption(GroupHeaderCardWidget):
         self.encryption_temp_switch.checkedChanged.connect(lambda: update_settings("advanced_safety_settings", "encryption_temp_switch", self.encryption_temp_switch.isChecked()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_document_bullet_list_clock_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_document_bullet_list_clock_20_filled"),
                         get_content_name_async("advanced_safety_settings", "encryption_list_switch"), get_content_description_async("advanced_safety_settings", "encryption_list_switch"), self.encryption_list_switch)
-        self.addGroup(get_theme_icon("ic_fluent_document_data_lock_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_document_data_lock_20_filled"),
                         get_content_name_async("advanced_safety_settings", "encryption_history_switch"), get_content_description_async("advanced_safety_settings", "encryption_history_switch"), self.encryption_history_switch)
-        self.addGroup(get_theme_icon("ic_fluent_document_lock_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_document_lock_20_filled"),
                         get_content_name_async("advanced_safety_settings", "encryption_temp_switch"), get_content_description_async("advanced_safety_settings", "encryption_temp_switch"), self.encryption_temp_switch)

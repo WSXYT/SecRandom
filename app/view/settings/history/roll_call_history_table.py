@@ -344,8 +344,10 @@ class roll_call_history_table(GroupHeaderCardWidget):
                     'total_count_str': str(total_count).zfill(max_total_count_length)
                 })
             
-            students_weight_data = calculate_weight(students_data)
-            max_weight_length = max(len(str(student.get('next_weight', ''))) for student in students_weight_data) if students_weight_data else 0
+            students_weight_data = calculate_weight(students_data, self.current_class_name)
+
+            # 使用权重格式化函数
+            format_weight, _, _ = format_weight_for_display(students_weight_data, 'next_weight')
             
             # 根据排序状态对数据进行排序
             if self.sort_column >= 0:
@@ -415,7 +417,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
                 
                 # 如果需要显示权重
                 if self.table.columnCount() > 5:
-                    weight_item = create_table_item(str(students_weight_data[i].get('next_weight', '')).zfill(max_weight_length))
+                    weight_item = create_table_item(str(format_weight(students_weight_data[i].get('next_weight', ''))))
                     self.table.setItem(row, 5, weight_item)
             
             # 更新当前行数
@@ -474,7 +476,8 @@ class roll_call_history_table(GroupHeaderCardWidget):
                                 'weight': record.get('weight', '')
                             })
 
-            max_weight_length = max(len(str(student.get('weight', ''))) for student in students_data)
+            # 使用权重格式化函数
+            format_weight, _, _ = format_weight_for_display(students_data, 'weight')
 
             # 根据排序状态对数据进行排序
             if self.sort_column >= 0:
@@ -537,7 +540,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
 
                 # 如果需要显示权重
                 if self.table.columnCount() > 5:
-                    weight_item = create_table_item(str(student.get('weight', '')).zfill(max_weight_length))
+                    weight_item = create_table_item(str(format_weight(student.get('weight', ''))))
                     self.table.setItem(row, 5, weight_item)
 
             # 更新当前行数
@@ -594,7 +597,8 @@ class roll_call_history_table(GroupHeaderCardWidget):
                                 'weight': record.get('weight', '')
                             })
             
-            max_weight_length = max(len(str(student.get('weight', ''))) for student in students_data)
+            # 使用权重格式化函数
+            format_weight, _, _ = format_weight_for_display(students_data, 'weight')
 
             # 根据排序状态对数据进行排序
             if self.sort_column >= 0:
@@ -657,7 +661,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
 
                 # 如果需要显示权重
                 if self.table.columnCount() > 5:
-                    weight_item = create_table_item(str(student.get('weight', '')).zfill(max_weight_length))
+                    weight_item = create_table_item(str(format_weight(student.get('weight', 0))))
                     self.table.setItem(row, 5, weight_item)
 
 

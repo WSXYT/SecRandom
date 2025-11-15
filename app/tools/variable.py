@@ -84,5 +84,42 @@ LANGUAGE_MODULE_DIR= "app/Language/modules"   # 模块化语言文件路径
 # ==================== 共享内存相关常量 ====================
 SHARED_MEMORY_KEY = "SecRandomSharedMemory"   # 共享内存键名
 
+# ==================== 结果显示相关常量 ====================
+# 布局间距
+AVATAR_LABEL_SPACING = 8                      # 头像和标签之间的间距
+GRID_LAYOUT_SPACING = 20                      # 网格布局统一间距
+GRID_HORIZONTAL_SPACING = 20                  # 网格布局水平间距
+GRID_VERTICAL_SPACING = 10                    # 网格布局垂直间距
+GRID_ITEM_MARGIN = 40                         # 网格项目边距
+GRID_ITEM_SPACING = 20                        # 网格项目间距
+DEFAULT_AVAILABLE_WIDTH = 800                 # 默认可用宽度
+
+# 颜色生成相关
+DEFAULT_MIN_SATURATION = 0.7                  # 默认最小饱和度
+DEFAULT_MAX_SATURATION = 1.0                  # 默认最大饱和度
+DEFAULT_MIN_VALUE = 0.7                       # 默认最小亮度值
+DEFAULT_MAX_VALUE = 1.0                       # 默认最大亮度值
+
+# 浅色主题颜色调整
+LIGHT_VALUE_MULTIPLIER = 0.7                  # 浅色主题亮度乘数
+LIGHT_MAX_VALUE_MULTIPLIER = 0.8              # 浅色主题最大亮度乘数
+LIGHT_THEME_MAX_VALUE = 0.5                  # 浅色主题最大亮度值
+LIGHT_THEME_ADJUSTED_MAX_VALUE = 0.7         # 浅色主题调整后的最大亮度值
+
+# 深色主题颜色调整
+DARK_VALUE_MULTIPLIER = 1.2                  # 深色主题亮度乘数
+DARK_MAX_VALUE_MULTIPLIER = 1.0              # 深色主题最大亮度乘数
+DARK_THEME_MIN_VALUE = 0.85                  # 深色主题最小亮度值
+DARK_THEME_MAX_VALUE = 1.0                  # 深色主题最大亮度值
+LIGHTNESS_THRESHOLD = 127                     # 浅色/深色主题亮度阈值
+RGB_COLOR_FORMAT = "rgb({r},{g},{b})"          # RGB颜色格式字符串
+
+# 图片相关
+SUPPORTED_IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.svg']  # 支持的图片扩展名
+
+# 格式化相关
+STUDENT_ID_FORMAT = "{num:02}"                 # 学号格式化字符串
+NAME_SPACING = "    "                          # 姓名之间的间距
+
 # ==================== 全局变量 ====================
 main_window = None                            # 全局主窗口引用

@@ -1,10 +1,6 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
 from loguru import logger
 from PyQt6.QtWidgets import *
@@ -74,21 +70,21 @@ class floating_window_basic_settings(GroupHeaderCardWidget):
 
         # 添加设置项到分组
         self.addGroup(
-            get_theme_icon("ic_fluent_desktop_sync_20_filled"), 
-            get_content_name_async("floating_window_management", "startup_display_floating_window"), 
-            get_content_description_async("floating_window_management", "startup_display_floating_window"), 
+            get_theme_icon("ic_fluent_desktop_sync_20_filled"),
+            get_content_name_async("floating_window_management", "startup_display_floating_window"),
+            get_content_description_async("floating_window_management", "startup_display_floating_window"),
             self.startup_display_floating_window_switch
         )
         self.addGroup(
-            get_theme_icon("ic_fluent_brightness_high_20_filled"), 
-            get_content_name_async("floating_window_management", "floating_window_opacity"), 
-            get_content_description_async("floating_window_management", "floating_window_opacity"), 
+            get_theme_icon("ic_fluent_brightness_high_20_filled"),
+            get_content_name_async("floating_window_management", "floating_window_opacity"),
+            get_content_description_async("floating_window_management", "floating_window_opacity"),
             self.floating_window_opacity_spinbox
         )
         self.addGroup(
-            get_theme_icon("ic_fluent_arrow_reset_20_filled"), 
-            get_content_name_async("floating_window_management", "reset_floating_window_position_button"), 
-            get_content_description_async("floating_window_management", "reset_floating_window_position_button"), 
+            get_theme_icon("ic_fluent_arrow_reset_20_filled"),
+            get_content_name_async("floating_window_management", "reset_floating_window_position_button"),
+            get_content_description_async("floating_window_management", "reset_floating_window_position_button"),
             self.reset_floating_window_position_button
         )
 
@@ -122,7 +118,7 @@ class floating_window_appearance_settings(GroupHeaderCardWidget):
         self.floating_window_placement_combo_box.addItems(get_content_combo_name_async("floating_window_management", "floating_window_placement"))
         self.floating_window_placement_combo_box.setCurrentIndex(readme_settings_async("floating_window_management", "floating_window_placement"))
         self.floating_window_placement_combo_box.currentIndexChanged.connect(self.floating_window_placement_combo_box_changed)
-        
+
         # 浮窗显示样式下拉框
         self.floating_window_display_style_combo_box = ComboBox()
         self.floating_window_display_style_combo_box.addItems(get_content_combo_name_async("floating_window_management", "floating_window_display_style"))
@@ -131,21 +127,21 @@ class floating_window_appearance_settings(GroupHeaderCardWidget):
 
         # 添加设置项到分组
         self.addGroup(
-            get_theme_icon("ic_fluent_button_20_filled"), 
-            get_content_name_async("floating_window_management", "floating_window_button_control"), 
-            get_content_description_async("floating_window_management", "floating_window_button_control"), 
+            get_theme_icon("ic_fluent_button_20_filled"),
+            get_content_name_async("floating_window_management", "floating_window_button_control"),
+            get_content_description_async("floating_window_management", "floating_window_button_control"),
             self.floating_window_button_control_combo_box
         )
         self.addGroup(
-            get_theme_icon("ic_fluent_align_left_20_filled"), 
-            get_content_name_async("floating_window_management", "floating_window_placement"), 
-            get_content_description_async("floating_window_management", "floating_window_placement"), 
+            get_theme_icon("ic_fluent_align_left_20_filled"),
+            get_content_name_async("floating_window_management", "floating_window_placement"),
+            get_content_description_async("floating_window_management", "floating_window_placement"),
             self.floating_window_placement_combo_box
         )
         self.addGroup(
-            get_theme_icon("ic_fluent_design_ideas_20_filled"), 
-            get_content_name_async("floating_window_management", "floating_window_display_style"), 
-            get_content_description_async("floating_window_management", "floating_window_display_style"), 
+            get_theme_icon("ic_fluent_design_ideas_20_filled"),
+            get_content_name_async("floating_window_management", "floating_window_display_style"),
+            get_content_description_async("floating_window_management", "floating_window_display_style"),
             self.floating_window_display_style_combo_box
         )
 
@@ -190,21 +186,21 @@ class floating_window_edge_settings(GroupHeaderCardWidget):
 
         # 添加设置项到分组
         self.addGroup(
-            get_theme_icon("ic_fluent_pin_20_filled"), 
-            get_content_name_async("floating_window_management", "floating_window_stick_to_edge"), 
-            get_content_description_async("floating_window_management", "floating_window_stick_to_edge"), 
+            get_theme_icon("ic_fluent_pin_20_filled"),
+            get_content_name_async("floating_window_management", "floating_window_stick_to_edge"),
+            get_content_description_async("floating_window_management", "floating_window_stick_to_edge"),
             self.floating_window_stick_to_edge_switch
         )
         self.addGroup(
-            get_theme_icon("ic_fluent_timer_20_filled"), 
-            get_content_name_async("floating_window_management", "floating_window_stick_to_edge_recover_seconds"), 
-            get_content_description_async("floating_window_management", "floating_window_stick_to_edge_recover_seconds"), 
+            get_theme_icon("ic_fluent_timer_20_filled"),
+            get_content_name_async("floating_window_management", "floating_window_stick_to_edge_recover_seconds"),
+            get_content_description_async("floating_window_management", "floating_window_stick_to_edge_recover_seconds"),
             self.floating_window_stick_to_edge_recover_seconds_spinbox
         )
         self.addGroup(
-            get_theme_icon("ic_fluent_desktop_sync_20_filled"), 
-            get_content_name_async("floating_window_management", "floating_window_stick_to_edge_display_style"), 
-            get_content_description_async("floating_window_management", "floating_window_stick_to_edge_display_style"), 
+            get_theme_icon("ic_fluent_desktop_sync_20_filled"),
+            get_content_name_async("floating_window_management", "floating_window_stick_to_edge_display_style"),
+            get_content_description_async("floating_window_management", "floating_window_stick_to_edge_display_style"),
             self.floating_window_stick_to_edge_display_style_combo_box
         )
 

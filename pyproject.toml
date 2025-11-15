@@ -13,41 +13,41 @@ dependencies = [
     "PyQt6-Fluent-Widgets==1.9.1",
     "PyQt6-Frameless-Window==0.7.4",
     "darkdetect==0.8.0",
-    
+
     # 核心库
     "asyncio~=3.4.3",
     "loguru==0.7.3",
     "colorama==0.4.6",
     "packaging==25.0",
-    
+
     # 数据处理
     "numpy==1.24.4",
     "pandas~=2.0.3",
     "pillow~=10.4.0",
     "openpyxl==3.1.5",
-    
+
     # 网络与通信
     "requests==2.32.4",
     "edge-tts==7.0.2",
-    
+
     # 音频处理
     "pyttsx3==2.98",
     "sounddevice==0.5.2",
     "soundfile==0.13.1",
-    
+
     # 系统工具
     "psutil~=7.0.0",
     "keyboard==0.13.5",
-    
+
     # 加密与安全
     "pyotp==2.9.0",
     "pycryptodome==3.23.0",
-    
+
     # 二维码处理
     "pyqrcode~=1.2.1",
     "pypng~=0.20220715.0",
     "colorthief==0.2.1",
-    
+
     # Windows特定依赖
     "pywin32==310; platform_system == 'Windows'",
     "win32_setctime==1.2.0; platform_system == 'Windows'",
@@ -55,10 +55,11 @@ dependencies = [
     "comtypes==1.4.10",
     "wmi==1.5.1",
     "pycaw==20240210; platform_system == 'Windows'",
-    
+
     # 其他依赖
     "sip~=6.8.6",
     "jinja2~=3.1.6",
+    "pre-commit"
 ]
 
 [project.optional-dependencies]
@@ -82,3 +83,6 @@ dev-dependencies = [
     "black",
     "flake8",
 ]
+
+[tool.ruff]
+lint.ignore=["E722","F405","F403","F811","E227","F841"]

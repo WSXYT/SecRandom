@@ -1,12 +1,7 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
-from loguru import logger
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -80,15 +75,15 @@ class sidebar_management_window(GroupHeaderCardWidget):
         self.settings_icon_comboBox.currentIndexChanged.connect(lambda: update_settings("sidebar_management_window", "settings_icon", self.settings_icon_comboBox.currentIndex()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_people_community_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_people_community_20_filled"),
                         get_content_name_async("sidebar_management_window", "roll_call_sidebar_position"), get_content_description_async("sidebar_management_window", "roll_call_sidebar_position"), self.roll_call_sidebar_position_comboBox)
         self.addGroup(get_theme_icon("ic_fluent_receipt_20_filled"),
                         get_content_name_async("sidebar_management_window", "custom_roll_call_sidebar_position"), get_content_description_async("sidebar_management_window", "custom_roll_call_sidebar_position"), self.custom_roll_call_sidebar_position_comboBox)
         self.addGroup(get_theme_icon("ic_fluent_reward_20_filled"),
                         get_content_name_async("sidebar_management_window", "lottery_sidebar_position"), get_content_description_async("sidebar_management_window", "lottery_sidebar_position"), self.lottery_sidebar_position_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_chat_history_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_chat_history_20_filled"),
                         get_content_name_async("sidebar_management_window", "main_window_history"), get_content_description_async("sidebar_management_window", "main_window_history"), self.main_window_history_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_settings_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_settings_20_filled"),
                         get_content_name_async("sidebar_management_window", "settings_icon"), get_content_description_async("sidebar_management_window", "settings_icon"), self.settings_icon_comboBox)
 
 class sidebar_management_settings(GroupHeaderCardWidget):
@@ -113,7 +108,7 @@ class sidebar_management_settings(GroupHeaderCardWidget):
         self.name_management_comboBox = ComboBox(self)
         self.name_management_comboBox.addItems(get_content_combo_name_async("sidebar_management_settings", "name_management"))
         self.name_management_comboBox.setCurrentIndex(readme_settings_async("sidebar_management_settings", "name_management"))
-        self.name_management_comboBox.currentIndexChanged.connect(lambda: update_settings("sidebar_management_settings", "name_management", self.name_management_comboBox.currentIndex()))   
+        self.name_management_comboBox.currentIndexChanged.connect(lambda: update_settings("sidebar_management_settings", "name_management", self.name_management_comboBox.currentIndex()))
 
         # 抽取设置下拉框
         self.draw_settings_comboBox = ComboBox(self)
@@ -158,25 +153,25 @@ class sidebar_management_settings(GroupHeaderCardWidget):
         self.more_settings_comboBox.currentIndexChanged.connect(lambda: update_settings("sidebar_management_settings", "more_settings", self.more_settings_comboBox.currentIndex()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_home_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_home_20_filled"),
                         get_content_name_async("sidebar_management_settings", "home"), get_content_description_async("sidebar_management_settings", "home"), self.home_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_wrench_settings_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_wrench_settings_20_filled"),
                         get_content_name_async("sidebar_management_settings", "base_settings"), get_content_description_async("sidebar_management_settings", "base_settings"), self.base_settings_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_list_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_list_20_filled"),
                         get_content_name_async("sidebar_management_settings", "name_management"), get_content_description_async("sidebar_management_settings", "name_management"), self.name_management_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_archive_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_archive_20_filled"),
                         get_content_name_async("sidebar_management_settings", "draw_settings"), get_content_description_async("sidebar_management_settings", "draw_settings"), self.draw_settings_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_service_bell_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_service_bell_20_filled"),
                         get_content_name_async("sidebar_management_settings", "notification_service"), get_content_description_async("sidebar_management_settings", "notification_service"), self.notification_service_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_shield_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_shield_20_filled"),
                         get_content_name_async("sidebar_management_settings", "security_settings"), get_content_description_async("sidebar_management_settings", "security_settings"), self.security_settings_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_person_edit_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_person_edit_20_filled"),
                         get_content_name_async("sidebar_management_settings", "personal_settings"), get_content_description_async("sidebar_management_settings", "personal_settings"), self.personal_settings_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_person_voice_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_person_voice_20_filled"),
                         get_content_name_async("sidebar_management_settings", "voice_settings"), get_content_description_async("sidebar_management_settings", "voice_settings"), self.voice_settings_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_chat_history_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_chat_history_20_filled"),
                         get_content_name_async("sidebar_management_settings", "settings_history"), get_content_description_async("sidebar_management_settings", "settings_history"), self.settings_history_comboBox)
-        self.addGroup(get_theme_icon("ic_fluent_more_horizontal_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_more_horizontal_20_filled"),
                         get_content_name_async("sidebar_management_settings", "more_settings"), get_content_description_async("sidebar_management_settings", "more_settings"), self.more_settings_comboBox)
 
 class tray_management(GroupHeaderCardWidget):
@@ -200,7 +195,7 @@ class tray_management(GroupHeaderCardWidget):
         self.open_settings_switch.checkedChanged.connect(lambda: update_settings("tray_management", "open_settings", self.open_settings_switch.isChecked()))
 
         # 暂时显示/隐藏浮窗 按钮开关
-        self.show_hide_float_window_switch = SwitchButton(self) 
+        self.show_hide_float_window_switch = SwitchButton(self)
         self.show_hide_float_window_switch.setOffText(get_content_switchbutton_name_async("tray_management", "show_hide_float_window", "disable"))
         self.show_hide_float_window_switch.setOnText(get_content_switchbutton_name_async("tray_management", "show_hide_float_window", "enable"))
         self.show_hide_float_window_switch.setChecked(readme_settings_async("tray_management", "show_hide_float_window"))
@@ -221,13 +216,13 @@ class tray_management(GroupHeaderCardWidget):
         self.exit_switch.checkedChanged.connect(lambda: update_settings("tray_management", "exit", self.exit_switch.isChecked()))
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_window_text_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_window_text_20_filled"),
                         get_content_name_async("tray_management", "show_hide_main_window"), get_content_description_async("tray_management", "show_hide_main_window"), self.show_hide_main_window_switch)
-        self.addGroup(get_theme_icon("ic_fluent_settings_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_settings_20_filled"),
                         get_content_name_async("tray_management", "open_settings"), get_content_description_async("tray_management", "open_settings"), self.open_settings_switch)
-        self.addGroup(get_theme_icon("ic_fluent_window_ad_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_window_ad_20_filled"),
                         get_content_name_async("tray_management", "show_hide_float_window"), get_content_description_async("tray_management", "show_hide_float_window"), self.show_hide_float_window_switch)
-        self.addGroup(get_theme_icon("ic_fluent_arrow_reset_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_reset_20_filled"),
                         get_content_name_async("tray_management", "restart"), get_content_description_async("tray_management", "restart"), self.restart_switch)
-        self.addGroup(get_theme_icon("ic_fluent_arrow_exit_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_arrow_exit_20_filled"),
                         get_content_name_async("tray_management", "exit"), get_content_description_async("tray_management", "exit"), self.exit_switch)

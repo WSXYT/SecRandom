@@ -1,10 +1,7 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
 import os
-import sys
-import subprocess
 
 from loguru import logger
 from PyQt6.QtWidgets import *
@@ -95,7 +92,7 @@ class quick_draw_extraction_function(GroupHeaderCardWidget):
                         get_content_name_async("quick_draw_settings", "clear_time"), get_content_description_async("quick_draw_settings", "clear_time"), self.clear_time_spin)
         self.addGroup(get_theme_icon("ic_fluent_drawer_add_20_filled"),
                         get_content_name_async("quick_draw_settings", "draw_type"), get_content_description_async("quick_draw_settings", "draw_type"), self.draw_type_combo)
-        
+
         # 初始化时调用一次，确保界面状态与设置一致
         self.on_draw_mode_changed()
 
@@ -103,10 +100,10 @@ class quick_draw_extraction_function(GroupHeaderCardWidget):
         """当抽取模式改变时的处理逻辑"""
         # 更新设置值
         update_settings("quick_draw_settings", "draw_mode", self.draw_mode_combo.currentIndex())
-        
+
         # 获取当前抽取模式索引
         draw_mode_index = self.draw_mode_combo.currentIndex()
-        
+
         # 根据抽取模式设置不同的控制逻辑
         if draw_mode_index == 0:  # 重复抽取模式
             # 禁用清除抽取记录方式下拉框
@@ -118,29 +115,29 @@ class quick_draw_extraction_function(GroupHeaderCardWidget):
             self.clear_record_combo.setCurrentIndex(2)
             # 更新设置
             update_settings("quick_draw_settings", "clear_record", 2)
-            
+
             # 设置half_repeat_spin为0并禁用
             self.half_repeat_spin.setEnabled(False)
             self.half_repeat_spin.setRange(0, 0)
             self.half_repeat_spin.setValue(0)
             # 更新设置
             update_settings("quick_draw_settings", "half_repeat", 0)
-            
+
         else:  # 不重复抽取模式或半重复抽取模式
             # 启用清除抽取记录方式下拉框
             self.clear_record_combo.setEnabled(True)
-            
+
             # 清空当前选项
             self.clear_record_combo.clear()
-            
+
             # 添加前两个选项（不包含"无需清除"）
             self.clear_record_combo.addItems(get_content_combo_name_async("quick_draw_settings", "clear_record"))
-            
+
             # 设置默认选择第一个选项
             self.clear_record_combo.setCurrentIndex(0)
             # 更新设置
             update_settings("quick_draw_settings", "clear_record", 0)
-            
+
             # 根据具体模式设置half_repeat_spin
             if draw_mode_index == 1:  # 不重复抽取模式
                 # 设置half_repeat_spin为1并禁用
@@ -278,7 +275,7 @@ class quick_draw_color_theme_settings(GroupHeaderCardWidget):
         # 动画固定颜色
         self.animation_fixed_color_button = ColorConfigItem("Theme", "Color", readme_settings_async("quick_draw_settings", "animation_fixed_color"))
         self.animation_fixed_color_button.valueChanged.connect(lambda color: update_settings("quick_draw_settings", "animation_fixed_color", color.name()))
-        
+
         # 结果固定颜色
         self.result_fixed_color_button = ColorConfigItem("Theme", "Color", readme_settings_async("quick_draw_settings", "result_fixed_color"))
         self.result_fixed_color_button.valueChanged.connect(lambda color: update_settings("quick_draw_settings", "result_fixed_color", color.name()))
@@ -447,7 +444,7 @@ class quick_draw_music_settings(GroupHeaderCardWidget):
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder_path)))
         else:
             logger.error("无法获取动画音乐文件夹路径")
-    
+
     def open_result_music_folder(self):
         """打开结果音乐文件夹"""
         folder_path = get_resources_path(RESULT_MUSIC_FOLDER)

@@ -1,12 +1,7 @@
 # ==================================================
 # 导入库
 # ==================================================
-import json
-import os
-import sys
-import subprocess
 
-from loguru import logger
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -34,7 +29,7 @@ class debug(GroupHeaderCardWidget):
         self.all_monitor_combo_box.addItems(self.get_monitor_list())
 
         # 添加设置项到分组
-        self.addGroup(get_theme_icon("ic_fluent_panel_separate_window_20_filled"), 
+        self.addGroup(get_theme_icon("ic_fluent_panel_separate_window_20_filled"),
                         "显示器列表", "显示所有显示器列表(DEBUG)", self.all_monitor_combo_box)
 
     def get_monitor_list(self):
