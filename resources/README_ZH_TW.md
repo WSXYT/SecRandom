@@ -6,7 +6,7 @@
 
 🚀 **現代化教育工具** | 🎯 **智能權重演算法** | 🎨 **優雅互動體驗**
 
-[简体中文](README.md) | [English](resources/README_EN.md) | **✔繁體中文**
+[简体中文](../README.md) | [English](./README_EN.md) | **✔繁體中文**
 
 > 本 Readme **由 AI 翻譯**，並由我們的開發人員審核。如果您發現任何錯誤，請向我們報告。
 </div>
@@ -94,10 +94,10 @@
 >
 > 以下的截圖均為 **中文簡體** 語言版本。
 
-![點名介面](./resources/ScreenShots/主界面_抽人_浅色.png)
-![抽獎介面](./resources/ScreenShots/主界面_抽奖_浅色.png)
-![歷史記錄](./resources/ScreenShots/主界面_抽人历史记录_浅色.png)
-![設定介面](./resources/ScreenShots/设置_抽人设置_浅色.png)
+![點名介面](./ScreenShots/主界面_抽人_浅色.png)
+![抽獎介面](./ScreenShots/主界面_抽奖_浅色.png)
+![歷史記錄](./ScreenShots/主界面_抽人历史记录_浅色.png)
+![設定介面](./ScreenShots/设置_抽人设置_浅色.png)
 
 </details>
 
