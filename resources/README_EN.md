@@ -89,10 +89,14 @@
 <details>
 <summary>📸 Software Screenshots Display ✨</summary>
 
-![Selection Interface](../ScreenSots/主界面_抽人_浅色.png)
-![Lottery Interface](../ScreenSots/主界面_抽奖_浅色.png)
-![History Records](../ScreenSots/主界面_抽人历史记录_浅色.png)
-![Settings Interface](../ScreenSots/设置_抽人设置_浅色.png)
+> [!warning]
+>
+> The screenshots shown below are in **Chinese Simplified** language.
+
+![Selection Interface](./resources/ScreenShots/主界面_抽人_浅色.png)
+![Lottery Interface](./resources/ScreenShots/主界面_抽奖_浅色.png)
+![History Records](./resources/ScreenShots/主界面_抽人历史记录_浅色.png)
+![Settings Interface](./resources/ScreenShots/设置_抽人设置_浅色.png)
 
 </details>
 

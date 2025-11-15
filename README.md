@@ -88,10 +88,10 @@
 <details>
 <summary>📸 软件截图展示 ✨</summary>
 
-![点名界面](ScreenSots/主界面_抽人_浅色.png)
-![抽奖界面](ScreenSots/主界面_抽奖_浅色.png)
-![历史记录](ScreenSots/主界面_抽人历史记录_浅色.png)
-![设置界面](ScreenSots/设置_抽人设置_浅色.png)
+![点名界面](resources/ScreenShots/主界面_抽人_浅色.png)
+![抽奖界面](resources/ScreenShots/主界面_抽奖_浅色.png)
+![历史记录](resources/ScreenShots/主界面_抽人历史记录_浅色.png)
+![设置界面](resources/ScreenShots/设置_抽人设置_浅色.png)
 
 </details>
 

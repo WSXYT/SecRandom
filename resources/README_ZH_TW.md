@@ -90,10 +90,14 @@
 <details>
 <summary>📸 軟體截圖展示 ✨</summary>
 
-![點名介面](../ScreenSots/主界面_抽人_浅色.png)
-![抽獎介面](../ScreenSots/主界面_抽奖_浅色.png)
-![歷史記錄](../ScreenSots/主界面_抽人历史记录_浅色.png)
-![設定介面](../ScreenSots/设置_抽人设置_浅色.png)
+> [!warning]
+>
+> 以下的截圖均為 **中文簡體** 語言版本。
+
+![點名介面](./resources/ScreenShots/主界面_抽人_浅色.png)
+![抽獎介面](./resources/ScreenShots/主界面_抽奖_浅色.png)
+![歷史記錄](./resources/ScreenShots/主界面_抽人历史记录_浅色.png)
+![設定介面](./resources/ScreenShots/设置_抽人设置_浅色.png)
 
 </details>
 
