@@ -149,14 +149,17 @@ Include `进行打包` in the commit message to trigger the automatic build proc
 
 If you find SecRandom helpful, you're welcome to support our development work!
 
-- **Alipay/WeChat Pay**
-
-  <image src="../app/resource/assets/contribution/Alipay.png" height="196"/> <image src="../app/resource/assets/contribution/WeChat_Pay.png" height="196"/>
+- **Alipay/WeChat Pay**  
+<image src="../app/resource/assets/contribution/Alipay.png" height="196"/>
+<image src="../app/resource/assets/contribution/WeChat_Pay.png" height="196"/>
+- **Afdian**  
+[Charge for 黎泽懿_Aionflux](https://afdian.com/a/lzy0983
 
 ## 📞 Contact
 
 * 📧 [Email](mailto:lzy.12@foxmail.com)
 * 👥 [QQ Group 833875216](https://qm.qq.com/q/iWcfaPHn7W)
+* #⃣️ [QQ Channel](https://pd.qq.com/s/4x5dafd34?b=9)
 * 🎥 [Bilibili Homepage](https://space.bilibili.com/520571577)
 * 🐛 [Issue Report](https://github.com/SECTL/SecRandom/issues)
 
