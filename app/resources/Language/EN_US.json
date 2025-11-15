@@ -1,0 +1,1015 @@
+{
+    "translate_JSON_file": {
+        "name": "English (United States)",
+        "entertainment": false,
+        "translated_personnel": "MacrosMeng"
+    },
+    "home": {
+        "title": {
+            "name": "Homepage",
+            "description": "The homepage of this software"
+        }
+    },
+    "basic_settings": {
+        "title": {
+            "name": "General Settings",
+            "description": "The general settings of this app"
+        },
+        "basic_function": {
+            "name": "Basic Features",
+            "description": "Features of this app"
+        },
+        "data_management": {
+            "name": "Data Management",
+            "description": "Manage your data"
+        },
+        "personalised": {
+            "name": "Customize",
+            "description": "Customize your app"
+        },
+        "autostart": {
+            "name": "Autostart on Boot",
+            "description": "Set whether the app starts automatically on system boot",
+            "switchbutton_name": {
+                "enable": "Enable",
+                "disable": "Disable"
+            }
+        },
+        "check_update": {
+            "name": "Check for Updates",
+            "description": "Set whether to check for updates at startup",
+            "switchbutton_name": {
+                "enable": "Enable",
+                "disable": "Disable"
+            }
+        },
+        "show_startup_window": {
+            "name": "Show Startup Window",
+            "description": "Set whether to show the startup window at launch",
+            "switchbutton_name": {
+                "enable": "Show",
+                "disable": "Don't show"
+            }
+        },
+        "export_diagnostic_data": {
+            "name": "Export Diagnostic Data",
+            "description": "Set whether to export diagnostic data on exit",
+            "pushbutton_name": "Export Diagnostic Data"
+        },
+        "export_settings": {
+            "name": "Export Settings",
+            "description": "Set whether to export settings on exit",
+            "pushbutton_name": "Export Settings"
+        },
+        "import_settings": {
+            "name": "Import Settings",
+            "description": "Set whether to import settings on startup",
+            "pushbutton_name": "Import Settings"
+        },
+        "export_all_data": {
+            "name": "Export All Data",
+            "description": "Set whether to export all data on exit",
+            "pushbutton_name": "Export All Data"
+        },
+        "import_all_data": {
+            "name": "Import All Data",
+            "description": "Set whether to import all data on startup",
+            "pushbutton_name": "Import All Data"
+        },
+        "dpiScale": {
+            "name": "DPI Scale",
+            "description": "Set the app DPI scaling (requires restart)",
+            "combo_items": [
+                "100%",
+                "125%",
+                "150%",
+                "175%",
+                "200%",
+                "Auto"
+            ]
+        },
+        "font": {
+            "name": "Font",
+            "description": "Set the app font (requires restart)"
+        },
+        "theme": {
+            "name": "Theme",
+            "description": "Set the app theme",
+            "combo_items": [
+                "Light",
+                "Dark",
+                "Follow system settings"
+            ]
+        },
+        "theme_color": {
+            "name": "Theme Color",
+            "description": "App theme color"
+        },
+        "language": {
+            "name": "Language",
+            "description": "Set the app language (requires restart)"
+        }
+    },
+    "list_management": {
+        "title": {
+            "name": "List Management",
+            "description": "The app's list management page"
+        }
+    },
+    "roll_call_list": {
+        "title": {
+            "name": "Roll Call Lists",
+            "description": "Lists for roll call"
+        },
+        "set_class_name": {
+            "name": "Set Class Name",
+            "description": "Set the class name"
+        },
+        "select_class_name": {
+            "name": "Select Class",
+            "description": "Select a class"
+        },
+        "import_student_name": {
+            "name": "Import Student List",
+            "description": "Import a list of students"
+        },
+        "name_setting": {
+            "name": "Name Settings",
+            "description": "Configure names"
+        },
+        "gender_setting": {
+            "name": "Gender Settings",
+            "description": "Configure gender"
+        },
+        "group_setting": {
+            "name": "Group Settings",
+            "description": "Configure groups"
+        },
+        "export_student_name": {
+            "name": "Export Student List",
+            "description": "Export the student list"
+        }
+    },
+    "roll_call_table": {
+        "title": {
+            "name": "Roll Call Table",
+            "description": "Table for displaying and managing roll call lists"
+        },
+        "HeaderLabels": {
+            "name": [
+                "Present",
+                "Student ID",
+                "Name",
+                "Gender",
+                "Group"
+            ],
+            "description": "Column headers for the roll call table"
+        }
+    },
+    "custom_draw_list": {
+        "title": {
+            "name": "Custom Draw",
+            "description": "Custom drawing (lottery) lists"
+        }
+    },
+    "lottery_list": {
+        "title": {
+            "name": "Lottery Lists",
+            "description": "Lists for lotteries/prize draws"
+        },
+        "set_pool_name": {
+            "name": "Set Prize Pool Name",
+            "description": "Set the name of the prize pool"
+        },
+        "select_pool_name": {
+            "name": "Select Prize Pool",
+            "description": "Select a prize pool"
+        },
+        "import_prize_name": {
+            "name": "Import Prize List",
+            "description": "Import a list of prizes"
+        },
+        "prize_setting": {
+            "name": "Prize Settings",
+            "description": "Configure prizes"
+        },
+        "prize_weight_setting": {
+            "name": "Set Weight",
+            "description": "Configure prize weight"
+        },
+        "export_prize_name": {
+            "name": "Export Prize List",
+            "description": "Export the prize list"
+        }
+    },
+    "lottery_table": {
+        "title": {
+            "name": "Lottery Table",
+            "description": "Table for displaying and managing lottery lists"
+        },
+        "HeaderLabels": {
+            "name": [
+                "Exists",
+                "Index",
+                "Prize",
+                "Weight"
+            ],
+            "description": "Column headers for the lottery table"
+        }
+    },
+    "extraction_settings": {
+        "title": {
+            "name": "Extraction Settings",
+            "description": "Settings related to extraction/drawing"
+        }
+    },
+    "roll_call_settings": {
+        "title": {
+            "name": "Roll Call Settings",
+            "description": "Settings for roll call"
+        },
+        "extraction_function": {
+            "name": "Extraction Functions",
+            "description": "Settings related to roll call extraction features"
+        },
+        "display_settings": {
+            "name": "Display Settings",
+            "description": "Settings for how roll call results are displayed"
+        },
+        "basic_animation_settings": {
+            "name": "Animation Settings",
+            "description": "Settings related to roll call animation effects"
+        },
+        "color_theme_settings": {
+            "name": "Color Theme Settings",
+            "description": "Color theme settings for roll call results display"
+        },
+        "student_image_settings": {
+            "name": "Student Avatar Settings",
+            "description": "Settings for student avatars in roll call results display"
+        },
+        "music_settings": {
+            "name": "Music Settings",
+            "description": "Settings related to roll call music"
+        },
+        "draw_mode": {
+            "name": "Draw Mode",
+            "description": "Set the draw mode for roll call",
+            "combo_items": [
+                "Allow Repeats",
+                "No Repeats",
+                "Partial Repeats"
+            ]
+        },
+        "clear_record": {
+            "name": "Clear Record Mode",
+            "description": "Set how roll call extraction records are cleared",
+            "combo_items": [
+                "Clear After Restart",
+                "Until All Selected"
+            ],
+            "combo_items_other": [
+                "Clear After Restart",
+                "Until All Selected",
+                "Never Clear"
+            ]
+        },
+        "half_repeat": {
+            "name": "Partial Repeat Count",
+            "description": "Set the number of partial repeats"
+        },
+        "clear_time": {
+            "name": "Timed Clear After Extraction",
+            "description": "Set the time (seconds) after which extraction records are cleared"
+        },
+        "draw_type": {
+            "name": "Draw Type",
+            "description": "Set the draw type for roll call",
+            "combo_items": [
+                "Random Draw",
+                "Fair Draw"
+            ]
+        },
+        "font_size": {
+            "name": "Font Size",
+            "description": "Set the font size for roll call results display"
+        },
+        "display_format": {
+            "name": "Result Display Format",
+            "description": "Set the format for displaying roll call results",
+            "combo_items": [
+                "Student ID + Name",
+                "Name",
+                "Student ID"
+            ]
+        },
+        "show_random": {
+            "name": "Show Random Group Member Format",
+            "description": "Set how random group members are shown",
+            "combo_items": [
+                "Don't show",
+                "GroupName[Newline]Name",
+                "GroupName[-]Name"
+            ]
+        },
+        "animation": {
+            "name": "Animation Mode",
+            "description": "Set the animation effect for roll call draws",
+            "combo_items": [
+                "Manual Stop Animation",
+                "Auto Play Animation",
+                "Show Result Immediately"
+            ]
+        },
+        "animation_interval": {
+            "name": "Animation Interval",
+            "description": "Set the interval for roll call animation (ms)"
+        },
+        "autoplay_count": {
+            "name": "Autoplay Count",
+            "description": "Set how many times the roll call animation auto-plays"
+        },
+        "animation_color_theme": {
+            "name": "Animation Color Theme",
+            "description": "Set the color theme for roll call animation",
+            "combo_items": [
+                "Off",
+                "Random Colors",
+                "Fixed Color"
+            ]
+        },
+        "result_color_theme": {
+            "name": "Result Color Theme",
+            "description": "Set the color theme for roll call result display",
+            "combo_items": [
+                "Off",
+                "Random Colors",
+                "Fixed Color"
+            ]
+        },
+        "animation_fixed_color": {
+            "name": "Animation Fixed Color",
+            "description": "Set the fixed color used during roll call animations"
+        },
+        "result_fixed_color": {
+            "name": "Result Fixed Color",
+            "description": "Set the fixed color used for roll call results display"
+        },
+        "student_image": {
+            "name": "Show Student Images",
+            "description": "Set whether to show student images",
+            "switchbutton_name": {
+                "enable": "Show",
+                "disable": "Hide"
+            }
+        },
+        "open_student_image_folder": {
+            "name": "Student Image Folder",
+            "description": "Manage student image files; image filenames must match student names"
+        },
+        "animation_music": {
+            "name": "Animation Music",
+            "description": "Set whether to play animation music",
+            "switchbutton_name": {
+                "enable": "Play",
+                "disable": "Off"
+            }
+        },
+        "result_music": {
+            "name": "Result Music",
+            "description": "Set whether to play result music",
+            "switchbutton_name": {
+                "enable": "Play",
+                "disable": "Off"
+            }
+        },
+        "open_animation_music_folder": {
+            "name": "Open Animation Music Folder",
+            "description": "Manage animation music files and enable random playback"
+        },
+        "open_result_music_folder": {
+            "name": "Open Result Music Folder",
+            "description": "Manage result music files and enable random playback"
+        },
+        "animation_music_volume": {
+            "name": "Animation Music Volume",
+            "description": "Set the volume for animation music"
+        },
+        "result_music_volume": {
+            "name": "Result Music Volume",
+            "description": "Set the volume for result music"
+        },
+        "animation_music_fade_in": {
+            "name": "Animation Music Fade-In Time",
+            "description": "Set the fade-in time for animation music"
+        },
+        "result_music_fade_in": {
+            "name": "Result Music Fade-In Time",
+            "description": "Set the fade-in time for result music"
+        },
+        "animation_music_fade_out": {
+            "name": "Animation Music Fade-Out Time",
+            "description": "Set the fade-out time for animation music"
+        },
+        "result_music_fade_out": {
+            "name": "Result Music Fade-Out Time",
+            "description": "Set the fade-out time for result music"
+        }
+    },
+    "quick_draw_settings": {
+        "title": {
+            "name": "Quick Draw Settings",
+            "description": "Settings for quick draws"
+        },
+        "extraction_function": {
+            "name": "Extraction Functions",
+            "description": "Settings related to quick draw extraction features"
+        },
+        "display_settings": {
+            "name": "Display Settings",
+            "description": "Settings for how quick draw results are displayed"
+        },
+        "basic_animation_settings": {
+            "name": "Animation Settings",
+            "description": "Settings related to quick draw animation effects"
+        },
+        "color_theme_settings": {
+            "name": "Color Theme Settings",
+            "description": "Color theme settings for quick draw results display"
+        },
+        "student_image_settings": {
+            "name": "Student Avatar Settings",
+            "description": "Settings for student avatars in quick draw results display"
+        },
+        "music_settings": {
+            "name": "Music Settings",
+            "description": "Settings related to quick draw music"
+        },
+        "draw_mode": {
+            "name": "Draw Mode",
+            "description": "Set the draw mode for quick draw",
+            "combo_items": [
+                "Allow Repeats",
+                "No Repeats",
+                "Partial Repeats"
+            ]
+        },
+        "clear_record": {
+            "name": "Clear Record Mode",
+            "description": "Set how quick draw extraction records are cleared",
+            "combo_items": [
+                "Clear After Restart",
+                "Until All Selected"
+            ],
+            "combo_items_other": [
+                "Clear After Restart",
+                "Until All Selected",
+                "Never Clear"
+            ]
+        },
+        "half_repeat": {
+            "name": "Partial Repeat Count",
+            "description": "Set the number of partial repeats"
+        },
+        "clear_time": {
+            "name": "Timed Clear After Extraction",
+            "description": "Set the time (seconds) after which extraction records are cleared"
+        },
+        "draw_type": {
+            "name": "Draw Type",
+            "description": "Set the draw type for quick draw",
+            "combo_items": [
+                "Random Draw",
+                "Fair Draw"
+            ]
+        },
+        "font_size": {
+            "name": "Font Size",
+            "description": "Set the font size for quick draw results display"
+        },
+        "display_format": {
+            "name": "Result Display Format",
+            "description": "Set the format for displaying quick draw results",
+            "combo_items": [
+                "Student ID + Name",
+                "Name",
+                "Student ID"
+            ]
+        },
+        "show_random": {
+            "name": "Show Random Group Member Format",
+            "description": "Set how random group members are shown",
+            "combo_items": [
+                "Don't show",
+                "GroupName[Newline]Name",
+                "GroupName[-]Name"
+            ]
+        },
+        "animation": {
+            "name": "Animation Mode",
+            "description": "Set the animation effect for quick draw",
+            "combo_items": [
+                "Manual Stop Animation",
+                "Auto Play Animation",
+                "Show Result Immediately"
+            ]
+        },
+        "animation_interval": {
+            "name": "Animation Interval",
+            "description": "Set the interval for quick draw animation (ms)"
+        },
+        "autoplay_count": {
+            "name": "Autoplay Count",
+            "description": "Set how many times the quick draw animation auto-plays"
+        },
+        "animation_color_theme": {
+            "name": "Animation Color Theme",
+            "description": "Set the color theme for quick draw animation",
+            "combo_items": [
+                "Off",
+                "Random Colors",
+                "Fixed Color"
+            ]
+        },
+        "result_color_theme": {
+            "name": "Result Color Theme",
+            "description": "Set the color theme for quick draw result display",
+            "combo_items": [
+                "Off",
+                "Random Colors",
+                "Fixed Color"
+            ]
+        },
+        "animation_fixed_color": {
+            "name": "Animation Fixed Color",
+            "description": "Set the fixed color used during quick draw animations"
+        },
+        "result_fixed_color": {
+            "name": "Result Fixed Color",
+            "description": "Set the fixed color used for quick draw results display"
+        },
+        "student_image": {
+            "name": "Show Student Images",
+            "description": "Set whether to show student images",
+            "switchbutton_name": {
+                "enable": "Show",
+                "disable": "Hide"
+            }
+        },
+        "open_student_image_folder": {
+            "name": "Student Image Folder",
+            "description": "Manage student image files; image filenames must match student names"
+        },
+        "animation_music": {
+            "name": "Animation Music",
+            "description": "Set whether to play animation music",
+            "switchbutton_name": {
+                "enable": "Play",
+                "disable": "Off"
+            }
+        },
+        "result_music": {
+            "name": "Result Music",
+            "description": "Set whether to play result music",
+            "switchbutton_name": {
+                "enable": "Play",
+                "disable": "Off"
+            }
+        },
+        "open_animation_music_folder": {
+            "name": "Open Animation Music Folder",
+            "description": "Manage animation music files and enable random playback"
+        },
+        "open_result_music_folder": {
+            "name": "Open Result Music Folder",
+            "description": "Manage result music files and enable random playback"
+        },
+        "animation_music_volume": {
+            "name": "Animation Music Volume",
+            "description": "Set the volume for animation music"
+        },
+        "result_music_volume": {
+            "name": "Result Music Volume",
+            "description": "Set the volume for result music"
+        },
+        "animation_music_fade_in": {
+            "name": "Animation Music Fade-In Time",
+            "description": "Set the fade-in time for animation music"
+        },
+        "result_music_fade_in": {
+            "name": "Result Music Fade-In Time",
+            "description": "Set the fade-in time for result music"
+        },
+        "animation_music_fade_out": {
+            "name": "Animation Music Fade-Out Time",
+            "description": "Set the fade-out time for animation music"
+        },
+        "result_music_fade_out": {
+            "name": "Result Music Fade-Out Time",
+            "description": "Set the fade-out time for result music"
+        }
+    },
+    "instant_draw_settings": {
+        "title": {
+            "name": "Instant Draw Settings",
+            "description": "Settings related to instant draw functionality"
+        },
+        "extraction_function": {
+            "name": "Extraction Functions",
+            "description": "Settings related to instant draw extraction features"
+        },
+        "display_settings": {
+            "name": "Display Settings",
+            "description": "Settings for how instant draw results are displayed"
+        },
+        "basic_animation_settings": {
+            "name": "Animation Settings",
+            "description": "Settings related to instant draw animation effects"
+        },
+        "color_theme_settings": {
+            "name": "Color Theme Settings",
+            "description": "Color theme settings for instant draw results display"
+        },
+        "student_image_settings": {
+            "name": "Student Avatar Settings",
+            "description": "Settings for student avatars in instant draw results display"
+        },
+        "music_settings": {
+            "name": "Music Settings",
+            "description": "Settings related to instant draw music"
+        },
+        "draw_mode": {
+            "name": "Draw Mode",
+            "description": "Set the draw mode for instant draw",
+            "combo_items": [
+                "Allow Repeats",
+                "No Repeats",
+                "Partial Repeats"
+            ]
+        },
+        "clear_record": {
+            "name": "Clear Record Mode",
+            "description": "Set how instant draw extraction records are cleared",
+            "combo_items": [
+                "Clear After Restart",
+                "Until All Selected"
+            ],
+            "combo_items_other": [
+                "Clear After Restart",
+                "Until All Selected",
+                "Never Clear"
+            ]
+        },
+        "half_repeat": {
+            "name": "Partial Repeat Count",
+            "description": "Set the number of partial repeats"
+        },
+        "clear_time": {
+            "name": "Timed Clear After Extraction",
+            "description": "Set the time (seconds) after which extraction records are cleared"
+        },
+        "draw_type": {
+            "name": "Draw Type",
+            "description": "Set the draw type for instant draw",
+            "combo_items": [
+                "Random Draw",
+                "Fair Draw"
+            ]
+        },
+        "font_size": {
+            "name": "Font Size",
+            "description": "Set the font size for instant draw results display"
+        },
+        "display_format": {
+            "name": "Result Display Format",
+            "description": "Set the format for displaying instant draw results",
+            "combo_items": [
+                "Student ID + Name",
+                "Name",
+                "Student ID"
+            ]
+        },
+        "show_random": {
+            "name": "Show Random Group Member Format",
+            "description": "Set how random group members are shown",
+            "combo_items": [
+                "Don't show",
+                "GroupName[Newline]Name",
+                "GroupName[-]Name"
+            ]
+        },
+        "animation": {
+            "name": "Animation Mode",
+            "description": "Set the animation effect for instant draw",
+            "combo_items": [
+                "Manual Stop Animation",
+                "Auto Play Animation",
+                "Show Result Immediately"
+            ]
+        },
+        "animation_interval": {
+            "name": "Animation Interval",
+            "description": "Set the interval for instant draw animation (ms)"
+        },
+        "autoplay_count": {
+            "name": "Autoplay Count",
+            "description": "Set how many times the instant draw animation auto-plays"
+        },
+        "animation_color_theme": {
+            "name": "Animation Color Theme",
+            "description": "Set the color theme for instant draw animation",
+            "combo_items": [
+                "Off",
+                "Random Colors",
+                "Fixed Color"
+            ]
+        },
+        "result_color_theme": {
+            "name": "Result Color Theme",
+            "description": "Set the color theme for instant draw result display",
+            "combo_items": [
+                "Off",
+                "Random Colors",
+                "Fixed Color"
+            ]
+        },
+        "animation_fixed_color": {
+            "name": "Animation Fixed Color",
+            "description": "Set the fixed color used during instant draw animations"
+        },
+        "result_fixed_color": {
+            "name": "Result Fixed Color",
+            "description": "Set the fixed color used for instant draw results display"
+        },
+        "student_image": {
+            "name": "Show Student Images",
+            "description": "Set whether to show student images",
+            "switchbutton_name": {
+                "enable": "Show",
+                "disable": "Hide"
+            }
+        },
+        "open_student_image_folder": {
+            "name": "Student Image Folder",
+            "description": "Manage student image files; image filenames must match student names"
+        },
+        "animation_music": {
+            "name": "Animation Music",
+            "description": "Set whether to play animation music",
+            "switchbutton_name": {
+                "enable": "Play",
+                "disable": "Off"
+            }
+        },
+        "result_music": {
+            "name": "Result Music",
+            "description": "Set whether to play result music",
+            "switchbutton_name": {
+                "enable": "Play",
+                "disable": "Off"
+            }
+        },
+        "open_animation_music_folder": {
+            "name": "Open Animation Music Folder",
+            "description": "Manage animation music files and enable random playback"
+        },
+        "open_result_music_folder": {
+            "name": "Open Result Music Folder",
+            "description": "Manage result music files and enable random playback"
+        },
+        "animation_music_volume": {
+            "name": "Animation Music Volume",
+            "description": "Set the volume for animation music"
+        },
+        "result_music_volume": {
+            "name": "Result Music Volume",
+            "description": "Set the volume for result music"
+        },
+        "animation_music_fade_in": {
+            "name": "Animation Music Fade-In Time",
+            "description": "Set the fade-in time for animation music"
+        },
+        "result_music_fade_in": {
+            "name": "Result Music Fade-In Time",
+            "description": "Set the fade-in time for result music"
+        },
+        "animation_music_fade_out": {
+            "name": "Animation Music Fade-Out Time",
+            "description": "Set the fade-out time for animation music"
+        },
+        "result_music_fade_out": {
+            "name": "Result Music Fade-Out Time",
+            "description": "Set the fade-out time for result music"
+        }
+    },
+    "custom_draw_settings": {
+        "title": {
+            "name": "Custom Draw Settings",
+            "description": "Settings for custom draws"
+        }
+    },
+    "lottery_settings": {
+        "title": {
+            "name": "Lottery Settings",
+            "description": "Settings for lottery/prize draws"
+        },
+        "extraction_function": {
+            "name": "Extraction Functions",
+            "description": "Settings related to lottery extraction features"
+        },
+        "display_settings": {
+            "name": "Display Settings",
+            "description": "Settings for how lottery results are displayed"
+        },
+        "basic_animation_settings": {
+            "name": "Animation Settings",
+            "description": "Settings related to lottery animation effects"
+        },
+        "color_theme_settings": {
+            "name": "Color Theme Settings",
+            "description": "Color theme settings for lottery results display"
+        },
+        "student_image_settings": {
+            "name": "Prize Image Settings",
+            "description": "Settings for prize images in lottery results display"
+        },
+        "music_settings": {
+            "name": "Music Settings",
+            "description": "Settings related to lottery music"
+        },
+        "draw_mode": {
+            "name": "Draw Mode",
+            "description": "Set the draw mode for lotteries",
+            "combo_items": [
+                "Allow Repeats",
+                "No Repeats",
+                "Partial Repeats"
+            ]
+        },
+        "clear_record": {
+            "name": "Clear Record Mode",
+            "description": "Set how lottery extraction records are cleared",
+            "combo_items": [
+                "Clear After Restart",
+                "Until All Selected"
+            ],
+            "combo_items_other": [
+                "Clear After Restart",
+                "Until All Selected",
+                "Never Clear"
+            ]
+        },
+        "half_repeat": {
+            "name": "Partial Repeat Count",
+            "description": "Set the number of partial repeats"
+        },
+        "clear_time": {
+            "name": "Timed Clear After Extraction",
+            "description": "Set the time (seconds) after which extraction records are cleared"
+        },
+        "draw_type": {
+            "name": "Draw Type",
+            "description": "Set the draw type for lotteries",
+            "combo_items": [
+                "Random Draw",
+                "Fair Draw"
+            ]
+        },
+        "font_size": {
+            "name": "Font Size",
+            "description": "Set the font size for lottery results display"
+        },
+        "display_format": {
+            "name": "Result Display Format",
+            "description": "Set the format for displaying lottery results",
+            "combo_items": [
+                "Index + Name",
+                "Name",
+                "Index"
+            ]
+        },
+        "animation": {
+            "name": "Animation Mode",
+            "description": "Set the animation effect for lottery draws",
+            "combo_items": [
+                "Manual Stop Animation",
+                "Auto Play Animation",
+                "Show Result Immediately"
+            ]
+        },
+        "animation_interval": {
+            "name": "Animation Interval",
+            "description": "Set the interval for lottery animation (ms)"
+        },
+        "autoplay_count": {
+            "name": "Autoplay Count",
+            "description": "Set how many times the lottery animation auto-plays"
+        },
+        "animation_color_theme": {
+            "name": "Animation Color Theme",
+            "description": "Set the color theme for lottery animation",
+            "combo_items": [
+                "Off",
+                "Random Colors",
+                "Fixed Color"
+            ]
+        },
+        "result_color_theme": {
+            "name": "Result Color Theme",
+            "description": "Set the color theme for lottery result display",
+            "combo_items": [
+                "Off",
+                "Random Colors",
+                "Fixed Color"
+            ]
+        },
+        "animation_fixed_color": {
+            "name": "Animation Fixed Color",
+            "description": "Set the fixed color used during lottery animations"
+        },
+        "result_fixed_color": {
+            "name": "Result Fixed Color",
+            "description": "Set the fixed color used for lottery results display"
+        },
+        "lottery_image": {
+            "name": "Show Item Images",
+            "description": "Set whether to show images for items/prizes",
+            "switchbutton_name": {
+                "enable": "Show",
+                "disable": "Hide"
+            }
+        },
+        "open_lottery_image_folder": {
+            "name": "Prize Image Folder",
+            "description": "Manage prize image files; image filenames must match prize names"
+        },
+        "animation_music": {
+            "name": "Animation Music",
+            "description": "Set whether to play animation music",
+            "switchbutton_name": {
+                "enable": "Play",
+                "disable": "Off"
+            }
+        },
+        "result_music": {
+            "name": "Result Music",
+            "description": "Set whether to play result music",
+            "switchbutton_name": {
+                "enable": "Play",
+                "disable": "Off"
+            }
+        },
+        "open_animation_music_folder": {
+            "name": "Open Animation Music Folder",
+            "description": "Manage animation music files and enable random playback"
+        },
+        "open_result_music_folder": {
+            "name": "Open Result Music Folder",
+            "description": "Manage result music files and enable random playback"
+        },
+        "animation_music_volume": {
+            "name": "Animation Music Volume",
+            "description": "Set the volume for animation music"
+        },
+        "result_music_volume": {
+            "name": "Result Music Volume",
+            "description": "Set the volume for result music"
+        },
+        "animation_music_fade_in": {
+            "name": "Animation Music Fade-In Time",
+            "description": "Set the fade-in time for animation music"
+        },
+        "result_music_fade_in": {
+            "name": "Result Music Fade-In Time",
+            "description": "Set the fade-in time for result music"
+        },
+        "animation_music_fade_out": {
+            "name": "Animation Music Fade-Out Time",
+            "description": "Set the fade-out time for animation music"
+        },
+        "result_music_fade_out": {
+            "name": "Result Music Fade-Out Time",
+            "description": "Set the fade-out time for result music"
+        }
+    },
+    "safety_settings": {
+        "title": {
+            "name": "Safety Settings",
+            "description": "Safety and security related settings"
+        }
+    },
+    "basic_safety_settings": {
+        "title": {
+            "name": "Basic Safety Settings",
+            "description": "Basic safety settings"
+        },
+        "verification_method": {
+            "name": "Verification Method",
+            "description": "Set the verification method for security features"
+        },
+        "verification_process": {
+            "name": "Verification Process",
+            "description": "Security verification steps"
+        }
+    }
+}

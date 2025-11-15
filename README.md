@@ -6,6 +6,7 @@
 
 🚀 **现代化教育工具** | 🎯 **智能权重算法** | 🎨 **优雅交互体验**
 
+**✔简体中文** | [English](resources/README_EN.md) | [繁體中文](resources/README_ZH_TW.md)
 </div>
 
 <!-- 项目状态徽章 -->
@@ -29,6 +30,12 @@
 > SecRandom 本体将基于GNU GPLv3协议开源
 >
 > GNU GPLv3具有Copyleft特性，也就是说，您可以修改SecRandom的源代码，但是**必须将修改版本同样以GNU GPLv3协议开源**
+
+> [!note]
+>
+> **SecRandom v2** 将会在 2025/12/14 (GMT +8:00 中国标准时间) 左右 发布！
+>
+> 敬请关注我们的 BiliBili、QQ 频道中的内容，我们会不定期发布开发进展等信息！
 
 ## 📖 目录
 - [🌟 核心亮点](#-核心亮点)
@@ -81,10 +88,10 @@
 <details>
 <summary>📸 软件截图展示 ✨</summary>
 
-![点名界面](ScreenSots/主界面_抽人_浅色.png)
-![抽奖界面](ScreenSots/主界面_抽奖_浅色.png)
-![历史记录](ScreenSots/主界面_抽人历史记录_浅色.png)
-![设置界面](ScreenSots/设置_抽人设置_浅色.png)
+![点名界面](resources/ScreenShots/主界面_抽人_浅色.png)
+![抽奖界面](resources/ScreenShots/主界面_抽奖_浅色.png)
+![历史记录](resources/ScreenShots/主界面_抽人历史记录_浅色.png)
+![设置界面](resources/ScreenShots/设置_抽人设置_浅色.png)
 
 </details>
 
