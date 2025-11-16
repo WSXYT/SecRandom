@@ -6,7 +6,7 @@
 
 🚀 **Modern Educational Tool** | 🎯 **Intelligent Weighting Algorithm** | 🎨 **Elegant Interactive Experience**
 
-[简体中文](resources/README_ZH.md) | **✔English** | [繁體中文](resources/README_ZH_TW.md)
+[简体中文](../README_ZH.md) | **✔English** | [繁體中文](./README_ZH_TW.md)
 > The Readme you are currently reading is **translated by AI** and reviewed by our developers. If you find any errors, please report it.
 </div>
 
@@ -39,6 +39,7 @@
 > Please follow our BiliBili / QQ Channel for regular development progress updates!
 
 ## 📖 Table of Contents
+
 - [🌟 Core Features](#-core-features)
 - [📥 Download](#-download)
 - [📸 Software Screenshots](#-software-screenshots)
@@ -50,21 +51,25 @@
 ## 🌟 Core Features
 
 ### 🎯 **Intelligent Fair Selection System**
+
 - ✅ **Dynamic Weighting Algorithm**: Calculates based on multiple dimensions including selection count, group, and gender to ensure true fairness
 - ✅ **Cold Start Protection**: Prevents new members from having too low weight, ensuring everyone has equal opportunities
 - ✅ **Probability Visualization**: Intuitively displays each member's probability of being selected, making the selection process transparent
 
 ### 🎨 **Modern User Experience**
+
 - ✅ **Elegant UI Design**: Modern interface based on Fluent Design, supporting light/dark themes
 - ✅ **Floating Window Mode**: Perform selections anytime without affecting other work
 - ✅ **Voice Announcements**: Automatic voice announcement of selection results, supporting custom voice engines
 
 ### 🚀 **Powerful Feature Set**
+
 - ✅ **Multiple Selection Modes**: Individual/multiple/group/gender selection to meet different scenario needs
 - ✅ **Smart History Records**: Detailed records with timestamps, supporting automatic cleanup
 - ✅ **Multi-list Management**: Support for importing/exporting lists, easily managing different classes/teams
 
 ### 💻 **System Compatibility**
+
 - ✅ **Full Platform Support**: Perfectly compatible with Windows 7/10/11 systems
 - ✅ **Multi-architecture Support**: Native support for x64 and x86 architectures
 - ✅ **Startup on Boot**: Supports automatic startup on boot, always available
@@ -72,57 +77,64 @@
 ## 📥 Download
 
 ### 🌐 Official Download Page
+
 - 📥 **[Official Download Page](https://secrandom.netlify.app/download)** - Get the latest stable version and beta versions
 
 ### 📦 Download Sources
 
 #### Official Channels
-- **GitHub Official Source** - Official release channel, faster access overseas, recommended
-- **123 Cloud Drive Source** - Cloud drive download, no speed limit, suitable for large file downloads
 
-#### Domestic Accelerated Mirrors
-- **GitHub Mirror (ghfast.top)** - Domestic accelerated mirror, fast and stable
-- **GitHub Mirror (gh-proxy.com)** - Domestic accelerated mirror, suitable for users with special network environments
+- **GitHub Official Source** - Official release channel, faster access outside mainland China, recommended
+- **123 Cloud Drive Source** - Cloud drive download, no speed limit, faster access in mainland China, suitable for large file downloads
 
+#### Accelerated Mirrors in Mainland China
 
-## 📸 Software Screenshots(v1.1.0.1)
-<details>
-<summary>📸 Software Screenshots Display ✨</summary>
+> [!note]
+>
+> These mirrors are mainly provided for users in mainland China.
+
+- **GitHub Mirror (ghfast.top)** - Accelerated mirror, fast and stable
+- **GitHub Mirror (gh-proxy.com)** - Accelerated mirror, suitable for users with special network environments
+
+## 📸 Software Screenshots
 
 > [!warning]
 >
 > The screenshots shown below are in **Chinese Simplified** language.
 
-![Selection Interface](./resources/ScreenShots/主界面_抽人_浅色.png)
-![Lottery Interface](./resources/ScreenShots/主界面_抽奖_浅色.png)
-![History Records](./resources/ScreenShots/主界面_抽人历史记录_浅色.png)
-![Settings Interface](./resources/ScreenShots/设置_抽人设置_浅色.png)
+<details>
+<summary>📸 Software Screenshots Display ✨</summary>
+
+![Selection Interface](./ScreenShots/主界面_抽人_浅色.png)
+![Lottery Interface](./ScreenShots/主界面_抽奖_浅色.png)
+![History Records](./ScreenShots/主界面_抽人历史记录_浅色.png)
+![Settings Interface](./ScreenShots/设置_抽人设置_浅色.png)
 
 </details>
 
 ## 📖 Fair Selection
 
-> [!note]
->
-> **Introduction**:
-> Fair selection is a random selection method that ensures each member's selection weight is determined by the system, thus avoiding unfair results.
-> This method is suitable for scenarios that require random and fair selection of students to answer questions or other situations requiring fair distribution.
-> SecRandom's fair selection implementation is based on a dynamic weight system, calculated through multiple aspects.
+### Introduction
 
-### **Dynamic Weight System**
-> [!note]
->
-> Dynamic weight is the core mechanism of SecRandom's fair selection.
-> It calculates each member's weight through the following aspects:
-> 1. **Total Selection Count**: More selections lead to lower weight, avoiding repeated selections
-> 2. **Group Selection Count**: Balances selection opportunities across different groups
-> 3. **Gender Selection Count**: Ensures gender balance
-> 4. **Base Weight**: Customizable initial weight settings
-> 5. **Cold Start Protection**: Prevents new members from having too low weight, ensuring fairness
+Fair selection is a random selection method that ensures each member's selection weight is determined by the system, thus avoiding unfair results.
+This method is suitable for scenarios that require random and fair selection of students to answer questions or other situations requiring fair distribution.
+SecRandom's fair selection implementation is based on a dynamic weight system, calculated through multiple aspects.
+
+### Dynamic Weight System
+
+Dynamic weight is the core mechanism of SecRandom's fair selection.
+It calculates each member's weight through the following aspects:
+
+1. **Total Selection Count**: More selections lead to lower weight, avoiding repeated selections
+2. **Group Selection Count**: Balances selection opportunities across different groups
+3. **Gender Selection Count**: Ensures gender balance
+4. **Base Weight**: Customizable initial weight settings
+5. **Cold Start Protection**: Prevents new members from having too low weight, ensuring fairness
 
 ## Build and Package
 
 ### Trigger Build
+
 Include `进行打包` in the commit message to trigger the automatic build process.
 
 </details>
@@ -149,14 +161,17 @@ Include `进行打包` in the commit message to trigger the automatic build proc
 
 If you find SecRandom helpful, you're welcome to support our development work!
 
-- **Alipay/WeChat Pay**
-
-  <image src="../app/resource/assets/contribution/Alipay.png" height="196"/> <image src="../app/resource/assets/contribution/WeChat_Pay.png" height="196"/>
+- **Alipay/WeChat Pay**  
+<image src="../app/resource/assets/contribution/Alipay.png" height="196"/>
+<image src="../app/resource/assets/contribution/WeChat_Pay.png" height="196"/>
+- **Afdian**  
+[Charge for 黎泽懿_Aionflux](https://afdian.com/a/lzy0983
 
 ## 📞 Contact
 
 * 📧 [Email](mailto:lzy.12@foxmail.com)
 * 👥 [QQ Group 833875216](https://qm.qq.com/q/iWcfaPHn7W)
+* #⃣️ [QQ Channel](https://pd.qq.com/s/4x5dafd34?b=9)
 * 🎥 [Bilibili Homepage](https://space.bilibili.com/520571577)
 * 🐛 [Issue Report](https://github.com/SECTL/SecRandom/issues)
 
