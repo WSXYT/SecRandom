@@ -367,28 +367,28 @@ jobs:
       - name: 生成 需发布 的表格信息
         run: |
           cd release
-          echo "" >> ../CHANGELOG.md
-          echo "**国内 下载链接**" >> ../CHANGELOG.md
-          echo "| 平台/打包方式 | 支持架构 | 完整版 |" >> ../CHANGELOG.md
-          echo "| --- | --- | --- |" >> ../CHANGELOG.md
-          echo "| Windows | x64 | [下载](https://www.123684.com/s/9529jv-U4Fxh) |" >> ../CHANGELOG.md
-          echo "| Linux | x64 | [下载](https://www.123684.com/s/9529jv-U4Fxh) |" >> ../CHANGELOG.md
-          echo "" >> ../CHANGELOG.md
-          echo "**Github 镜像 下载链接**" >> ../CHANGELOG.md
-          echo "| 镜像源 | 平台 | 支持架构 | 完整版 |" >> ../CHANGELOG.md
-          echo "| --- | --- | --- | --- |" >> ../CHANGELOG.md
-          echo "| ghfast.top | Windows | x64 | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-windows-${{ github.ref_name }}-x64-dir.zip) |" >> ../CHANGELOG.md
-          echo "| ghfast.top | Linux | x64 | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-linux-${{ github.ref_name }}-x64-dir.zip) |" >> ../CHANGELOG.md
-          echo "| gh-proxy.com | Windows | x64 | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-windows-${{ github.ref_name }}-x64-dir.zip) |" >> ../CHANGELOG.md
-          echo "| gh-proxy.com | Linux | x64 | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-linux-${{ github.ref_name }}-x64-dir.zip) |" >> ../CHANGELOG.md
-          echo "" >> ../CHANGELOG.md
-          echo "**SHA256 校验值-请核对下载的文件的SHA256值是否正确**" >> ../CHANGELOG.md
-          echo "| 文件名 | SHA256 值 |" >> ../CHANGELOG.md
-          echo "| --- | --- |" >> ../CHANGELOG.md
+          echo "" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "**国内 下载链接**" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| 平台/打包方式 | 支持架构 | 完整版 |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| --- | --- | --- |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| Windows | x64 | [下载](https://www.123684.com/s/9529jv-U4Fxh) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| Linux | x64 | [下载](https://www.123684.com/s/9529jv-U4Fxh) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "**Github 镜像 下载链接**" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| 镜像源 | 平台 | 支持架构 | 完整版 |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| --- | --- | --- | --- |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| ghfast.top | Windows | x64 | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-windows-${{ github.ref_name }}-x64-dir.zip) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| ghfast.top | Linux | x64 | [下载 ${{ github.ref_name }}](https://ghfast.top/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-linux-${{ github.ref_name }}-x64-dir.zip) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| gh-proxy.com | Windows | x64 | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-windows-${{ github.ref_name }}-x64-dir.zip) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| gh-proxy.com | Linux | x64 | [下载 ${{ github.ref_name }}](https://gh-proxy.com/https://github.com/SECTL/SecRandom/releases/download/${{ github.ref_name }}/SecRandom-linux-${{ github.ref_name }}-x64-dir.zip) |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "**SHA256 校验值-请核对下载的文件的SHA256值是否正确**" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| 文件名 | SHA256 值 |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
+          echo "| --- | --- |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
           while read -r line; do
             hash=$(echo "$line" | awk '{print $1}')
             file=$(echo "$line" | awk '{print $2}')
-            echo "| $file | $hash |" >> ../CHANGELOG.md
+            echo "| $file | $hash |" >> ../CHANGELOG/${{ github.ref_name }}/CHANGELOG.md
           done < SHA256SUMS.txt
           rm SHA256SUMS.txt
           cd ..
