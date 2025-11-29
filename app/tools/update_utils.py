@@ -229,6 +229,11 @@ async def get_latest_version_async(channel: int | None = None) -> dict | None:
         version = latest.get(channel_name, latest.get("release", VERSION))
         version_no = latest_no.get(channel_name, latest_no.get("release", 0))
 
+        # 如果版本号是Disable，返回当前版本，禁止该通道更新
+        if version == "Disable":
+            logger.debug(f"通道 {channel_name} 已禁用，返回当前版本")
+            return {"version": VERSION, "version_no": 0}
+
         logger.debug(
             f"获取最新版本信息成功: 通道={channel_name}, 版本={version}, 版本号={version_no}"
         )

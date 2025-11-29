@@ -58,11 +58,15 @@ class update(QWidget):
 
         # 创建顶部信息区域
         self.setup_header_info()
+        # 创建下载布局
+        self.setup_download_layout()
         # 创建更新设置区域
         self.setup_update_settings()
+
         # 添加到主界面
         self.main_layout.addWidget(self.titleLabel)
         self.main_layout.addLayout(self.header_layout)
+        self.main_layout.addLayout(self.download_layout)
         self.main_layout.addWidget(self.update_settings_card)
         # 设置窗口布局
         self.setLayout(self.main_layout)
@@ -131,11 +135,23 @@ class update(QWidget):
         button_ring_layout.addWidget(self.indeterminate_ring)
         button_ring_layout.addStretch()  # 右侧添加拉伸，确保按钮和进度环靠左
 
+        # 添加控件到状态布局
+        status_layout.addWidget(self.status_label)
+        status_layout.addWidget(self.version_label)
+        status_layout.addWidget(self.last_check_label)
+        status_layout.addLayout(button_ring_layout)
+
+        # 添加状态布局、取消布局和拉伸到头部布局
+        self.header_layout.addLayout(status_layout)
+        self.header_layout.addStretch(1)  # 添加拉伸因子，将内容向左推
+
+    def setup_download_layout(self):
+        """设置下载布局"""
         # 创建下载信息布局（垂直布局，用于进度条和相关信息）
-        download_layout = QVBoxLayout()
-        download_layout.setSpacing(5)
-        download_layout.setAlignment(Qt.AlignLeft)
-        download_layout.setContentsMargins(0, 0, 0, 0)  # 移除边距
+        self.download_layout = QVBoxLayout()
+        self.download_layout.setSpacing(5)
+        self.download_layout.setAlignment(Qt.AlignLeft)
+        self.download_layout.setContentsMargins(0, 0, 0, 0)  # 移除边距
 
         # 创建下载进度条（单独一个布局，让它可以延伸到窗口最右端）
         self.download_progress = ProgressBar()
@@ -155,7 +171,7 @@ class update(QWidget):
         self.cancel_update_button.clicked.connect(self.cancel_update)
         self.cancel_update_button.setVisible(False)  # 默认隐藏
 
-        # 创建取消按钮布局
+        # 取消按钮布局（与进度条对齐）
         cancel_layout = QHBoxLayout()
         cancel_layout.setSpacing(10)
         cancel_layout.setAlignment(Qt.AlignLeft)
@@ -163,29 +179,9 @@ class update(QWidget):
         cancel_layout.addStretch()  # 右侧添加拉伸
 
         # 添加控件到下载布局
-        download_layout.addWidget(self.download_progress)
-        download_layout.addWidget(self.download_info_label)
-        download_layout.addLayout(cancel_layout)
-
-        # 添加控件到状态布局
-        status_layout.addWidget(self.status_label)
-        status_layout.addWidget(self.version_label)
-        status_layout.addWidget(self.last_check_label)
-        status_layout.addLayout(button_ring_layout)
-
-        # 添加状态布局和下载布局到头部布局
-        self.header_layout.addLayout(status_layout)
-        self.header_layout.addStretch(1)  # 添加拉伸因子，将内容向左推
-
-        # 创建单独的进度条布局，让它可以延伸到窗口最右端
-        self.progress_layout = QVBoxLayout()
-        self.progress_layout.setSpacing(5)
-        self.progress_layout.setAlignment(Qt.AlignLeft)
-        self.progress_layout.setContentsMargins(0, 0, 0, 0)  # 移除边距
-        self.progress_layout.addLayout(download_layout)
-
-        # 添加进度条布局到主布局
-        self.main_layout.insertLayout(2, self.progress_layout)
+        self.download_layout.addWidget(self.download_progress)
+        self.download_layout.addWidget(self.download_info_label)
+        self.download_layout.addLayout(cancel_layout)
 
     def setup_update_settings(self):
         """设置更新设置区域"""
@@ -340,18 +336,17 @@ class update(QWidget):
         # 获取最新版本信息
         latest_version_info = get_latest_version()
         if not latest_version_info:
-            msg_box = MessageBox(
-                get_content_name("update", "download_failed"),
-                get_content_name("update", "failed_to_get_version_info"),
-                self,
+            self.status_label.setText(
+                get_content_name_async("update", "failed_to_get_version_info")
             )
-            msg_box.exec()
             return
 
         latest_version = latest_version_info["version"]
 
         # 更新状态显示
-        self.status_label.setText(get_content_name("update", "downloading_update"))
+        self.status_label.setText(
+            get_content_name_async("update", "downloading_update")
+        )
         self.download_progress.setVisible(True)
         self.download_info_label.setVisible(True)
         self.cancel_update_button.setVisible(True)
@@ -360,8 +355,9 @@ class update(QWidget):
 
         # 下载状态变量
         self._download_cancelled = False
-        self._last_downloaded = 0
         self._start_time = QDateTime.currentDateTime().toMSecsSinceEpoch()
+        self._last_speed_update = 0
+        self._speed_update_interval = 300  # 每300ms更新一次速度
 
         # 定义进度回调函数
         def progress_callback(downloaded: int, total: int):
@@ -378,28 +374,33 @@ class update(QWidget):
                     Q_ARG(int, progress),
                 )
 
-                # 计算下载速度
+                # 格式化速度和总大小
+                def format_size(size_bytes):
+                    """格式化文件大小"""
+                    if size_bytes < 1024:
+                        return f"{size_bytes} B"
+                    elif size_bytes < 1024 * 1024:
+                        return f"{size_bytes / 1024:.1f} KB"
+                    else:
+                        return f"{size_bytes / (1024 * 1024):.1f} MB"
+
                 current_time = QDateTime.currentDateTime().toMSecsSinceEpoch()
-                elapsed = current_time - self._start_time
-                if elapsed > 0:
-                    # 计算下载速度（字节/秒）
-                    speed = (downloaded - self._last_downloaded) * 1000 / elapsed
-                    self._last_downloaded = downloaded
-                    self._start_time = current_time
+                total_str = format_size(total)
+                downloaded_str = format_size(downloaded)
 
-                    # 格式化速度和总大小
-                    def format_size(size_bytes):
-                        """格式化文件大小"""
-                        if size_bytes < 1024:
-                            return f"{size_bytes} B"
-                        elif size_bytes < 1024 * 1024:
-                            return f"{size_bytes / 1024:.1f} KB"
-                        else:
-                            return f"{size_bytes / (1024 * 1024):.1f} MB"
-
-                    speed_str = format_size(speed)
-                    total_str = format_size(total)
-                    downloaded_str = format_size(downloaded)
+                # 每300ms更新一次速度
+                if (
+                    current_time - self._last_speed_update
+                    >= self._speed_update_interval
+                ):
+                    elapsed = current_time - self._start_time
+                    if elapsed > 0:
+                        # 计算累计平均速度（字节/秒）
+                        # 从开始下载到当前的总字节数除以总时间
+                        speed = downloaded * 1000 / elapsed
+                        speed_str = format_size(speed)
+                    else:
+                        speed_str = "0 B/s"
 
                     # 更新下载信息标签
                     info_text = f"{speed_str}/s | {downloaded_str} / {total_str}"
@@ -410,6 +411,9 @@ class update(QWidget):
                         Q_ARG(str, info_text),
                     )
 
+                    # 更新上次速度更新时间
+                    self._last_speed_update = current_time
+
         # 定义下载完成后的处理函数
         def on_download_complete(file_path: Optional[str]):
             if self._download_cancelled:
@@ -418,7 +422,7 @@ class update(QWidget):
                     self.status_label,
                     "setText",
                     Qt.QueuedConnection,
-                    Q_ARG(str, get_content_name("update", "update_cancelled")),
+                    Q_ARG(str, get_content_name_async("update", "update_cancelled")),
                 )
             elif file_path:
                 # 下载成功，开始安装
@@ -426,7 +430,7 @@ class update(QWidget):
                     self.status_label,
                     "setText",
                     Qt.QueuedConnection,
-                    Q_ARG(str, get_content_name("update", "installing_update")),
+                    Q_ARG(str, get_content_name_async("update", "installing_update")),
                 )
 
                 # 安装更新
@@ -441,63 +445,41 @@ class update(QWidget):
                             Qt.QueuedConnection,
                             Q_ARG(
                                 str,
-                                get_content_name(
+                                get_content_name_async(
                                     "update", "update_installed_successfully"
                                 ),
                             ),
                         )
-                        # 显示安装成功消息
-                        msg_box = MessageBox(
-                            get_content_name("update", "update_installed"),
-                            get_content_name("update", "update_installed_successfully"),
-                            self,
-                        )
-                        msg_box.exec()
                     else:
                         # 安装失败
                         QMetaObject.invokeMethod(
                             self.status_label,
                             "setText",
                             Qt.QueuedConnection,
-                            Q_ARG(str, get_content_name("update", "install_failed")),
+                            Q_ARG(
+                                str, get_content_name_async("update", "install_failed")
+                            ),
                         )
-                        # 显示安装失败消息
-                        msg_box = MessageBox(
-                            get_content_name("update", "install_failed"),
-                            get_content_name("update", "failed_to_install_update"),
-                            self,
-                        )
-                        msg_box.exec()
                 except Exception as e:
                     # 安装过程中发生错误
+                    error_text = f"{get_content_name_async('update', 'install_failed')}: {str(e)}"
                     QMetaObject.invokeMethod(
                         self.status_label,
                         "setText",
                         Qt.QueuedConnection,
-                        Q_ARG(str, get_content_name("update", "install_failed")),
+                        Q_ARG(str, error_text),
                     )
-                    # 显示安装失败消息
-                    msg_box = MessageBox(
-                        get_content_name("update", "install_failed"),
-                        f"{get_content_name('update', 'failed_to_install_update')}: {str(e)}",
-                        self,
-                    )
-                    msg_box.exec()
             else:
                 # 下载失败
                 QMetaObject.invokeMethod(
                     self.status_label,
                     "setText",
                     Qt.QueuedConnection,
-                    Q_ARG(str, get_content_name("update", "download_failed")),
+                    Q_ARG(
+                        str,
+                        get_content_name_async("update", "failed_to_download_update"),
+                    ),
                 )
-                # 显示下载失败消息
-                msg_box = MessageBox(
-                    get_content_name("update", "download_failed"),
-                    get_content_name("update", "failed_to_download_update"),
-                    self,
-                )
-                msg_box.exec()
 
             # 恢复UI状态
             QMetaObject.invokeMethod(
@@ -531,10 +513,7 @@ class update(QWidget):
                 Q_ARG(bool, True),
             )
             QMetaObject.invokeMethod(
-                self.download_info_label,
-                "setText",
-                Qt.QueuedConnection,
-                Q_ARG(str, ""),
+                self.download_info_label, "setText", Qt.QueuedConnection, Q_ARG(str, "")
             )
 
         # 定义下载任务类
@@ -561,8 +540,18 @@ class update(QWidget):
     def cancel_update(self):
         """取消更新"""
         self._download_cancelled = True
-        self.status_label.setText(get_content_name("update", "cancelling_update"))
-        self.cancel_update_button.setEnabled(False)
+        QMetaObject.invokeMethod(
+            self.status_label,
+            "setText",
+            Qt.QueuedConnection,
+            Q_ARG(str, get_content_name_async("update", "cancelling_update")),
+        )
+        QMetaObject.invokeMethod(
+            self.cancel_update_button,
+            "setEnabled",
+            Qt.QueuedConnection,
+            Q_ARG(bool, False),
+        )
 
     @Slot(str)
     def _update_check_status(self, status_text):
