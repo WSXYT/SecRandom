@@ -508,6 +508,7 @@ DEFAULT_SETTINGS = {
         "need_notification": {"default_value": True},
         "update_channel": {"default_value": 0},
         "update_source": {"default_value": 0},
+        "last_check_time": {"default_value": "1970-01-01 08:00:00"},
     },
     "about": {
         "title": {"default_value": None},

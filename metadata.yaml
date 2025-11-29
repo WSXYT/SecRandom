@@ -1,10 +1,12 @@
 latest:
   release: v1.3.1.5
   beta: v1.3.1.5
+  alpha: v2.0.0-alpha.1
 
 latest_no:
   release: 1
   beta: 1
+  alpha: 2
 
 subchannels:
   arch:

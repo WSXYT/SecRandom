@@ -12,6 +12,7 @@ from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
+from app.tools.update_utils import *
 from app.Language.obtain_language import *
 
 
@@ -22,6 +23,7 @@ class update(QWidget):
     """创建更新页面"""
 
     def __init__(self, parent=None):
+        """初始化更新页面"""
         super().__init__(parent)
 
         # 创建主布局
@@ -47,40 +49,29 @@ class update(QWidget):
         # 设置窗口布局
         self.setLayout(self.main_layout)
 
+        # 初始化更新检查
+        # self.check_for_updates()
+
     def setup_header_info(self):
         """设置头部信息区域"""
-        # 创建水平布局用于放置图标和状态信息
+        # 创建水平布局用于放置状态信息
         self.header_layout = QHBoxLayout()
-        self.header_layout.setSpacing(15)
+        self.header_layout.setSpacing(10)  # 减小间距
         self.header_layout.setAlignment(Qt.AlignLeft)
 
-        # 添加软件图标
-        self.icon_label = BodyLabel()
-        icon_pixmap = QPixmap(
-            str(get_resources_path("assets/icon", "secrandom-icon-paper.png"))
-        )
-        self.icon_label.setPixmap(
-            icon_pixmap.scaled(100, 100, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        )
-
-        # 创建垂直布局用于放置图标和进度条
-        icon_progress_layout = QVBoxLayout()
-        icon_progress_layout.setAlignment(Qt.AlignCenter)
-        icon_progress_layout.addWidget(self.icon_label)
-
-        # 添加进度条
-        self.progress_bar = ProgressBar()
-        self.progress_bar.setVisible(False)  # 默认隐藏
-        icon_progress_layout.addWidget(self.progress_bar)
+        # 创建状态信息容器
+        status_container = QWidget()
+        status_container.setMaximumWidth(400)  # 设置最大宽度
 
         # 创建状态信息布局
-        status_layout = QVBoxLayout()
+        status_layout = QVBoxLayout(status_container)
         status_layout.setSpacing(5)
         status_layout.setAlignment(Qt.AlignLeft)
+        status_layout.setContentsMargins(0, 0, 0, 0)  # 移除边距
 
         # 当前状态标签
         self.status_label = BodyLabel(
-            get_content_name_async("update", "checking_update")
+            get_content_name_async("update", "already_latest_version")
         )
         self.status_label.setFont(QFont(load_custom_font(), 16))
 
@@ -90,12 +81,49 @@ class update(QWidget):
         )
         self.version_label.setFont(QFont(load_custom_font(), 12))
 
+        # 上次检查更新时间标签
+        self.last_check_label = BodyLabel()
+        self.last_check_label.setFont(QFont(load_custom_font(), 10))
+        # 加载上次检查时间
+        self._load_last_check_time()
+
+        # 创建水平布局，包含下载按钮、检查更新按钮和进度环
+        button_ring_layout = QHBoxLayout()
+        button_ring_layout.setSpacing(10)
+        button_ring_layout.setAlignment(Qt.AlignLeft)
+
+        # 下载并安装按钮（默认隐藏，仅在有新版本时显示）
+        self.download_install_button = PrimaryPushButton(
+            get_content_name_async("update", "download_and_install")
+        )
+        self.download_install_button.clicked.connect(self.download_and_install)
+        self.download_install_button.setVisible(False)  # 默认隐藏
+
+        # 检查更新按钮
+        self.check_update_button = PushButton(
+            get_content_name_async("update", "check_for_updates")
+        )
+        self.check_update_button.clicked.connect(self.check_for_updates)
+
+        # 添加不确定进度环（用于检查更新时显示）
+        self.indeterminate_ring = IndeterminateProgressRing()
+        self.indeterminate_ring.setFixedSize(24, 24)  # 减小进度环大小，适合按钮右侧
+        self.indeterminate_ring.setStrokeWidth(3)  # 减小厚度
+        self.indeterminate_ring.setVisible(False)  # 默认隐藏
+
+        # 将按钮和进度环添加到水平布局（下载按钮在左侧，检查按钮在中间，进度环在右侧）
+        button_ring_layout.addWidget(self.download_install_button)
+        button_ring_layout.addWidget(self.check_update_button)
+        button_ring_layout.addWidget(self.indeterminate_ring)
+        button_ring_layout.addStretch()  # 右侧添加拉伸，确保按钮和进度环靠左
+
         status_layout.addWidget(self.status_label)
         status_layout.addWidget(self.version_label)
+        status_layout.addWidget(self.last_check_label)
+        status_layout.addLayout(button_ring_layout)
 
-        self.header_layout.addLayout(icon_progress_layout)
-        self.header_layout.addLayout(status_layout)
-        self.header_layout.addStretch()
+        self.header_layout.addWidget(status_container)
+        self.header_layout.addStretch(1)  # 添加拉伸因子，将内容向左推
 
     def setup_update_settings(self):
         """设置更新设置区域"""
@@ -214,3 +242,105 @@ class update(QWidget):
             get_content_description_async("update", "update_source"),
             self.update_source_combo,
         )
+
+    def check_for_updates(self):
+        """触发更新检查"""
+        # 更新状态显示
+        self.status_label.setText(get_content_name_async("update", "checking_update"))
+        self.indeterminate_ring.setVisible(True)  # 显示不确定进度环
+        self.check_update_button.setEnabled(False)
+
+        # 使用异步方式检查更新
+        def check_update_task():
+            status_text = ""
+            try:
+                # 获取最新版本信息
+                latest_version_info = get_latest_version()
+
+                if latest_version_info:
+                    latest_version = latest_version_info["version"]
+                    latest_version_no = latest_version_info["version_no"]
+
+                    # 比较版本号
+                    compare_result = compare_versions(VERSION, latest_version)
+
+                    if compare_result == 1:
+                        # 有新版本
+                        status_text = f"{get_content_name_async('update', 'new_version_available')}: {latest_version}"
+                        # 显示下载并安装按钮
+                        self.download_install_button.setVisible(True)
+                    elif compare_result == 0:
+                        # 当前是最新版本
+                        status_text = get_content_name_async(
+                            "update", "already_latest_version"
+                        )
+                        # 隐藏下载并安装按钮
+                        self.download_install_button.setVisible(False)
+                    else:
+                        # 比较失败或版本号异常
+                        status_text = get_content_name_async(
+                            "update", "check_update_failed"
+                        )
+                        # 隐藏下载并安装按钮
+                        self.download_install_button.setVisible(False)
+                else:
+                    # 获取版本信息失败
+                    status_text = get_content_name_async(
+                        "update", "check_update_failed"
+                    )
+                    # 隐藏下载并安装按钮
+                    self.download_install_button.setVisible(False)
+            except Exception as e:
+                # 处理异常
+                status_text = get_content_name_async("update", "check_update_failed")
+                # 隐藏下载并安装按钮
+                self.download_install_button.setVisible(False)
+            finally:
+                # 使用QMetaObject.invokeMethod确保UI更新在主线程执行
+                QMetaObject.invokeMethod(
+                    self,
+                    "_update_check_status",
+                    Qt.QueuedConnection,
+                    Q_ARG(str, status_text),
+                )
+
+        # 创建并启动异步任务
+        runnable = QRunnable.create(check_update_task)
+        QThreadPool.globalInstance().start(runnable)
+
+    def _load_last_check_time(self):
+        """加载上次检查更新时间"""
+        last_check_time = readme_settings("update", "last_check_time")
+        self.last_check_label.setText(
+            f"{get_content_name_async('update', 'last_check_time')}: {last_check_time}"
+        )
+
+    def _update_last_check_time(self):
+        """更新上次检查更新时间为当前时间"""
+        from datetime import datetime
+
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        update_settings("update", "last_check_time", current_time)
+        self._load_last_check_time()
+
+    def download_and_install(self):
+        """下载并安装更新"""
+        # 这里可以添加下载和安装更新的逻辑
+        # 暂时显示一个消息框，提示功能正在开发中
+        from qfluentwidgets import MessageBox
+
+        msg_box = MessageBox(
+            get_content_name_async("update", "download_and_install"),
+            get_content_name_async("update", "download_in_progress"),
+            self,
+        )
+        msg_box.exec()
+
+    @Slot(str)
+    def _update_check_status(self, status_text):
+        """更新UI状态（主线程执行）"""
+        self.status_label.setText(status_text)
+        self.indeterminate_ring.setVisible(False)  # 隐藏不确定进度环
+        self.check_update_button.setEnabled(True)
+        # 更新上次检查时间
+        self._update_last_check_time()

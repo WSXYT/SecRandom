@@ -344,39 +344,51 @@ def calculate_weight(students_data: list, class_name: str) -> list:
     """
     # 从设置中加载权重相关配置
     settings = {
-        "fair_draw_enabled": readme_settings_async("advanced_settings", "fair_draw"),
+        "fair_draw_enabled": readme_settings_async("advanced_settings", "fair_draw")
+        or False,
         "fair_draw_group_enabled": readme_settings_async(
             "advanced_settings", "fair_draw_group"
-        ),
+        )
+        or False,
         "fair_draw_gender_enabled": readme_settings_async(
             "advanced_settings", "fair_draw_gender"
-        ),
+        )
+        or False,
         "fair_draw_time_enabled": readme_settings_async(
             "advanced_settings", "fair_draw_time"
-        ),
-        "base_weight": readme_settings_async("advanced_settings", "base_weight"),
-        "min_weight": readme_settings_async("advanced_settings", "min_weight"),
-        "max_weight": readme_settings_async("advanced_settings", "max_weight"),
+        )
+        or False,
+        "base_weight": readme_settings_async("advanced_settings", "base_weight") or 1.0,
+        "min_weight": readme_settings_async("advanced_settings", "min_weight") or 0.1,
+        "max_weight": readme_settings_async("advanced_settings", "max_weight") or 5.0,
         "frequency_function": readme_settings_async(
             "advanced_settings", "frequency_function"
-        ),
+        )
+        or 1,
         "frequency_weight": readme_settings_async(
             "advanced_settings", "frequency_weight"
-        ),
-        "group_weight": readme_settings_async("advanced_settings", "group_weight"),
-        "gender_weight": readme_settings_async("advanced_settings", "gender_weight"),
-        "time_weight": readme_settings_async("advanced_settings", "time_weight"),
+        )
+        or 1.0,
+        "group_weight": readme_settings_async("advanced_settings", "group_weight")
+        or 1.0,
+        "gender_weight": readme_settings_async("advanced_settings", "gender_weight")
+        or 1.0,
+        "time_weight": readme_settings_async("advanced_settings", "time_weight") or 1.0,
         "cold_start_enabled": readme_settings_async(
             "advanced_settings", "cold_start_enabled"
-        ),
+        )
+        or False,
         "cold_start_rounds": readme_settings_async(
             "advanced_settings", "cold_start_rounds"
-        ),
-        "shield_enabled": readme_settings_async("advanced_settings", "shield_enabled"),
-        "shield_time": readme_settings_async("advanced_settings", "shield_time"),
+        )
+        or 10,
+        "shield_enabled": readme_settings_async("advanced_settings", "shield_enabled")
+        or False,
+        "shield_time": readme_settings_async("advanced_settings", "shield_time") or 0,
         "shield_time_unit": readme_settings_async(
             "advanced_settings", "shield_time_unit"
-        ),
+        )
+        or 0,
     }
 
     # 加载历史记录数据

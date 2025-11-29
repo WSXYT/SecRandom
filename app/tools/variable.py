@@ -3,7 +3,7 @@
 # ==================== 软件基本信息 ====================
 APPLY_NAME = "SecRandom"  # 软件名称
 VERSION = "v0.0.0"  # 软件当前版本
-NEXT_VERSION = "v2.0.0"  # 软件下一个版本
+NEXT_VERSION = "v2.0.0-alpha.1"  # 软件下一个版本
 CODENAME = "Koharu"  # 软件代号
 YEAR = 2025  # 软件发布年份
 MONTH = 4  # 软件发布月份
