@@ -47,6 +47,14 @@ a = Analysis(
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
+import sys
+
+# 根据平台设置不同的EXE名称
+exename = "SecRandom"
+if sys.platform == "linux":
+    # 在Linux上，EXE会创建一个无扩展名的文件，为避免与COLLECT目录冲突，添加.bin扩展名
+    exename = "SecRandom.bin"
+
 exe = EXE(
     pyz,
     a.scripts,
@@ -54,7 +62,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name="SecRandom",
+    name=exename,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
