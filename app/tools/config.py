@@ -33,6 +33,7 @@ from app.tools.variable import (
     LOG_ROTATION_SIZE,
     LOG_RETENTION_DAYS,
     LOG_COMPRESSION,
+    APPLY_NAME,
 )
 from app.Language.obtain_language import (
     get_content_pushbutton_name_async,
@@ -375,6 +376,89 @@ def show_notification(
         return info_bar
     else:
         raise ValueError(f"不支持的通知类型: {notification_type}")
+
+
+def send_system_notification(title: str, content: str) -> bool:
+    """
+    发送系统通知
+
+    Args:
+        title: 通知标题
+        content: 通知内容
+
+    Returns:
+        bool: 通知发送是否成功
+    """
+    try:
+        # 获取软件图标路径
+        icon_path = str(get_resources_path("assets", "icon/secrandom-icon-paper.ico"))
+
+        if sys.platform == "win32":
+            # Windows平台
+            try:
+                # 尝试使用win10toast发送通知
+                from win10toast import ToastNotifier
+
+                toaster = ToastNotifier()
+                toaster.show_toast(
+                    title, content, icon_path=icon_path, duration=15, threaded=True
+                )
+                logger.debug(f"已发送Windows通知: {title}")
+                return True
+            except ImportError:
+                # 如果win10toast不可用，尝试使用plyer
+                try:
+                    from plyer import notification
+
+                    notification.notify(
+                        title=title,
+                        message=content,
+                        app_name=APPLY_NAME,
+                        app_icon=icon_path,
+                        timeout=15,
+                    )
+                    logger.debug(f"已发送Windows通知(使用plyer): {title}")
+                    return True
+                except Exception as e:
+                    logger.warning(f"发送Windows通知失败: {e}")
+                    return False
+        elif sys.platform.startswith("linux"):
+            # Linux平台
+            try:
+                # 尝试使用notify-send命令
+                import subprocess
+
+                subprocess.run(
+                    ["notify-send", "--icon", icon_path, title, content],
+                    check=True,
+                    timeout=5,
+                )
+                logger.debug(f"已发送Linux通知: {title}")
+                return True
+            except subprocess.CalledProcessError as e:
+                # 如果notify-send不可用，尝试使用plyer
+                try:
+                    from plyer import notification
+
+                    notification.notify(
+                        title=title,
+                        message=content,
+                        app_name=APPLY_NAME,
+                        app_icon=icon_path,
+                        timeout=15,
+                    )
+                    logger.debug(f"已发送Linux通知(使用plyer): {title}")
+                    return True
+                except Exception as e:
+                    logger.warning(f"发送Linux通知失败: {e}")
+                    return False
+        else:
+            # 其他平台，不支持系统通知
+            logger.warning(f"当前平台不支持系统通知: {sys.platform}")
+            return False
+    except Exception as e:
+        logger.error(f"发送系统通知时发生意外错误: {e}")
+        return False
 
 
 # ======= 设置导入/导出功能 =======

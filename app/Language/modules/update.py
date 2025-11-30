@@ -12,6 +12,8 @@ update = {
         "force_check": {"name": "强制检查更新"},
         "check_for_updates": {"name": "检查更新"},
         "checking_update": {"name": "正在检查更新..."},
+        "update_notification_title": {"name": "SecRandom 更新通知"},
+        "update_notification_content": {"name": "发现新版本: {version}\n点击查看详情"},
         "check_update_failed": {"name": "检查更新失败"},
         "failed_to_get_version_info": {"name": "获取版本信息失败"},
         "download_and_install": {"name": "下载并安装"},
@@ -86,6 +88,12 @@ update = {
         },
         "checking_update": {
             "name": "Checking for updates...",
+        },
+        "update_notification_title": {
+            "name": "SecRandom Update Notification",
+        },
+        "update_notification_content": {
+            "name": "New version found: {version}\nClick to view details",
         },
         "check_update_failed": {
             "name": "Failed to check for updates",

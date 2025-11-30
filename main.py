@@ -31,6 +31,12 @@ local_server = None
 # 全局URL处理器实例
 url_handler = None
 
+# 全局更新检查线程实例
+update_check_thread = None
+
+# 导入更新相关模块
+from app.tools.update_utils import *
+from app.tools.config import send_system_notification
 
 # 添加项目根目录到Python路径
 project_root = str(get_app_root())
@@ -365,6 +371,118 @@ def show_float_window():
 # ==================================================
 # 应用程序初始化相关函数
 # ==================================================
+def check_for_updates_on_startup():
+    """
+    应用启动时检查更新
+    根据自动更新模式设置执行相应的更新操作
+    异步执行，避免阻塞应用启动进程
+    """
+
+    # 创建一个QThread来执行更新检查，避免阻塞主线程
+    class UpdateCheckThread(QThread):
+        def run(self):
+            try:
+                # 读取自动更新模式设置
+                auto_update_mode = readme_settings_async("update", "auto_update_mode")
+                logger.debug(f"自动更新模式: {auto_update_mode}")
+
+                # 获取最新版本信息
+                logger.debug("开始检查更新")
+                latest_version_info = get_latest_version()
+
+                if not latest_version_info:
+                    logger.debug("获取最新版本信息失败")
+                    return
+
+                latest_version = latest_version_info["version"]
+                latest_version_no = latest_version_info["version_no"]
+
+                # 比较版本号
+                compare_result = compare_versions(VERSION, latest_version)
+
+                # 获取下载文件夹路径
+                download_dir = get_resources_path("downloads")
+                ensure_dir(download_dir)
+
+                # 构建预期的文件名
+                expected_filename = DEFAULT_NAME_FORMAT
+                expected_filename = expected_filename.replace(
+                    "[version]", latest_version
+                )
+                expected_filename = expected_filename.replace("[system]", SYSTEM)
+                expected_filename = expected_filename.replace("[arch]", ARCH)
+                expected_filename = expected_filename.replace("[struct]", STRUCT)
+                expected_file_path = download_dir / expected_filename
+
+                # 检查是否有已下载的更新文件（模式3：自动安装）
+                if (
+                    expected_file_path.exists()
+                    and compare_result == 1
+                    and auto_update_mode == 3
+                ):
+                    logger.debug(
+                        f"发现已下载的更新文件，开始自动安装: {expected_file_path}"
+                    )
+                    # 自动安装更新
+                    success = install_update(str(expected_file_path))
+                    if success:
+                        logger.debug("自动安装更新成功")
+                    else:
+                        logger.error("自动安装更新失败")
+                    return
+
+                # 如果是模式0（不自动检查更新），直接返回
+                if auto_update_mode == 0:
+                    logger.debug("自动更新模式为0，不执行更新检查")
+                    return
+
+                if compare_result == 1:
+                    # 有新版本
+                    logger.debug(f"发现新版本: {latest_version}")
+
+                    # 发送系统通知
+                    title = get_content_name_async(
+                        "update", "update_notification_title"
+                    )
+                    content = get_content_name_async(
+                        "update", "update_notification_content"
+                    ).format(version=latest_version)
+                    send_system_notification(title, content)
+
+                    # 如果是模式2或3，自动下载更新
+                    if auto_update_mode in [2, 3]:
+                        logger.debug(
+                            f"自动更新模式为{auto_update_mode}，开始自动下载更新"
+                        )
+
+                        # 检查文件是否已存在
+                        if expected_file_path.exists():
+                            logger.debug(
+                                f"更新文件已存在，跳过下载: {expected_file_path}"
+                            )
+                            return
+
+                        # 自动下载更新
+                        file_path = download_update(latest_version)
+                        if file_path:
+                            logger.debug(f"自动下载更新成功: {file_path}")
+                        else:
+                            logger.error("自动下载更新失败")
+                elif compare_result == 0:
+                    # 当前是最新版本
+                    logger.debug("当前已是最新版本")
+                else:
+                    # 版本比较失败
+                    logger.debug("版本比较失败")
+            except Exception as e:
+                logger.error(f"启动时检查更新失败: {e}")
+
+    # 启动更新检查线程
+    global update_check_thread
+    update_check_thread = UpdateCheckThread()
+    update_check_thread.start()
+
+
 def initialize_app():
     """初始化应用程序"""
     # 管理设置文件，确保其存在且完整
@@ -400,6 +518,9 @@ def initialize_app():
 
     # 清除重启记录
     QTimer.singleShot(APP_INIT_DELAY, lambda: (remove_record("", "", "", "restart")))
+
+    # 检查是否需要安装更新
+    QTimer.singleShot(APP_INIT_DELAY, lambda: (check_for_updates_on_startup()))
 
     # 创建主窗口实例（但不自动显示）
     QTimer.singleShot(APP_INIT_DELAY, lambda: (start_main_window()))
@@ -519,6 +640,15 @@ if __name__ == "__main__":
         if local_server:
             local_server.close()
 
+        # 等待更新检查线程完成
+        if update_check_thread and update_check_thread.isRunning():
+            logger.debug("等待更新检查线程完成...")
+            # 设置一个超时时间，避免无限等待
+            update_check_thread.wait(5000)  # 等待5秒
+            if update_check_thread.isRunning():
+                logger.warning("更新检查线程未在超时时间内完成，强制终止")
+                # 注意：QThread没有直接的终止方法，这里主要是确保线程对象被正确引用
+
         gc.collect()
 
         sys.exit()
@@ -536,4 +666,11 @@ if __name__ == "__main__":
                 local_server.close()
         except Exception as close_e:
             logger.exception("程序退出时关闭本地服务器失败: {}", close_e)
+        # 等待更新检查线程完成（异常退出情况）
+        try:
+            if update_check_thread and update_check_thread.isRunning():
+                logger.debug("等待更新检查线程完成...")
+                update_check_thread.wait(5000)  # 等待5秒
+        except Exception as thread_e:
+            logger.exception("处理更新检查线程时发生错误: {}", thread_e)
         sys.exit(1)

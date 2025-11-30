@@ -510,6 +510,12 @@ async def install_update_async(file_path: str) -> bool:
             # 解压更新文件到 TEMP 目录
             success = extract_zip(file_path, temp_dir, overwrite=True)
             if success:
+                # 开发环境：删除旧版本文件
+                old_version_dir = get_path("SecRandom")
+                if old_version_dir.exists():
+                    shutil.rmtree(old_version_dir)
+                    logger.info(f"删除旧版本目录: {old_version_dir}")
+
                 logger.info(f"开发环境更新文件安装成功: {file_path}")
                 return True
             else:
@@ -605,6 +611,14 @@ async def install_update_async(file_path: str) -> bool:
                         success = extract_zip(update_file, root_dir, overwrite=True)
                         if success:
                             logger.info("更新安装成功")
+
+                            # 删除下载的更新文件
+                            logger.info(f"准备删除更新文件: {update_file}")
+                            try:
+                                Path(update_file).unlink()
+                                logger.info(f"更新文件已删除: {update_file}")
+                            except Exception as e:
+                                logger.error(f"删除更新文件失败: {e}")
                         else:
                             logger.error("更新安装失败")
                             sys.exit(1)
