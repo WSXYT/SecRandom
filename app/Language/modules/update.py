@@ -9,6 +9,7 @@ update = {
         "new_version_available": {"name": "发现新版本"},
         "last_check_time": {"name": "上次检查更新时间"},
         "check_update": {"name": "检查更新"},
+        "force_check": {"name": "强制检查更新"},
         "check_for_updates": {"name": "检查更新"},
         "checking_update": {"name": "正在检查更新..."},
         "check_update_failed": {"name": "检查更新失败"},

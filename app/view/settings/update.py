@@ -117,11 +117,32 @@ class update(QWidget):
         self.download_install_button.clicked.connect(self.download_and_install)
         self.download_install_button.setVisible(False)  # 默认隐藏
 
-        # 检查更新按钮
-        self.check_update_button = PushButton(
+        # 检查更新按钮（带下拉菜单）
+        self.check_update_button = DropDownPushButton(
             get_content_name_async("update", "check_for_updates")
         )
-        self.check_update_button.clicked.connect(self.check_for_updates)
+
+        # 创建RoundMenu菜单
+        self.check_update_menu = RoundMenu(parent=self.check_update_button)
+
+        # 添加普通检查更新菜单项
+        check_update_action = Action(
+            get_theme_icon("ic_fluent_arrow_repeat_all_20_filled"),
+            get_content_name_async("update", "check_for_updates"),
+            triggered=self.check_for_updates,
+        )
+        self.check_update_menu.addAction(check_update_action)
+
+        # 添加强制检查更新菜单项
+        force_check_action = Action(
+            get_theme_icon("ic_fluent_arrow_repeat_all_20_filled"),
+            get_content_name_async("update", "force_check"),
+            triggered=self.force_check_for_updates,
+        )
+        self.check_update_menu.addAction(force_check_action)
+
+        # 设置菜单
+        self.check_update_button.setMenu(self.check_update_menu)
 
         # 添加不确定进度环（用于检查更新时显示）
         self.indeterminate_ring = IndeterminateProgressRing()
@@ -250,6 +271,12 @@ class update(QWidget):
             get_content_description_async("update", "update_source"),
             self.update_source_combo,
         )
+
+    def force_check_for_updates(self):
+        """强制检查更新"""
+        # 直接调用check_for_updates方法执行强制更新检查
+        self.check_for_updates()
+        logger.debug("用户进行了强制检查更新")
 
     def check_for_updates(self):
         """触发更新检查"""
