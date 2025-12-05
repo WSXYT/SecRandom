@@ -4,14 +4,14 @@
 import json
 from random import SystemRandom
 
-from app.tools.list import (
+from app.common.data.list import (
     get_group_list,
     get_student_list,
     filter_students_data,
     get_pool_list,
 )
-from app.tools.roll_call_utils import RollCallUtils
-from app.tools.history import calculate_weight
+from app.common.roll_call.roll_call_utils import RollCallUtils
+from app.common.history.history import calculate_weight
 from app.tools.config import (
     calculate_remaining_count,
     read_drawn_record,
@@ -254,7 +254,7 @@ class LotteryUtils:
     def get_prize_total_count(pool_name: str) -> int:
         """获取奖池奖品总数"""
         try:
-            from app.tools.list import get_pool_list
+            from app.common.data.list import get_pool_list
 
             return len(get_pool_list(pool_name))
         except Exception:
@@ -359,7 +359,7 @@ class LotteryUtils:
     def calculate_prize_remaining_count(pool_name: str) -> int:
         """计算剩余可抽奖品数量，考虑不重复/半重复设置"""
         try:
-            from app.tools.list import get_pool_list
+            from app.common.data.list import get_pool_list
 
             threshold = LotteryUtils._get_prize_draw_threshold()
             total = len(get_pool_list(pool_name))

@@ -23,7 +23,7 @@ from app.page_building.security_window import (
 )
 from app.common.safety.verify_ops import require_and_run
 from app.common.safety.usb import has_binding, is_bound_present
-from app.tools.secure_store import read_secrets, write_secrets
+from app.common.safety.secure_store import read_secrets, write_secrets
 from app.common.safety.password import is_configured as password_is_configured
 from app.common.safety.totp import is_configured as totp_is_configured
 

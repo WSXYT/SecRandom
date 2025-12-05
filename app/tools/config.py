@@ -25,7 +25,7 @@ from app.tools.path_utils import (
 )
 from app.tools.personalised import get_theme_icon
 from app.tools.settings_access import readme_settings_async
-from app.tools.list import get_student_list, get_group_list
+from app.common.data.list import get_student_list, get_group_list
 from app.tools.variable import (
     SPECIAL_VERSION,
     LOG_DIR,

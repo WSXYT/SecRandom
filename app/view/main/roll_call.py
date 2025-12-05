@@ -15,11 +15,11 @@ from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
 
-from app.tools.list import *
-from app.tools.history import *
-from app.tools.result_display import *
+from app.common.data.list import *
+from app.common.history.history import *
+from app.common.display.result_display import *
 from app.tools.config import *
-from app.tools.roll_call_utils import RollCallUtils
+from app.common.roll_call.roll_call_utils import RollCallUtils
 from app.tools.variable import *
 
 from app.page_building.another_window import *

@@ -833,7 +833,7 @@ class FloatingNotificationManager:
             is_animation_enabled = True
 
         # 使用ResultDisplayUtils创建学生标签（动态导入避免循环依赖）
-        from app.tools.result_display import ResultDisplayUtils
+        from app.common.display.result_display import ResultDisplayUtils
 
         student_labels = ResultDisplayUtils.create_student_label(
             class_name=class_name,

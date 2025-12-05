@@ -1,10 +1,10 @@
 from app.page_building.page_template import PageTemplate
 from app.page_building.window_template import SimpleWindowTemplate
-from app.view.another_window.set_password import SetPasswordWindow
-from app.view.another_window.set_totp import SetTotpWindow
-from app.view.another_window.bind_usb import BindUsbWindow
-from app.view.another_window.unbind_usb import UnbindUsbWindow
-from app.view.another_window.verify_password import VerifyPasswordWindow
+from app.view.another_window.security.set_password import SetPasswordWindow
+from app.view.another_window.security.set_totp import SetTotpWindow
+from app.view.another_window.usb.bind_usb import BindUsbWindow
+from app.view.another_window.usb.unbind_usb import UnbindUsbWindow
+from app.view.another_window.security.verify_password import VerifyPasswordWindow
 from app.Language.obtain_language import *
 
 _security_window_instances = {}

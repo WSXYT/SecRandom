@@ -17,7 +17,7 @@ from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
 from app.tools.config import *
-from app.tools.list import *
+from app.common.data.list import *
 
 
 class SetClassNameWindow(QWidget):

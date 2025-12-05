@@ -5,7 +5,7 @@ from app.tools.path_utils import (
     get_config_path,
     get_settings_path,
 )
-from app.tools.secure_store import read_secrets, write_secrets
+from app.common.safety.secure_store import read_secrets, write_secrets
 
 try:
     from Cryptodome.Cipher import AES

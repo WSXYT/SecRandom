@@ -17,19 +17,19 @@ from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
 from app.tools.config import *
-from app.tools.list import *
+from app.common.data.list import *
 
 
-class NameSettingWindow(QWidget):
-    """姓名设置窗口"""
+class PrizeNameSettingWindow(QWidget):
+    """奖品名称设置窗口"""
 
     def __init__(self, parent=None):
-        """初始化姓名设置窗口"""
+        """初始化奖品名称设置窗口"""
         super().__init__(parent)
 
         # 初始化变量
         self.saved = False
-        self.initial_names = []  # 保存初始加载的姓名列表
+        self.initial_names = []  # 保存初始加载的奖品名称列表
 
         # 初始化UI
         self.init_ui()
@@ -40,7 +40,7 @@ class NameSettingWindow(QWidget):
     def init_ui(self):
         """初始化UI"""
         # 设置窗口标题
-        self.setWindowTitle(get_content_name_async("name_setting", "title"))
+        self.setWindowTitle(get_content_name_async("lottery_name_setting", "title"))
 
         # 创建主布局
         self.main_layout = QVBoxLayout(self)
@@ -48,18 +48,20 @@ class NameSettingWindow(QWidget):
         self.main_layout.setSpacing(15)
 
         # 创建标题
-        self.title_label = TitleLabel(get_content_name_async("name_setting", "title"))
+        self.title_label = TitleLabel(
+            get_content_name_async("lottery_name_setting", "title")
+        )
         self.main_layout.addWidget(self.title_label)
 
         # 创建说明标签
         self.description_label = BodyLabel(
-            get_content_name_async("name_setting", "description")
+            get_content_name_async("lottery_name_setting", "description")
         )
         self.description_label.setWordWrap(True)
         self.main_layout.addWidget(self.description_label)
 
-        # 创建姓名输入区域
-        self.__create_name_input_area()
+        # 创建奖品名称输入区域
+        self.__create_prize_name_input_area()
 
         # 创建按钮区域
         self.__create_button_area()
@@ -67,26 +69,26 @@ class NameSettingWindow(QWidget):
         # 添加伸缩项
         self.main_layout.addStretch(1)
 
-    def __create_name_input_area(self):
-        """创建姓名输入区域"""
+    def __create_prize_name_input_area(self):
+        """创建奖品名称输入区域"""
         # 创建卡片容器
         input_card = CardWidget()
         input_layout = QVBoxLayout(input_card)
 
         # 创建输入区域标题
         input_title = SubtitleLabel(
-            get_content_name_async("name_setting", "input_title")
+            get_content_name_async("lottery_name_setting", "input_title")
         )
         input_layout.addWidget(input_title)
 
         # 创建文本编辑框
         self.text_edit = PlainTextEdit()
         self.text_edit.setPlaceholderText(
-            get_content_name_async("name_setting", "input_placeholder")
+            get_content_name_async("lottery_name_setting", "input_placeholder")
         )
 
-        # 加载现有姓名
-        existing_names = self.__load_existing_names()
+        # 加载现有奖品名称
+        existing_names = self.__load_existing_prize_names()
         if existing_names:
             self.text_edit.setPlainText("\n".join(existing_names))
 
@@ -95,15 +97,15 @@ class NameSettingWindow(QWidget):
         # 添加到主布局
         self.main_layout.addWidget(input_card)
 
-    def __load_existing_names(self):
-        """加载现有姓名"""
+    def __load_existing_prize_names(self):
+        """加载现有奖品名称"""
         try:
-            # 获取班级名单目录
-            roll_call_list_dir = get_path("app/resources/list/roll_call_list")
+            # 获取奖池名单目录
+            lottery_list_dir = get_path("app/resources/list/lottery_list")
 
-            # 从设置中获取班级名称
-            class_name = readme_settings_async("roll_call_list", "select_class_name")
-            list_file = roll_call_list_dir / f"{class_name}.json"
+            # 从设置中获取奖池名称
+            pool_name = readme_settings_async("lottery_list", "select_pool_name")
+            list_file = lottery_list_dir / f"{pool_name}.json"
 
             # 如果文件不存在，返回空列表
             if not list_file.exists():
@@ -114,7 +116,7 @@ class NameSettingWindow(QWidget):
             with open_file(list_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-            # 获取所有姓名（字典的键）
+            # 获取所有名称（字典的键）
             names = list(data.keys())
             # 保存到initial_names变量
             self.initial_names = names.copy()
@@ -122,7 +124,7 @@ class NameSettingWindow(QWidget):
             return names
 
         except Exception as e:
-            logger.error(f"加载姓名失败: {str(e)}")
+            logger.error(f"加载奖品名称失败: {str(e)}")
             self.initial_names = []
             return []
 
@@ -136,14 +138,14 @@ class NameSettingWindow(QWidget):
 
         # 保存按钮
         self.save_button = PrimaryPushButton(
-            get_content_name_async("name_setting", "save_button")
+            get_content_name_async("lottery_name_setting", "save_button")
         )
         self.save_button.setIcon(FluentIcon.SAVE)
         button_layout.addWidget(self.save_button)
 
         # 取消按钮
         self.cancel_button = PushButton(
-            get_content_name_async("name_setting", "cancel_button")
+            get_content_name_async("lottery_name_setting", "cancel_button")
         )
         self.cancel_button.setIcon(FluentIcon.CANCEL)
         button_layout.addWidget(self.cancel_button)
@@ -160,80 +162,86 @@ class NameSettingWindow(QWidget):
 
     def __on_text_changed(self):
         """文本变化事件处理"""
-        # 获取当前文本中的姓名
+        # 获取当前文本中的名称
         current_text = self.text_edit.toPlainText()
-        current_names = [
+        current_prize_names = [
             name.strip() for name in current_text.split("\n") if name.strip()
         ]
 
-        # 检查哪些初始姓名被删除了
-        deleted_names = [
-            name for name in self.initial_names if name not in current_names
+        # 检查哪些初始奖品名称被删除了
+        deleted_prize_names = [
+            name for name in self.initial_names if name not in current_prize_names
         ]
 
-        # 如果有姓名被删除，显示提示
-        if deleted_names:
-            for name in deleted_names:
+        # 如果有奖品名称被删除，显示提示
+        if deleted_prize_names:
+            for name in deleted_prize_names:
                 # 显示删除提示
                 config = NotificationConfig(
-                    title=get_content_name_async("name_setting", "name_deleted_title"),
+                    title=get_content_name_async(
+                        "lottery_name_setting", "name_deleted_title"
+                    ),
                     content=get_content_name_async(
-                        "name_setting", "name_deleted_message"
+                        "lottery_name_setting", "name_deleted_message"
                     ).format(name=name),
                     duration=3000,
                 )
                 show_notification(NotificationType.INFO, config, parent=self)
 
-            # 更新初始姓名列表为当前列表，避免重复提示
-            self.initial_names = current_names.copy()
+            # 更新初始奖品名称列表为当前列表，避免重复提示
+            self.initial_names = current_prize_names.copy()
 
     def __save_names(self):
-        """保存姓名"""
+        """保存奖品名称"""
         try:
-            # 获取输入的姓名
-            names_text = self.text_edit.toPlainText().strip()
-            if not names_text:
+            # 获取输入的奖品名称
+            prize_names_text = self.text_edit.toPlainText().strip()
+            if not prize_names_text:
                 # 显示错误消息
                 config = NotificationConfig(
-                    title=get_content_name_async("name_setting", "error_title"),
-                    content=get_content_name_async("name_setting", "no_names_error"),
+                    title=get_content_name_async("lottery_name_setting", "error_title"),
+                    content=get_content_name_async(
+                        "lottery_name_setting", "no_names_error"
+                    ),
                     duration=3000,
                 )
                 show_notification(NotificationType.ERROR, config, parent=self)
                 return
 
-            # 分割姓名
-            names = [name.strip() for name in names_text.split("\n") if name.strip()]
+            # 分割奖品名称
+            prize_names = [
+                name.strip() for name in prize_names_text.split("\n") if name.strip()
+            ]
 
-            # 验证姓名
-            invalid_names = []
-            for name in names:
+            # 验证奖品名称
+            invalid_prize_names = []
+            for name in prize_names:
                 # 检查是否包含非法字符
                 if re.search(r'[\/:*?"<>|]', name):
-                    invalid_names.append(name)
+                    invalid_prize_names.append(name)
                 # 检查是否为保留字
                 elif name.lower() == "class":
-                    invalid_names.append(name)
+                    invalid_prize_names.append(name)
 
-            if invalid_names:
+            if invalid_prize_names:
                 # 显示错误消息
                 config = NotificationConfig(
-                    title=get_content_name_async("name_setting", "error_title"),
+                    title=get_content_name_async("lottery_name_setting", "error_title"),
                     content=get_content_name_async(
-                        "name_setting", "invalid_names_error"
-                    ).format(names=", ".join(invalid_names)),
+                        "lottery_name_setting", "invalid_names_error"
+                    ).format(names=", ".join(invalid_prize_names)),
                     duration=5000,
                 )
                 show_notification(NotificationType.ERROR, config, parent=self)
                 return
 
             # 获取文件路径
-            roll_call_list_dir = get_path("app/resources/list/roll_call_list")
-            roll_call_list_dir.mkdir(parents=True, exist_ok=True)
+            lottery_list_dir = get_path("app/resources/list/lottery_list")
+            lottery_list_dir.mkdir(parents=True, exist_ok=True)
 
-            # 从设置中获取班级名称
-            class_name = readme_settings_async("roll_call_list", "select_class_name")
-            list_file = roll_call_list_dir / f"{class_name}.json"
+            # 从设置中获取奖池名称
+            pool_name = readme_settings_async("lottery_list", "select_pool_name")
+            list_file = lottery_list_dir / f"{pool_name}.json"
 
             # 读取现有数据
             existing_data = {}
@@ -241,13 +249,13 @@ class NameSettingWindow(QWidget):
                 with open_file(list_file, "r", encoding="utf-8") as f:
                     existing_data = json.load(f)
 
-            # 如果名称没有新增
-            if set(names) == set(existing_data.keys()):
+            # 如果奖品名称没有新增
+            if set(prize_names) == set(existing_data.keys()):
                 # 显示提示消息
                 config = NotificationConfig(
-                    title=get_content_name_async("name_setting", "info_title"),
+                    title=get_content_name_async("lottery_name_setting", "info_title"),
                     content=get_content_name_async(
-                        "name_setting", "no_new_names_message"
+                        "lottery_name_setting", "no_new_names_message"
                     ),
                     duration=3000,
                 )
@@ -257,14 +265,14 @@ class NameSettingWindow(QWidget):
             # 创建新的学生数据字典
             new_data = {}
 
-            # 为新姓名分配学号（从1开始递增）
-            for i, name in enumerate(names, 1):
-                # 如果姓名已存在于现有数据中，保留原有信息
+            # 为新奖品名称分配学号（从1开始递增）
+            for i, name in enumerate(prize_names, 1):
+                # 如果奖品名称已存在于现有数据中，保留原有信息
                 if name in existing_data:
                     new_data[name] = existing_data[name]
                 else:
-                    # 新增的姓名，分配新的学号和默认值
-                    new_data[name] = {"id": i, "gender": "", "group": "", "exist": True}
+                    # 新增的奖品名称，分配新的学号和默认值
+                    new_data[name] = {"id": i, "weight": 1, "exist": True}
 
             # 保存到文件
             with open_file(list_file, "w", encoding="utf-8") as f:
@@ -272,10 +280,10 @@ class NameSettingWindow(QWidget):
 
             # 显示保存成功通知
             config = NotificationConfig(
-                title=get_content_name_async("name_setting", "success_title"),
+                title=get_content_name_async("lottery_name_setting", "success_title"),
                 content=get_content_name_async(
-                    "name_setting", "success_message"
-                ).format(count=len(names)),
+                    "lottery_name_setting", "success_message"
+                ).format(count=len(prize_names)),
                 duration=3000,
             )
             show_notification(NotificationType.SUCCESS, config, parent=self)
@@ -286,12 +294,12 @@ class NameSettingWindow(QWidget):
         except Exception as e:
             # 显示错误消息
             config = NotificationConfig(
-                title=get_content_name_async("name_setting", "error_title"),
-                content=f"{get_content_name_async('name_setting', 'save_error')}: {str(e)}",
+                title=get_content_name_async("lottery_name_setting", "error_title"),
+                content=f"{get_content_name_async('lottery_name_setting', 'save_error')}: {str(e)}",
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"保存姓名失败: {e}")
+            logger.error(f"保存奖品名称失败: {e}")
 
     def __cancel(self):
         """取消操作"""
@@ -309,16 +317,20 @@ class NameSettingWindow(QWidget):
         if not self.saved:
             # 创建确认对话框
             dialog = Dialog(
-                get_content_name_async("name_setting", "unsaved_changes_title"),
-                get_content_name_async("name_setting", "unsaved_changes_message"),
+                get_content_name_async("lottery_name_setting", "unsaved_changes_title"),
+                get_content_name_async(
+                    "lottery_name_setting", "unsaved_changes_message"
+                ),
                 self,
             )
 
             dialog.yesButton.setText(
-                get_content_name_async("name_setting", "discard_button")
+                get_content_name_async("lottery_name_setting", "discard_button")
             )
             dialog.cancelButton.setText(
-                get_content_name_async("name_setting", "continue_editing_button")
+                get_content_name_async(
+                    "lottery_name_setting", "continue_editing_button"
+                )
             )
 
             # 显示对话框并获取用户选择

@@ -16,7 +16,7 @@ from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
-from app.tools.history import *
+from app.common.history.history import *
 
 
 # ==================================================

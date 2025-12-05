@@ -4,8 +4,8 @@
 import json
 from random import SystemRandom
 
-from app.tools.list import get_group_list, get_student_list, filter_students_data
-from app.tools.history import calculate_weight
+from app.common.data.list import get_group_list, get_student_list, filter_students_data
+from app.common.history.history import calculate_weight
 from app.tools.config import (
     calculate_remaining_count,
     read_drawn_record,
