@@ -23,8 +23,8 @@ roll_call_notification_settings = {
             "description": "配置点名通知窗口显示方式",
         },
         "floating_window_mode": {
-            "name": "浮动窗口模式",
-            "description": "配置点名通知浮动窗口行为",
+            "name": "浮窗模式",
+            "description": "配置点名通知浮窗行为",
         },
         "call_notification_service": {
             "name": "调用通知服务",
@@ -38,11 +38,11 @@ roll_call_notification_settings = {
         },
         "floating_window_enabled_monitor": {
             "name": "显示器选择",
-            "description": "选择显示点名通知浮动窗口的显示器",
+            "description": "选择显示点名通知浮窗的显示器",
         },
         "floating_window_position": {
-            "name": "浮动窗口位置",
-            "description": "设置点名通知浮动窗口屏幕显示位置",
+            "name": "浮窗位置",
+            "description": "设置点名通知浮窗屏幕显示位置",
             "combo_items": [
                 "中心",
                 "顶部",
@@ -57,19 +57,19 @@ roll_call_notification_settings = {
         },
         "floating_window_horizontal_offset": {
             "name": "水平偏移",
-            "description": "调整点名通知浮动窗口相对默认位置水平偏移量（像素）",
+            "description": "调整点名通知浮窗相对默认位置水平偏移量（像素）",
         },
         "floating_window_vertical_offset": {
             "name": "垂直偏移",
-            "description": "调整点名通知浮动窗口相对默认位置垂直偏移量（像素）",
+            "description": "调整点名通知浮窗相对默认位置垂直偏移量（像素）",
         },
         "floating_window_transparency": {
             "name": "透明度",
-            "description": "调整点名通知浮动窗口透明度，数值越小越透明（0-100）",
+            "description": "调整点名通知浮窗透明度，数值越小越透明（0-100）",
         },
         "floating_window_auto_close_time": {
-            "name": "浮动窗口自动关闭时间",
-            "description": "设置浮动窗口自动关闭时间（秒），设为0表示不自动关闭",
+            "name": "浮窗自动关闭时间",
+            "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
     }
 }
@@ -90,8 +90,8 @@ quick_draw_notification_settings = {
             "description": "设置闪抽通知窗口显示方式",
         },
         "floating_window_mode": {
-            "name": "浮动窗口模式",
-            "description": "设置闪抽通知浮动窗口行为模式",
+            "name": "浮窗模式",
+            "description": "设置闪抽通知浮窗行为模式",
         },
         "animation": {
             "name": "动画",
@@ -100,11 +100,11 @@ quick_draw_notification_settings = {
         },
         "floating_window_enabled_monitor": {
             "name": "选择闪抽通知显示的显示器",
-            "description": "选择闪抽通知浮动窗口显示器",
+            "description": "选择闪抽通知浮窗显示器",
         },
         "floating_window_position": {
-            "name": "浮动窗口位置",
-            "description": "设置闪抽通知浮动窗口屏幕显示位置",
+            "name": "浮窗位置",
+            "description": "设置闪抽通知浮窗屏幕显示位置",
             "combo_items": [
                 "中心",
                 "顶部",
@@ -119,19 +119,19 @@ quick_draw_notification_settings = {
         },
         "floating_window_horizontal_offset": {
             "name": "水平偏移",
-            "description": "设置闪抽通知浮动窗口相对默认位置水平偏移量（像素）",
+            "description": "设置闪抽通知浮窗相对默认位置水平偏移量（像素）",
         },
         "floating_window_vertical_offset": {
             "name": "垂直偏移",
-            "description": "设置闪抽通知浮动窗口相对默认位置垂直偏移量（像素）",
+            "description": "设置闪抽通知浮窗相对默认位置垂直偏移量（像素）",
         },
         "floating_window_transparency": {
-            "name": "浮动窗口透明度",
-            "description": "设置闪抽通知浮动窗口透明度，数值越小越透明（0-100）",
+            "name": "浮窗透明度",
+            "description": "设置闪抽通知浮窗透明度，数值越小越透明（0-100）",
         },
         "floating_window_auto_close_time": {
-            "name": "浮动窗口自动关闭时间",
-            "description": "设置浮动窗口自动关闭时间（秒），设为0表示不自动关闭",
+            "name": "浮窗自动关闭时间",
+            "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
     }
 }
@@ -152,8 +152,8 @@ instant_draw_notification_settings = {
             "description": "设置即抽通知窗口显示方式",
         },
         "floating_window_mode": {
-            "name": "浮动窗口模式",
-            "description": "设置即抽通知浮动窗口行为模式",
+            "name": "浮窗模式",
+            "description": "设置即抽通知浮窗行为模式",
         },
         "animation": {
             "name": "动画",
@@ -162,11 +162,11 @@ instant_draw_notification_settings = {
         },
         "floating_window_enabled_monitor": {
             "name": "选择即抽通知显示的显示器",
-            "description": "选择即抽通知浮动窗口显示器",
+            "description": "选择即抽通知浮窗显示器",
         },
         "floating_window_position": {
-            "name": "浮动窗口位置",
-            "description": "设置即抽通知浮动窗口屏幕显示位置",
+            "name": "浮窗位置",
+            "description": "设置即抽通知浮窗屏幕显示位置",
             "combo_items": [
                 "中心",
                 "顶部",
@@ -181,19 +181,19 @@ instant_draw_notification_settings = {
         },
         "floating_window_horizontal_offset": {
             "name": "水平偏移",
-            "description": "设置即抽通知浮动窗口相对默认位置水平偏移量（像素）",
+            "description": "设置即抽通知浮窗相对默认位置水平偏移量（像素）",
         },
         "floating_window_vertical_offset": {
             "name": "垂直偏移",
-            "description": "设置即抽通知浮动窗口相对默认位置垂直偏移量（像素）",
+            "description": "设置即抽通知浮窗相对默认位置垂直偏移量（像素）",
         },
         "floating_window_transparency": {
-            "name": "浮动窗口透明度",
-            "description": "设置即抽通知浮动窗口透明度，数值越小越透明（0-100）",
+            "name": "浮窗透明度",
+            "description": "设置即抽通知浮窗透明度，数值越小越透明（0-100）",
         },
         "floating_window_auto_close_time": {
-            "name": "浮动窗口自动关闭时间",
-            "description": "设置浮动窗口自动关闭时间（秒），设为0表示不自动关闭",
+            "name": "浮窗自动关闭时间",
+            "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
     }
 }
@@ -208,8 +208,8 @@ custom_draw_notification_settings = {
             "description": "设置自定义抽取通知窗口显示方式",
         },
         "floating_window_mode": {
-            "name": "浮动窗口模式",
-            "description": "设置自定义抽取通知浮动窗口行为模式",
+            "name": "浮窗模式",
+            "description": "设置自定义抽取通知浮窗行为模式",
         },
         "call_notification_service": {
             "name": "调用通知服务",
@@ -223,11 +223,11 @@ custom_draw_notification_settings = {
         },
         "floating_window_enabled_monitor": {
             "name": "选择自定义抽取通知显示的显示器",
-            "description": "选择自定义抽取通知浮动窗口显示器",
+            "description": "选择自定义抽取通知浮窗显示器",
         },
         "floating_window_position": {
-            "name": "浮动窗口位置",
-            "description": "设置自定义抽取通知浮动窗口屏幕显示位置",
+            "name": "浮窗位置",
+            "description": "设置自定义抽取通知浮窗屏幕显示位置",
             "combo_items": [
                 "中心",
                 "顶部",
@@ -242,19 +242,19 @@ custom_draw_notification_settings = {
         },
         "floating_window_horizontal_offset": {
             "name": "水平偏移",
-            "description": "设置自定义抽取通知浮动窗口相对默认位置水平偏移量（像素）",
+            "description": "设置自定义抽取通知浮窗相对默认位置水平偏移量（像素）",
         },
         "floating_window_vertical_offset": {
             "name": "垂直偏移",
-            "description": "设置自定义抽取通知浮动窗口相对默认位置垂直偏移量（像素）",
+            "description": "设置自定义抽取通知浮窗相对默认位置垂直偏移量（像素）",
         },
         "floating_window_transparency": {
-            "name": "浮动窗口透明度",
-            "description": "设置自定义抽取通知浮动窗口透明度，数值越小越透明（0-100）",
+            "name": "浮窗透明度",
+            "description": "设置自定义抽取通知浮窗透明度，数值越小越透明（0-100）",
         },
         "floating_window_auto_close_time": {
-            "name": "浮动窗口自动关闭时间",
-            "description": "设置浮动窗口自动关闭时间（秒），设为0表示不自动关闭",
+            "name": "浮窗自动关闭时间",
+            "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
     },
     "EN_US": {
@@ -272,7 +272,7 @@ custom_draw_notification_settings = {
         },
         "floating_window_mode": {
             "name": "Floating window mode",
-            "description": "设置自定义抽取通知浮动窗口行为模式",
+            "description": "设置自定义抽取通知浮窗行为模式",
         },
         "call_notification_service": {
             "name": "Call notification service",
@@ -284,11 +284,11 @@ custom_draw_notification_settings = {
         },
         "floating_window_enabled_monitor": {
             "name": "选择自定义抽取通知显示的显示器",
-            "description": "选择自定义抽取通知浮动窗口显示器",
+            "description": "选择自定义抽取通知浮窗显示器",
         },
         "floating_window_position": {
             "name": "Floating window position",
-            "description": "设置自定义抽取通知浮动窗口屏幕显示位置",
+            "description": "设置自定义抽取通知浮窗屏幕显示位置",
             "combo_items": {
                 "0": "Center",
                 "1": "Top",
@@ -303,19 +303,19 @@ custom_draw_notification_settings = {
         },
         "floating_window_horizontal_offset": {
             "name": "Horizontal Offset",
-            "description": "设置自定义抽取通知浮动窗口相对默认位置水平偏移量（像素）",
+            "description": "设置自定义抽取通知浮窗相对默认位置水平偏移量（像素）",
         },
         "floating_window_vertical_offset": {
             "name": "Vertical Offset",
-            "description": "设置自定义抽取通知浮动窗口相对默认位置垂直偏移量（像素）",
+            "description": "设置自定义抽取通知浮窗相对默认位置垂直偏移量（像素）",
         },
         "floating_window_transparency": {
             "name": "Floating window transparency",
-            "description": "设置自定义抽取通知浮动窗口透明度，数值越小越透明（0-100）",
+            "description": "设置自定义抽取通知浮窗透明度，数值越小越透明（0-100）",
         },
         "floating_window_auto_close_time": {
-            "name": "浮动窗口自动关闭时间",
-            "description": "设置浮动窗口自动关闭时间（秒），设为0表示不自动关闭",
+            "name": "浮窗自动关闭时间",
+            "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
     },
 }
@@ -336,8 +336,8 @@ lottery_notification_settings = {
             "description": "设置抽奖通知窗口显示方式",
         },
         "floating_window_mode": {
-            "name": "浮动窗口模式",
-            "description": "设置抽奖通知浮动窗口行为模式",
+            "name": "浮窗模式",
+            "description": "设置抽奖通知浮窗行为模式",
         },
         "call_notification_service": {
             "name": "调用通知服务",
@@ -351,11 +351,11 @@ lottery_notification_settings = {
         },
         "floating_window_enabled_monitor": {
             "name": "选择抽奖通知显示的显示器",
-            "description": "选择抽奖通知浮动窗口显示器",
+            "description": "选择抽奖通知浮窗显示器",
         },
         "floating_window_position": {
-            "name": "浮动窗口位置",
-            "description": "设置抽奖通知浮动窗口屏幕显示位置",
+            "name": "浮窗位置",
+            "description": "设置抽奖通知浮窗屏幕显示位置",
             "combo_items": [
                 "中心",
                 "顶部",
@@ -370,19 +370,19 @@ lottery_notification_settings = {
         },
         "floating_window_horizontal_offset": {
             "name": "水平偏移",
-            "description": "设置抽奖通知浮动窗口相对默认位置水平偏移量（像素）",
+            "description": "设置抽奖通知浮窗相对默认位置水平偏移量（像素）",
         },
         "floating_window_vertical_offset": {
             "name": "垂直偏移",
-            "description": "设置抽奖通知浮动窗口相对默认位置垂直偏移量（像素）",
+            "description": "设置抽奖通知浮窗相对默认位置垂直偏移量（像素）",
         },
         "floating_window_transparency": {
-            "name": "浮动窗口透明度",
-            "description": "设置抽奖通知浮动窗口透明度，数值越小越透明（0-100）",
+            "name": "浮窗透明度",
+            "description": "设置抽奖通知浮窗透明度，数值越小越透明（0-100）",
         },
         "floating_window_auto_close_time": {
-            "name": "浮动窗口自动关闭时间",
-            "description": "设置浮动窗口自动关闭时间（秒），设为0表示不自动关闭",
+            "name": "浮窗自动关闭时间",
+            "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
     }
 }

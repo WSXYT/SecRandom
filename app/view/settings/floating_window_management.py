@@ -17,7 +17,7 @@ from app.Language.obtain_language import *
 
 
 # ==================================================
-# 浮动窗口管理 - 主容器
+# 浮窗管理 - 主容器
 # ==================================================
 class floating_window_management(QWidget):
     def __init__(self, parent=None):
@@ -57,7 +57,7 @@ class floating_window_management(QWidget):
 
 
 # ==================================================
-# 浮动窗口管理 - 基础设置
+# 浮窗管理 - 基础设置
 # ==================================================
 class floating_window_basic_settings(GroupHeaderCardWidget):
     def __init__(self, parent=None):
@@ -232,7 +232,7 @@ class floating_window_basic_settings(GroupHeaderCardWidget):
 
 
 # ==================================================
-# 浮动窗口管理 - 外观设置
+# 浮窗管理 - 外观设置
 # ==================================================
 class floating_window_appearance_settings(GroupHeaderCardWidget):
     appearance_settings_changed = Signal()
@@ -344,7 +344,7 @@ class floating_window_appearance_settings(GroupHeaderCardWidget):
 
 
 # ==================================================
-# 浮动窗口管理 - 贴边设置
+# 浮窗管理 - 贴边设置
 # ==================================================
 class floating_window_edge_settings(GroupHeaderCardWidget):
     def __init__(self, parent=None):

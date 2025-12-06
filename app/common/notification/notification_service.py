@@ -10,7 +10,7 @@ from app.tools.variable import WINDOW_BOTTOM_POSITION_FACTOR
 
 
 class NotificationContentWidget(QWidget):
-    """通知内容控件，用于在浮动窗口中显示内容"""
+    """通知内容控件，用于在浮窗中显示内容"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -461,7 +461,7 @@ class FloatingNotificationWindow(CardWidget):
         return QRect(x, y, window_width, window_height)
 
     def position_window(self, settings=None):
-        """根据设置定位浮动窗口"""
+        """根据设置定位浮窗"""
         # 获取屏幕
         screen = self._get_screen_from_settings(settings)
         screen_geometry = screen.geometry()
@@ -869,7 +869,7 @@ class FloatingNotificationManager:
 
     def close_all_notifications(self):
         """关闭所有浮动通知窗口"""
-        # 关闭浮动窗口
+        # 关闭浮窗
         for window in self.notification_windows.values():
             if window.auto_close_timer.isActive():
                 window.auto_close_timer.stop()

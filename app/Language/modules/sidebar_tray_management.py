@@ -1,30 +1,30 @@
 # 浮窗管理语言配置
 floating_window_management = {
     "ZH_CN": {
-        "title": {"name": "浮窗管理", "description": "配置浮动窗口相关设置"},
-        "basic_settings": {"name": "基本设置", "description": "配置浮动窗口基本设置"},
+        "title": {"name": "浮窗管理", "description": "配置浮窗相关设置"},
+        "basic_settings": {"name": "基本设置", "description": "配置浮窗基本设置"},
         "appearance_settings": {
             "name": "外观设置",
-            "description": "配置浮动窗口外观设置",
+            "description": "配置浮窗外观设置",
         },
-        "edge_settings": {"name": "贴边设置", "description": "配置浮动窗口贴边设置"},
+        "edge_settings": {"name": "贴边设置", "description": "配置浮窗贴边设置"},
         "startup_display_floating_window": {
             "name": "启动时显示浮窗",
-            "description": "控制软件启动时是否自动显示浮动窗口",
+            "description": "控制软件启动时是否自动显示浮窗",
             "switchbutton_name": {"enable": "", "disable": ""},
         },
         "floating_window_opacity": {
             "name": "浮窗透明度",
-            "description": "调整浮动窗口透明度",
+            "description": "调整浮窗透明度",
         },
         "reset_floating_window_position_button": {
             "name": "重置浮窗位置",
-            "description": "将浮动窗口位置重置为默认位置",
+            "description": "将浮窗位置重置为默认位置",
             "pushbutton_name": "重置位置",
         },
         "floating_window_button_control": {
             "name": "浮窗控件配置",
-            "description": "选择在浮动窗口中显示的功能按钮",
+            "description": "选择在浮窗中显示的功能按钮",
             "combo_items": [
                 "点名",
                 "闪抽",
@@ -46,71 +46,71 @@ floating_window_management = {
         },
         "floating_window_placement": {
             "name": "浮窗排列方式",
-            "description": "设置浮动窗口中控件排列方式",
+            "description": "设置浮窗中控件排列方式",
             "combo_items": ["矩形排列", "竖向排列", "横向排列"],
         },
         "floating_window_display_style": {
             "name": "浮窗显示样式",
-            "description": "设置浮动窗口中控件显示样式",
+            "description": "设置浮窗中控件显示样式",
             "combo_items": ["图标+文字", "图标", "文字"],
         },
         "floating_window_stick_to_edge": {
             "name": "贴边功能",
-            "description": "控制浮动窗口是否自动贴边",
+            "description": "控制浮窗是否自动贴边",
             "switchbutton_name": {"enable": "", "disable": ""},
         },
         "floating_window_stick_to_edge_recover_seconds": {
             "name": "贴边收纳时间",
-            "description": "设置浮动窗口贴边后自动收纳时间（秒）",
+            "description": "设置浮窗贴边后自动收纳时间（秒）",
         },
         "floating_window_draggable": {
             "name": "浮窗可拖动",
-            "description": "控制浮动窗口是否可被拖动",
+            "description": "控制浮窗是否可被拖动",
             "switchbutton_name": {"enable": "", "disable": ""},
         },
         "floating_window_long_press_duration": {
             "name": "长按时间",
-            "description": "设置浮动窗口长按时间（毫秒）",
+            "description": "设置浮窗长按时间（毫秒）",
         },
         "floating_window_stick_to_edge_display_style": {
             "name": "贴边显示样式",
-            "description": "设置浮动窗口贴边时显示样式",
+            "description": "设置浮窗贴边时显示样式",
             "combo_items": ["图标", "文字", "箭头"],
         },
     },
     "EN_US": {
         "title": {
             "name": "Floating window management",
-            "description": "配置浮动窗口相关设置",
+            "description": "配置浮窗相关设置",
         },
         "basic_settings": {
             "name": "Basic settings",
-            "description": "配置浮动窗口基本设置",
+            "description": "配置浮窗基本设置",
         },
         "appearance_settings": {
             "name": "Appearance settings",
-            "description": "配置浮动窗口外观设置",
+            "description": "配置浮窗外观设置",
         },
         "edge_settings": {
             "name": "Edge settings",
-            "description": "配置浮动窗口贴边设置",
+            "description": "配置浮窗贴边设置",
         },
         "startup_display_floating_window": {
             "name": "启动时显示浮窗",
-            "description": "控制软件启动时是否自动显示浮动窗口",
+            "description": "控制软件启动时是否自动显示浮窗",
         },
         "floating_window_opacity": {
             "name": "Floating window transparency",
-            "description": "调整浮动窗口透明度",
+            "description": "调整浮窗透明度",
         },
         "reset_floating_window_position_button": {
             "name": "Reset floating window position",
-            "description": "将浮动窗口位置重置为默认位置",
+            "description": "将浮窗位置重置为默认位置",
             "pushbutton_name": "Reset position",
         },
         "floating_window_button_control": {
             "name": "Floating window controls config",
-            "description": "选择在浮动窗口中显示的功能按钮",
+            "description": "选择在浮窗中显示的功能按钮",
             "combo_items": {
                 "0": "Pick",
                 "1": "Quick pick",
@@ -132,7 +132,7 @@ floating_window_management = {
         },
         "floating_window_placement": {
             "name": "Floating window layout",
-            "description": "设置浮动窗口中控件排列方式",
+            "description": "设置浮窗中控件排列方式",
             "combo_items": {
                 "0": "Rectangle",
                 "1": "Portrait",
@@ -141,7 +141,7 @@ floating_window_management = {
         },
         "floating_window_display_style": {
             "name": "Floating window style",
-            "description": "设置浮动窗口中控件显示样式",
+            "description": "设置浮窗中控件显示样式",
             "combo_items": {
                 "0": "Icon + Text",
                 "1": "Icon only",
@@ -150,15 +150,15 @@ floating_window_management = {
         },
         "floating_window_stick_to_edge": {
             "name": "Edge function",
-            "description": "控制浮动窗口是否自动贴边",
+            "description": "控制浮窗是否自动贴边",
         },
         "floating_window_stick_to_edge_recover_seconds": {
             "name": "Edge receipt time",
-            "description": "设置浮动窗口贴边后自动收纳时间（秒）",
+            "description": "设置浮窗贴边后自动收纳时间（秒）",
         },
         "floating_window_stick_to_edge_display_style": {
             "name": "Edge style",
-            "description": "设置浮动窗口贴边时显示样式",
+            "description": "设置浮窗贴边时显示样式",
             "combo_items": {
                 "0": "Icon",
                 "1": "Text",
@@ -292,7 +292,7 @@ tray_management = {
         },
         "show_hide_float_window": {
             "name": "暂时显示/隐藏浮窗",
-            "description": "控制浮动窗口显示和隐藏",
+            "description": "控制浮窗显示和隐藏",
             "switchbutton_name": {"enable": "", "disable": ""},
         },
         "restart": {

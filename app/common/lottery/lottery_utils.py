@@ -459,7 +459,7 @@ class LotteryUtils:
             "student_image": readme_settings_async(
                 "roll_call_settings", "student_image"
             ),
-            # 浮动窗口设置
+            # 浮窗设置
             "animation": readme_settings_async(
                 "roll_call_notification_settings", "animation"
             ),

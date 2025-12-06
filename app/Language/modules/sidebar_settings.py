@@ -69,7 +69,7 @@ tray_management = {
         },
         "show_hide_float_window": {
             "name": "暂时显示/隐藏浮窗",
-            "description": "控制浮动窗口显示和隐藏",
+            "description": "控制浮窗显示和隐藏",
             "switchbutton_name": {"enable": "", "disable": ""},
         },
         "restart": {

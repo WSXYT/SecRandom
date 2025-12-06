@@ -346,18 +346,18 @@ def show_settings_window_about():
 
 
 def create_float_window():
-    """创建浮动窗口实例"""
+    """创建浮窗实例"""
     global float_window
     try:
         from app.view.floating_window.levitation import LevitationWindow
 
         float_window = LevitationWindow()
     except Exception as e:
-        logger.error(f"创建浮动窗口失败: {e}", exc_info=True)
+        logger.error(f"创建浮窗失败: {e}", exc_info=True)
 
 
 def show_float_window():
-    """显示浮动窗口"""
+    """显示浮窗"""
     try:
         global float_window
         if float_window is None:
@@ -365,7 +365,7 @@ def show_float_window():
         if float_window is not None:
             float_window.show()
     except Exception as e:
-        logger.error(f"显示浮动窗口失败: {e}", exc_info=True)
+        logger.error(f"显示浮窗失败: {e}", exc_info=True)
 
 
 # ==================================================
