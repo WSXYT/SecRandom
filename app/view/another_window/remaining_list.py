@@ -6,7 +6,7 @@
 import json
 from typing import Dict, Any
 
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout
+from PySide6.QtWidgets import QWidget, QVBoxLayout
 from PySide6.QtGui import QFont
 from PySide6.QtCore import (
     Signal,
@@ -17,7 +17,7 @@ from PySide6.QtCore import (
     QThreadPool,
     QObject,
 )
-from qfluentwidgets import SubtitleLabel, BodyLabel, CardWidget
+from qfluentwidgets import SubtitleLabel, BodyLabel, CardWidget, FlowLayout
 from loguru import logger
 
 from app.tools.variable import (
@@ -301,10 +301,11 @@ class RemainingListPage(QWidget):
             self.count_label.setFont(QFont("", 12))
         self.main_layout.addWidget(self.count_label)
 
-        # 创建网格布局
-        self.grid_layout = QGridLayout()
-        self.grid_layout.setSpacing(STUDENT_CARD_SPACING)
-        self.main_layout.addLayout(self.grid_layout)
+        # 创建流式布局
+        self.flow_layout = FlowLayout()
+        self.flow_layout.setVerticalSpacing(STUDENT_CARD_SPACING)
+        self.flow_layout.setHorizontalSpacing(STUDENT_CARD_SPACING)
+        self.main_layout.addLayout(self.flow_layout)
 
         # 初始化卡片列表
         self.cards = []
@@ -421,7 +422,7 @@ class RemainingListPage(QWidget):
 
         # 清空现有卡片并准备异步渲染
         self.cards = []
-        self._clear_grid_layout()
+        self._clear_flow_layout()
 
         # 将待渲染学生放入队列，启动增量渲染
         self._pending_students = list(self.students) if self.students else []
@@ -431,7 +432,7 @@ class RemainingListPage(QWidget):
 
     def update_layout(self):
         """更新布局"""
-        if not self.grid_layout or not self.cards:
+        if not self.flow_layout or not self.cards:
             return
 
         # 检查是否需要更新布局
@@ -464,27 +465,17 @@ class RemainingListPage(QWidget):
             self.setUpdatesEnabled(False)
 
             # 清空现有布局
-            self._clear_grid_layout()
+            self._clear_flow_layout()
 
-            # 计算列数
-            window_width = max(self.width(), self.sizeHint().width())
-            columns = self._calculate_columns(window_width)
-
-            # 添加卡片到网格布局
-            for i, card in enumerate(self.cards):
-                row = i // columns
-                col = i % columns
-                self.grid_layout.addWidget(card, row, col)
+            # 添加卡片到流式布局
+            for card in self.cards:
+                self.flow_layout.addWidget(card)
                 # 仅在控件当前不可见时显示，避免重复触发绘制
                 if not card.isVisible():
                     card.show()
 
-            # 设置列的伸缩因子，使卡片均匀分布
-            for col in range(columns):
-                self.grid_layout.setColumnStretch(col, 1)
-
             logger.debug(
-                f"布局更新完成: 宽度={window_width}, 列数={columns}, 卡片数={len(self.cards)}"
+                f"布局更新完成: 宽度={current_width}, 卡片数={len(self.cards)}"
             )
         finally:
             # 清除布局更新标志
@@ -515,26 +506,17 @@ class RemainingListPage(QWidget):
                     "Error calling update() after layout update (ignored): {}", e
                 )
 
-    def _calculate_columns(self, width: int) -> int:
-        """根据窗口宽度和卡片尺寸动态计算列数"""
+    def _clear_flow_layout(self):
+        """清空流式布局"""
+        # 使用FlowLayout的removeAllWidgets方法清空布局
+        self.flow_layout.removeAllWidgets()
+        # 清空已记录的已添加卡片集合
         try:
-            if width <= 0:
-                return 1
-
-            # 计算可用宽度（减去左右边距）
-            available_width = width - 40  # 左右各20px边距
-
-            # 所有卡片使用相同的尺寸
-            card_actual_width = STUDENT_CARD_FIXED_WIDTH + STUDENT_CARD_SPACING
-            max_cols = max(1, available_width // card_actual_width)
-
-            # 至少显示1列，且不超过一个合理上限
-            return max(1, min(int(max_cols), 6))
+            self._cards_set.clear()
         except Exception as e:
             from loguru import logger
 
-            logger.exception("Error calculating columns (fallback to 1): {}", e)
-            return 1
+            logger.exception("Error clearing cards set (ignored): {}", e)
 
     def _start_incremental_render(self):
         """使用 QThreadPool 启动后台任务，按批准备数据并通过信号通知主线程创建控件"""
@@ -724,69 +706,33 @@ class RemainingListPage(QWidget):
                 self.cards.append(card)
                 self._cards_set.add(key)
 
-        # 将新卡片添加到布局（只放置尚未加入布局的卡片）
+        # 将新卡片添加到布局
         try:
-            columns = self._calculate_columns(
-                max(self.width(), self.sizeHint().width())
-            )
-
-            for i, card in enumerate(list(self.cards)):
+            for card in list(self.cards):
+                # 确保卡片不在另一个父控件下
+                try:
+                    if card.parent() is not None and card.parent() is not self:
+                        card.setParent(None)
+                except Exception as e:
+                    from loguru import logger
+                    logger.exception("Error resetting card parent (ignored): {}", e)
+                
                 # 如果卡片已经在布局中则跳过
                 try:
-                    if self.grid_layout.indexOf(card) != -1:
+                    if self.flow_layout.indexOf(card) != -1:
                         continue
                 except Exception as e:
                     from loguru import logger
-
-                    logger.exception(
-                        "Error checking grid_layout.indexOf (ignored): {}", e
-                    )
-
-                row = i // columns
-                col = i % columns
-
-                # 如果目标格位已有其它控件，先移除避免重叠
+                    logger.exception("Error checking flow_layout.indexOf (ignored): {}", e)
+                
                 try:
-                    existing_item = self.grid_layout.itemAtPosition(row, col)
-                    if existing_item is not None:
-                        existing_widget = existing_item.widget()
-                        if existing_widget is not None and existing_widget is not card:
-                            try:
-                                self.grid_layout.removeWidget(existing_widget)
-                            except Exception as e:
-                                from loguru import logger
-
-                                logger.exception(
-                                    "Error removing existing widget from grid (ignored): {}",
-                                    e,
-                                )
-                            try:
-                                existing_widget.hide()
-                            except Exception as e:
-                                from loguru import logger
-
-                                logger.exception(
-                                    "Error hiding existing widget (ignored): {}", e
-                                )
-                except Exception as e:
-                    from loguru import logger
-
-                    logger.exception(
-                        "Error handling existing widget in grid (ignored): {}", e
-                    )
-
-                try:
-                    self.grid_layout.addWidget(card, row, col)
+                    self.flow_layout.addWidget(card)
                     if not card.isVisible():
                         card.show()
                 except Exception:
-                    logger.exception("向网格添加卡片失败")
-
-            for col in range(columns):
-                self.grid_layout.setColumnStretch(col, 1)
+                    logger.exception("向流式布局添加卡片失败")
         except Exception as e:
             from loguru import logger
-
             logger.exception("增量渲染时布局更新失败: {}", e)
 
     def _on_render_finished(self, reporter):

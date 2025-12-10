@@ -44,10 +44,11 @@ class contributor_page(QWidget):
         self.main_layout.setContentsMargins(10, 10, 10, 10)
         self.main_layout.setSpacing(10)
 
-        # 创建网格布局
-        self.grid_layout = QGridLayout()
-        self.grid_layout.setSpacing(CONTRIBUTOR_CARD_SPACING)
-        self.main_layout.addLayout(self.grid_layout)
+        # 创建流式布局
+        self.flow_layout = FlowLayout()
+        self.flow_layout.setVerticalSpacing(CONTRIBUTOR_CARD_SPACING)
+        self.flow_layout.setHorizontalSpacing(CONTRIBUTOR_CARD_SPACING)
+        self.main_layout.addLayout(self.flow_layout)
 
         # 初始化卡片列表
         self.cards = []
@@ -182,7 +183,7 @@ class contributor_page(QWidget):
 
         # 清空现有卡片列表，但保留在缓存中
         self.cards = []
-        self._clear_grid_layout()
+        self._clear_flow_layout()
 
         # 添加贡献者卡片
         for contributor in self.contributors:
@@ -211,29 +212,19 @@ class contributor_page(QWidget):
         # 延迟更新布局
         QTimer.singleShot(50, self.update_layout)
 
-    def _calculate_columns(self, width: int) -> int:
-        """根据窗口宽度和卡片尺寸动态计算列数"""
+    def _clear_flow_layout(self):
+        """清空流式布局"""
+        # 使用FlowLayout的removeAllWidgets方法清空布局
+        self.flow_layout.removeAllWidgets()
+        # 清空已记录的已添加卡片集合
         try:
-            if width <= 0:
-                return 1
-
-            # 计算可用宽度（减去左右边距）
-            available_width = width - 40  # 左右各20px边距
-
-            # 所有卡片使用相同的尺寸
-            card_actual_width = CONTRIBUTOR_CARD_MIN_WIDTH + CONTRIBUTOR_CARD_SPACING
-            max_cols = max(1, available_width // card_actual_width)
-
-            # 至少显示1列，且不超过最大列数限制
-            return max(1, min(int(max_cols), CONTRIBUTOR_MAX_COLUMNS))
+            self._cards_set.clear()
         except Exception as e:
-            from loguru import logger
-            logger.exception("Error calculating columns (fallback to 1): {}", e)
-            return 1
+            logger.exception("Error clearing cards set (ignored): {}", e)
 
     def update_layout(self):
         """更新布局"""
-        if not self.grid_layout or not self.cards:
+        if not self.flow_layout or not self.cards:
             return
 
         # 检查是否需要更新布局
@@ -269,26 +260,16 @@ class contributor_page(QWidget):
             self.setUpdatesEnabled(False)
 
             # 清空现有布局
-            self._clear_grid_layout()
+            self._clear_flow_layout()
 
-            # 计算列数
-            window_width = max(self.width(), self.sizeHint().width())
-            columns = self._calculate_columns(window_width)
-
-            # 添加卡片到网格布局
-            for i, card in enumerate(self.cards):
-                row = i // columns
-                col = i % columns
+            # 添加卡片到流式布局
+            for card in self.cards:
                 card.setMinimumWidth(CONTRIBUTOR_CARD_MIN_WIDTH)
                 card.setMaximumWidth(CONTRIBUTOR_CARD_MIN_WIDTH * 1.5)
-                self.grid_layout.addWidget(card, row, col)
+                self.flow_layout.addWidget(card)
                 # 仅在控件当前不可见时显示，避免重复触发绘制
                 if not card.isVisible():
                     card.show()
-
-            # 设置列的伸缩因子，使卡片均匀分布
-            for col in range(columns):
-                self.grid_layout.setColumnStretch(col, 1)
         finally:
             # 清除布局更新标志
             self._layout_update_in_progress = False
@@ -340,9 +321,6 @@ class contributor_page(QWidget):
 
     def addContributorCard(self, contributor):
         """添加单个贡献者卡片"""
-        if not hasattr(self, "grid_layout") or self.grid_layout is None:
-            return None
-
         try:
             card = QWidget()
             card.setObjectName("contributorCard")
