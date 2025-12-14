@@ -4,6 +4,7 @@
 import os
 import json
 from typing import Dict, List, Any
+from concurrent.futures import ThreadPoolExecutor
 
 from loguru import logger
 from PySide6.QtWidgets import *
@@ -23,6 +24,10 @@ from app.tools.config import *
 class ImportPrizeNameWindow(QWidget):
     """奖品名称导入窗口"""
 
+    # 定义信号，用于后台加载文件完成后通知UI线程
+    fileLoaded = Signal(object, list)  # 参数：数据，列名列表
+    fileLoadError = Signal(str)  # 参数：错误信息
+
     def __init__(self, parent=None):
         """初始化奖品名称导入窗口"""
         # 调用父类初始化方法
@@ -34,6 +39,8 @@ class ImportPrizeNameWindow(QWidget):
         self.columns = []
         self.column_mapping = {}
         self.preview_data = []
+        # 线程池用于后台加载文件
+        self.executor = ThreadPoolExecutor(max_workers=2)
 
         # 创建UI
         self.__init_ui()
@@ -46,7 +53,7 @@ class ImportPrizeNameWindow(QWidget):
         # 创建主布局
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(20, 20, 20, 20)
-        self.main_layout.setSpacing(15)
+        self.main_layout.setSpacing(5)
 
         # 创建标题
         self.title_label = TitleLabel(
@@ -210,6 +217,10 @@ class ImportPrizeNameWindow(QWidget):
         self.preview_table = TableWidget()
         self.preview_table.setWordWrap(True)
         self.preview_table.verticalHeader().setVisible(False)
+        # 限制预览表格高度
+        self.preview_table.setMaximumHeight(150)
+        # 设置固定行数显示
+        self.preview_table.setRowCount(0)
         preview_layout.addWidget(self.preview_table)
 
         # 添加到主布局
@@ -252,6 +263,10 @@ class ImportPrizeNameWindow(QWidget):
 
         # 按钮事件
         self.import_btn.clicked.connect(self.__import_data)
+
+        # 后台文件加载完成信号
+        self.fileLoaded.connect(self.__on_file_loaded)
+        self.fileLoadError.connect(self.__on_file_load_error)
 
     def __update_ui_state(self):
         """更新UI状态"""
@@ -319,73 +334,18 @@ class ImportPrizeNameWindow(QWidget):
         )
 
         if file_path:
-            try:
-                # 加载文件
-                self.__load_file(file_path)
+            # 更新文件路径标签
+            self.file_path_label.setText(os.path.basename(file_path))
 
-                # 更新文件路径标签
-                self.file_path_label.setText(os.path.basename(file_path))
+            # 使用线程池在后台加载文件
+            self.executor.submit(self.__load_file, file_path)
 
-                # 显示成功消息
-                config = NotificationConfig(
-                    title=get_content_name_async(
-                        "import_prize_name", "file_loaded_notification_title"
-                    ),
-                    content=get_content_name_async(
-                        "import_prize_name", "file_loaded_notification_content"
-                    ),
-                    duration=3000,
-                )
-                show_notification(NotificationType.SUCCESS, config, parent=self)
-
-            except Exception as e:
-                # 显示错误消息
-                config = NotificationConfig(
-                    title=get_content_name_async(
-                        "import_prize_name", "load_failed_notification_title"
-                    ),
-                    content=get_content_name_async(
-                        "import_prize_name", "load_failed_notification_content"
-                    ),
-                    duration=3000,
-                )
-                show_notification(NotificationType.ERROR, config, parent=self)
-                logger.error(f"加载文件失败: {e}")
-
-    def __load_file(self, file_path: str):
-        """加载文件"""
-        self.file_path = file_path
-
-        # 根据文件扩展名选择加载方法
-        file_ext = os.path.splitext(file_path)[1].lower()
-
-        if file_ext in [".xlsx", ".xls"]:
-            # 延迟导入 pandas，避免在模块导入时加载大型 C 扩展
-            try:
-                import pandas as pd
-            except Exception as e:
-                logger.error(f"加载 Excel 需要 pandas 库，但导入失败: {e}")
-                raise
-
-            # 加载Excel文件
-            self.data = pd.read_excel(file_path)
-        elif file_ext == ".csv":
-            # 延迟导入 pandas，避免在模块导入时加载大型 C 扩展
-            try:
-                import pandas as pd
-            except Exception as e:
-                logger.error(f"加载 CSV 需要 pandas 库，但导入失败: {e}")
-                raise
-
-            # 加载CSV文件
-            self.data = pd.read_csv(file_path)
-        else:
-            raise ValueError(
-                get_content_name_async("import_prize_name", "unsupported_format")
-            )
-
-        # 获取列名
-        self.columns = list(self.data.columns)
+    def __on_file_loaded(self, data, columns):
+        """文件加载完成后的处理"""
+        # 更新UI数据
+        self.data = data
+        self.columns = columns
+        self.file_path = self.file_path_label.text()
 
         # 更新列映射下拉框
         self.__update_column_combos()
@@ -398,6 +358,73 @@ class ImportPrizeNameWindow(QWidget):
 
         # 更新UI状态
         self.__update_ui_state()
+
+        # 显示成功消息
+        config = NotificationConfig(
+            title=get_content_name_async(
+                "import_prize_name", "file_loaded_notification_title"
+            ),
+            content=get_content_name_async(
+                "import_prize_name", "file_loaded_notification_content"
+            ),
+            duration=3000,
+        )
+        show_notification(NotificationType.SUCCESS, config, parent=self)
+
+    def __on_file_load_error(self, error_msg):
+        """文件加载失败后的处理"""
+        # 隐藏加载动画
+        self.__hide_loading_animation()
+
+        # 显示错误消息
+        config = NotificationConfig(
+            title=get_content_name_async(
+                "import_prize_name", "load_failed_notification_title"
+            ),
+            content=get_content_name_async(
+                "import_prize_name", "load_failed_notification_content"
+            )
+            + f": {error_msg}",
+            duration=3000,
+        )
+        show_notification(NotificationType.ERROR, config, parent=self)
+
+    def __load_file(self, file_path: str):
+        """加载文件 - 在后台线程中执行"""
+        try:
+            # 根据文件扩展名选择加载方法
+            file_ext = os.path.splitext(file_path)[1].lower()
+            data = None
+
+            if file_ext in [".xlsx", ".xls"]:
+                # 延迟导入 pandas，避免在模块导入时加载大型 C 扩展
+                import pandas as pd
+
+                # 加载Excel文件，使用更高效的引擎
+                data = pd.read_excel(
+                    file_path, engine="openpyxl" if file_ext == ".xlsx" else "xlrd"
+                )
+            elif file_ext == ".csv":
+                # 延迟导入 pandas，避免在模块导入时加载大型 C 扩展
+                import pandas as pd
+
+                # 加载CSV文件，使用更高效的参数
+                data = pd.read_csv(file_path, engine="c", low_memory=False)
+            else:
+                raise ValueError(
+                    get_content_name_async("import_prize_name", "unsupported_format")
+                )
+
+            # 获取列名
+            columns = list(data.columns)
+
+            # 通过信号通知UI线程文件加载完成
+            self.fileLoaded.emit(data, columns)
+
+        except Exception as e:
+            logger.error(f"加载文件失败: {e}")
+            # 通过信号通知UI线程文件加载失败
+            self.fileLoadError.emit(str(e))
 
     def __update_column_combos(self):
         """更新列映射下拉框"""
@@ -527,7 +554,7 @@ class ImportPrizeNameWindow(QWidget):
             )
 
         # 限制预览行数
-        max_rows = min(10, len(self.data))
+        max_rows = min(3, len(self.data))
         preview_df = self.data[preview_columns].head(max_rows).reset_index(drop=True)
 
         # 更新表格
