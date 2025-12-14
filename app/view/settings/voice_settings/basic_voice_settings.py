@@ -63,12 +63,10 @@ class basic_settings_voice_engine(GroupHeaderCardWidget):
             )
         )
         self.voice_enable_switch.setChecked(
-            readme_settings_async("basic_voice_settings", "voice_enable", default=True)
+            readme_settings_async("basic_voice_settings", "voice_enable")
         )
         self.voice_enable_switch.checkedChanged.connect(
-            lambda state: update_settings(
-                "basic_voice_settings", "voice_enable", state
-            )
+            lambda state: update_settings("basic_voice_settings", "voice_enable", state)
         )
 
         # 语音引擎设置

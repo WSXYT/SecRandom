@@ -52,16 +52,16 @@ def _print_packaging_summary() -> None:
     )
     module_names = [name for name in hidden_names if "." in name]
 
-    print("\nSelected data includes ({len(data_includes)} entries):".format(len(data_includes)))
+    print("\nSelected data includes ({} entries):".format(len(data_includes)))
     for item in data_includes:
         kind = "dir " if item.is_dir else "file"
         print(f"  - {kind} {item.source} -> {item.target}")
 
-    print("\nRequired packages ({len(package_names)} entries):".format(len(package_names)))
+    print("\nRequired packages ({} entries):".format(len(package_names)))
     for pkg in package_names:
         print(f"  - {pkg}")
 
-    print("\nHidden modules ({len(module_names)} entries):".format(len(module_names)))
+    print("\nHidden modules ({} entries):".format(len(module_names)))
     for mod in module_names:
         print(f"  - {mod}")
 
@@ -78,7 +78,6 @@ def _gather_data_flags() -> list[str]:
             target = Path(source).name
         flags.append(f"{flag}={source}={target}")
     return flags
-
 
 
 def _gather_module_and_package_flags() -> tuple[list[str], list[str]]:
@@ -98,7 +97,6 @@ def _gather_module_and_package_flags() -> tuple[list[str], list[str]]:
     return module_flags, package_flags
 
 
-
 def _sanitize_version(ver_str: str) -> str:
     """清理版本字符串，确保符合Nuitka要求"""
     if not ver_str:
@@ -111,7 +109,6 @@ def _sanitize_version(ver_str: str) -> str:
             clean_ver += ".0"
         return clean_ver
     return "0.0.0.0"
-
 
 
 def get_nuitka_command() -> list[str]:
@@ -169,7 +166,6 @@ def get_nuitka_command() -> list[str]:
     return cmd
 
 
-
 def check_compiler_env() -> bool:
     """检查编译器环境"""
     if sys.platform != "win32":
@@ -211,7 +207,6 @@ def check_compiler_env() -> bool:
 
     print("⚠ 警告: 未找到 MinGW64，Nuitka 可能会尝试自动下载。")
     return input("是否继续? (y/n): ").lower() == "y"
-
 
 
 def build_deb() -> None:
@@ -284,6 +279,7 @@ def main():
         print("\n" + "=" * 60)
         print(f"发生意外错误: {e}")
         import traceback
+
         traceback.print_exc()
         print("=" * 60)
         sys.exit(1)
