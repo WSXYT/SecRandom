@@ -376,7 +376,7 @@ class instant_draw_basic_animation_settings(GroupHeaderCardWidget):
             lambda: update_settings(
                 "instant_draw_settings",
                 "animation",
-                self.animation_combo.currentIndex(),
+                self.animation_combo.currentIndex() + 1,
             )
         )
 

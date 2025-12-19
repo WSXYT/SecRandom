@@ -367,7 +367,9 @@ class quick_draw_basic_animation_settings(GroupHeaderCardWidget):
         )
         self.animation_combo.currentIndexChanged.connect(
             lambda: update_settings(
-                "quick_draw_settings", "animation", self.animation_combo.currentIndex()
+                "quick_draw_settings",
+                "animation",
+                self.animation_combo.currentIndex() + 1,
             )
         )
 
