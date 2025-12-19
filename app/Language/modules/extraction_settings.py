@@ -152,7 +152,7 @@ quick_draw_settings = {
         "animation": {
             "name": "动画模式",
             "description": "设置闪抽抽取动画效果",
-            "combo_items": ["手动停止动画", "自动播放动画", "直接显示结果"],
+            "combo_items": ["自动播放动画", "直接显示结果"],
         },
         "animation_interval": {
             "name": "动画间隔",
@@ -242,7 +242,7 @@ instant_draw_settings = {
         "animation": {
             "name": "动画模式",
             "description": "设置即抽抽取动画效果",
-            "combo_items": ["手动停止动画", "自动播放动画", "直接显示结果"],
+            "combo_items": ["自动播放动画", "直接显示结果"],
         },
         "animation_interval": {
             "name": "动画间隔",
