@@ -53,23 +53,20 @@ lottery = {
         },
     },
     "EN_US": {
-        "title": {
-            "name": "Lottery",
-            "description": "Pickup features",
-        },
+        "title": {"name": "Lottery", "description": "Lottery function"},
         "reset_button": {
             "name": "Reset",
-            "description": "Reset Pickups",
+            "description": "Reset lottery prize count",
             "pushbutton_name": "Reset",
         },
         "start_button": {
             "name": "Start",
-            "description": "Begin the drawing of awards",
+            "description": "Start lottery",
             "pushbutton_name": "Start",
         },
         "stop_button": {
             "name": "Stop",
-            "description": "Dismissal of prizes",
+            "description": "Stop lottery",
             "pushbutton_name": "Stop",
         },
         "default_empty_item": {
@@ -79,24 +76,17 @@ lottery = {
         "list_combobox": {
             "name": "Class",
             "description": "Select class",
-            "combo_items": {
-                "0": "Do not extract students",
-            },
+            "combo_items": {"0": "No-picking students"},
         },
         "range_combobox": {
             "name": "Range",
             "description": "Select pick range",
-            "combo_items": {
-                "0": "Pick all students",
-                "1": "Pick all groups",
-            },
+            "combo_items": {"0": "Pick all students", "1": "Pick all groups"},
         },
         "gender_combobox": {
             "name": "Gender",
             "description": "Select gender range",
-            "combo_items": {
-                "0": "Pick all gender",
-            },
+            "combo_items": {"0": "Pick all gender"},
         },
         "remaining_button": {
             "name": "View remaining list",
@@ -104,11 +94,11 @@ lottery = {
             "pushbutton_name": "View remaining list",
         },
         "many_count_label": {
-            "name": "Total / Remaining Awards",
-            "description": "Show total and remaining awards",
-            "text_0": "总奖数: {total_count} | 剩余奖数: {remaining_count}",
-            "text_1": "总奖数: {total_count}",
-            "text_2": "剩余奖数: {remaining_count}",
+            "name": "Total / Remaining Prizes",
+            "description": "Show total and remaining prizes",
+            "text_0": "Total prize count: {total_count} | Remain: {remaining_count}",
+            "text_1": "Total prize count: {total_count}",
+            "text_2": "Remain prize count: {remaining_count}",
             "text_3": "Total group count: {total_count} | Remain: {remaining_count}",
             "text_4": "Total group count: {total_count}",
             "text_5": "Remain group count: {remaining_count}",

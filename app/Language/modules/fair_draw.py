@@ -106,24 +106,24 @@ fair_draw_settings = {
     },
     "EN_US": {
         "title": {
-            "name": "Fair Extraction Settings",
-            "description": "Fair extraction feature settings",
+            "name": "Fair pick settings",
+            "description": "Fair pick function settings",
         },
         "fair_draw_set": {
             "name": "Fair pick",
-            "description": "Configure equitable extraction algorithm related settings",
+            "description": "Configure fair pick algorithm related settings",
         },
         "basic_fair_settings": {
-            "name": "Basic Equity Settings",
-            "description": "Configure base calculation for equitable extraction",
+            "name": "Basic fair settings",
+            "description": "Configure base calculation for fair pick",
         },
         "weight_range_settings": {
             "name": "Weight range settings",
             "description": "Configure base value and range of weights",
         },
         "shield_settings": {
-            "name": "Block when extracted",
-            "description": "Configure block rules after extraction.",
+            "name": "Block after pick",
+            "description": "Configure block rules after picking",
         },
         "frequency_settings": {
             "name": "Frequency function settings",
@@ -134,12 +134,12 @@ fair_draw_settings = {
             "description": "Configure the weight of the balance factors",
         },
         "cold_start_settings": {
-            "name": "Cold Boot Settings",
+            "name": "Cold boot settings",
             "description": "Configure cold start rules for the initial phase of a new class",
         },
         "fair_draw": {
-            "name": "Fair draw by number of withdrawals",
-            "description": "Enable to make fair drawings based on the total number of withdrawals",
+            "name": "Fair pick by total pick times",
+            "description": "Enable to make fair pickings based on the total pick times",
         },
         "fair_draw_group": {
             "name": "Fair pick by group",
@@ -151,7 +151,7 @@ fair_draw_settings = {
         },
         "fair_draw_time": {
             "name": "Fair pick by time",
-            "description": "Enable to participate in fair extraction based on time",
+            "description": "Enable to participate in fair pick by time",
         },
         "base_weight": {
             "name": "Base weight",
@@ -166,13 +166,9 @@ fair_draw_settings = {
             "description": "Set maximum weight per option",
         },
         "frequency_function": {
-            "name": "Frequency Punishment Function",
+            "name": "Frequency punishment function",
             "description": "Select the type of compute function for frequency punishment",
-            "combo_items": {
-                "0": "Linear",
-                "1": "Square root",
-                "2": "Index",
-            },
+            "combo_items": {"0": "Linear", "1": "Square root", "2": "Index"},
         },
         "frequency_weight": {
             "name": "Frequency penalties weight",
@@ -195,25 +191,21 @@ fair_draw_settings = {
             "description": "Use cold boot mode for new class or initial phase",
         },
         "cold_start_rounds": {
-            "name": "Cold Boot Wheel",
+            "name": "Cold boot rounds",
             "description": "Sets the number of rounds in cold boot mode",
         },
         "shield_enabled": {
             "name": "Enable block after exam",
-            "description": "When enabled, extracted students will not be duplicated during the specified time",
+            "description": "When enabled, picked students will not be duplicated during the specified time",
         },
         "shield_time": {
             "name": "Blocked time",
-            "description": "Set the length of time to block after extracting",
+            "description": "Set the time to block after picking",
         },
         "shield_time_unit": {
             "name": "Block time units",
             "description": "Select time unit for block time",
-            "combo_items": {
-                "0": "Seconds",
-                "1": "minutes",
-                "2": "Hours",
-            },
+            "combo_items": {"0": "Seconds", "1": "Minutes", "2": "Hours"},
         },
     },
 }

@@ -1,6 +1,12 @@
 # 通知设置语言配置
 notification_settings = {
-    "ZH_CN": {"title": {"name": "通知设置", "description": "通知功能设置"}}
+    "ZH_CN": {"title": {"name": "通知设置", "description": "通知功能设置"}},
+    "EN_US": {
+        "title": {
+            "name": "Notification settings",
+            "description": "Notification settings",
+        }
+    },
 }
 
 # 通用通知文本
@@ -10,7 +16,13 @@ notification_common = {
             "name": "通知结果",
             "description": "通用通知结果窗口标题",
         }
-    }
+    },
+    "EN_US": {
+        "notification_result": {
+            "name": "Notice results",
+            "description": "Generic notification result window title",
+        }
+    },
 }
 
 # 点名通知设置语言配置
@@ -71,7 +83,68 @@ roll_call_notification_settings = {
             "name": "浮窗自动关闭时间",
             "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Picking notification settings",
+            "description": "Picking notification settings",
+        },
+        "basic_settings": {
+            "name": "Basic settings",
+            "description": "Configure notification display base parameters",
+        },
+        "window_mode": {
+            "name": "Window mode",
+            "description": "Configure generic pick notification window display method",
+        },
+        "floating_window_mode": {
+            "name": "Floating window mode",
+            "description": "Configure generic pick notification floating window behavior mode",
+        },
+        "call_notification_service": {
+            "name": "Call notification service",
+            "description": "Call the system notification service to send the picking result when enabled",
+        },
+        "animation": {
+            "name": "Animation",
+            "description": "Configure Pick notification window display animation effect",
+        },
+        "floating_window_enabled_monitor": {
+            "name": "Monitor select",
+            "description": "Select the display monitor for picking notification floating windows",
+        },
+        "floating_window_position": {
+            "name": "Floating window position",
+            "description": "Configure picking notification floating window on-screen display position",
+            "combo_items": {
+                "0": "Center",
+                "1": "Top",
+                "2": "Bottom",
+                "3": "Left",
+                "4": "Right",
+                "5": "Top left",
+                "6": "Top right",
+                "7": "Bottom left",
+                "8": "Bottom right",
+            },
+        },
+        "floating_window_horizontal_offset": {
+            "name": "Horizontal offset",
+            "description": "Configure the horizontal offset (in pixels) for the pick notification floating window relative to the default position",
+        },
+        "floating_window_vertical_offset": {
+            "name": "Vertical offset",
+            "description": "Configure the vertical offset (in pixels) for the pick notification floating window relative to the default position",
+        },
+        "floating_window_transparency": {
+            "name": "Transparency",
+            "description": "Configure pick notification floating window transparency, where a smaller value indicates higher transparency (0-100)",
+        },
+        "floating_window_auto_close_time": {
+            "name": "Floating window auto-close time",
+            "description": "Set the time to close the floating window automatically (second), set to 0 to not close automatically",
+        },
+    },
 }
 
 # 闪抽通知设置
@@ -133,7 +206,64 @@ quick_draw_notification_settings = {
             "name": "浮窗自动关闭时间",
             "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Quick Pick notification settings",
+            "description": "Configure Quick Pick result notification display method and parameters",
+        },
+        "basic_settings": {
+            "name": "Basic settings",
+            "description": "Configure Quick Pick notification basic display parameters",
+        },
+        "window_mode": {
+            "name": "Window mode",
+            "description": "Configure Quick Pick notification window display method",
+        },
+        "floating_window_mode": {
+            "name": "Floating window mode",
+            "description": "Configure Quick Pick notification floating window behavior mode",
+        },
+        "animation": {
+            "name": "Animation",
+            "description": "Configure Quick Pick notification window display animation effect",
+        },
+        "floating_window_enabled_monitor": {
+            "name": "Select the display monitor for Quick Pick notifications",
+            "description": "Select the display monitor for Quick Pick notification floating windows",
+        },
+        "floating_window_position": {
+            "name": "Floating window position",
+            "description": "Configure Quick Pick notification floating window on-screen display position",
+            "combo_items": {
+                "0": "Center",
+                "1": "Top",
+                "2": "Bottom",
+                "3": "Left",
+                "4": "Right",
+                "5": "Top left",
+                "6": "Top right",
+                "7": "Bottom left",
+                "8": "Bottom right",
+            },
+        },
+        "floating_window_horizontal_offset": {
+            "name": "Horizontal offset",
+            "description": "Configure the horizontal offset (in pixels) for the Quick Pick notification floating window relative to the default position",
+        },
+        "floating_window_vertical_offset": {
+            "name": "Vertical offset",
+            "description": "Configure the vertical offset (in pixels) for the Quick Pick notification floating window relative to the default position",
+        },
+        "floating_window_transparency": {
+            "name": "Floating window transparency",
+            "description": "Configure Quick Pick notification floating window transparency, where a smaller value indicates higher transparency (0-100)",
+        },
+        "floating_window_auto_close_time": {
+            "name": "Floating window auto-close time",
+            "description": "Set the time to close the floating window automatically (seconds), set to 0 to not close automatically",
+        },
+    },
 }
 
 # 即抽通知设置
@@ -195,7 +325,64 @@ instant_draw_notification_settings = {
             "name": "浮窗自动关闭时间",
             "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Instant Pick notification settings",
+            "description": "Configure Instant Pick result notification display method and parameters",
+        },
+        "basic_settings": {
+            "name": "Basic settings",
+            "description": "Configure Instant Pick notification basic display parameters",
+        },
+        "window_mode": {
+            "name": "Window mode",
+            "description": "Configure Instant Pick notification window display method",
+        },
+        "floating_window_mode": {
+            "name": "Floating window mode",
+            "description": "Configure Instant Pick notification floating window behavior mode",
+        },
+        "animation": {
+            "name": "Animation",
+            "description": "Configure Instant Pick notification window display animation effect",
+        },
+        "floating_window_enabled_monitor": {
+            "name": "Select the display monitor for Instant Pick notification floating windows",
+            "description": "Select the display monitor for Instant Pick notification floating windows",
+        },
+        "floating_window_position": {
+            "name": "Floating window position",
+            "description": "Configure Instant Pick notification floating window on-screen display position",
+            "combo_items": {
+                "0": "Center",
+                "1": "Top",
+                "2": "Bottom",
+                "3": "Left",
+                "4": "Right",
+                "5": "Top left",
+                "6": "Top right",
+                "7": "Bottom left",
+                "8": "Bottom right",
+            },
+        },
+        "floating_window_horizontal_offset": {
+            "name": "Horizontal offset",
+            "description": "Configure the horizontal offset (in pixels) for the Instant Pick notification floating window relative to the default position",
+        },
+        "floating_window_vertical_offset": {
+            "name": "Vertical offset",
+            "description": "Configure the vertical offset (in pixels) for the Instant Pick notification floating window relative to the default position",
+        },
+        "floating_window_transparency": {
+            "name": "Floating window transparency",
+            "description": "Configure Instant Pick notification floating window transparency, where a smaller value indicates higher transparency (0-100)",
+        },
+        "floating_window_auto_close_time": {
+            "name": "Floating window auto-close time",
+            "description": "Set the time to close the floating window automatically (seconds), set to 0 to not close automatically",
+        },
+    },
 }
 
 # 自定义抽通知设置
@@ -259,36 +446,33 @@ custom_draw_notification_settings = {
     },
     "EN_US": {
         "title": {
-            "name": "自定义抽通知设置",
-            "description": "自定义抽取通知功能设置",
+            "name": "Custom pick notification settings",
+            "description": "Custom pick settings",
         },
-        "basic_settings": {
-            "name": "Basic settings",
-            "description": "Basic settings",
-        },
+        "basic_settings": {"name": "Basic settings", "description": "Basic settings"},
         "window_mode": {
             "name": "Window mode",
-            "description": "设置自定义抽取通知窗口显示方式",
+            "description": "Configure custom pick notification window display method",
         },
         "floating_window_mode": {
             "name": "Floating window mode",
-            "description": "设置自定义抽取通知浮窗行为模式",
+            "description": "Configure custom pick notification floating window behavior mode",
         },
         "call_notification_service": {
             "name": "Call notification service",
-            "description": "是否调用系统通知服务发送自定义抽取结果",
+            "description": "Whether to call the system notification service to send custom pick results",
         },
         "animation": {
             "name": "Animation",
-            "description": "设置自定义抽取通知窗口显示动画效果",
+            "description": "Configure custom pick notification window display animation effect",
         },
         "floating_window_enabled_monitor": {
-            "name": "选择自定义抽取通知显示的显示器",
-            "description": "选择自定义抽取通知浮窗显示器",
+            "name": "Select the display monitor for custom pick notifications",
+            "description": "Select the display monitor for custom pick notification floating windows",
         },
         "floating_window_position": {
             "name": "Floating window position",
-            "description": "设置自定义抽取通知浮窗屏幕显示位置",
+            "description": "Configure custom pick notification floating window on-screen display position",
             "combo_items": {
                 "0": "Center",
                 "1": "Top",
@@ -302,20 +486,20 @@ custom_draw_notification_settings = {
             },
         },
         "floating_window_horizontal_offset": {
-            "name": "Horizontal Offset",
-            "description": "设置自定义抽取通知浮窗相对默认位置水平偏移量（像素）",
+            "name": "Horizontal offset",
+            "description": "Configure the horizontal offset (in pixels) for the custom pick notification floating window relative to the default position",
         },
         "floating_window_vertical_offset": {
-            "name": "Vertical Offset",
-            "description": "设置自定义抽取通知浮窗相对默认位置垂直偏移量（像素）",
+            "name": "Vertical offset",
+            "description": "Configure the vertical offset (in pixels) for the custom pick notification floating window relative to the default position",
         },
         "floating_window_transparency": {
             "name": "Floating window transparency",
-            "description": "设置自定义抽取通知浮窗透明度，数值越小越透明（0-100）",
+            "description": "Configure custom pick notification floating window transparency, where a smaller value indicates higher transparency (0-100)",
         },
         "floating_window_auto_close_time": {
-            "name": "浮窗自动关闭时间",
-            "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
+            "name": "Floating window auto-close time",
+            "description": "Set the time to close the floating window automatically (seconds), set to 0 to not close automatically",
         },
     },
 }
@@ -384,5 +568,66 @@ lottery_notification_settings = {
             "name": "浮窗自动关闭时间",
             "description": "设置浮窗自动关闭时间（秒），设为0表示不自动关闭",
         },
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Lottery notification settings",
+            "description": "Configure lottery result notification display method and parameters",
+        },
+        "basic_settings": {
+            "name": "Basic settings",
+            "description": "Configure lottery notification basic display parameters",
+        },
+        "window_mode": {
+            "name": "Window mode",
+            "description": "Configure lottery notification window display method",
+        },
+        "floating_window_mode": {
+            "name": "Floating window mode",
+            "description": "Configure lottery notification floating window behavior mode",
+        },
+        "call_notification_service": {
+            "name": "Call notification service",
+            "description": "Whether to call the system notification service to send lottery results",
+        },
+        "animation": {
+            "name": "Animation",
+            "description": "Configure lottery notification window display animation effect",
+        },
+        "floating_window_enabled_monitor": {
+            "name": "Select the display monitor for lottery notifications",
+            "description": "Select the display monitor for lottery notification floating windows",
+        },
+        "floating_window_position": {
+            "name": "Floating window position",
+            "description": "Configure lottery notification floating window on-screen display position",
+            "combo_items": {
+                "0": "Center",
+                "1": "Top",
+                "2": "Bottom",
+                "3": "Left",
+                "4": "Right",
+                "5": "Top left",
+                "6": "Top right",
+                "7": "Bottom left",
+                "8": "Bottom right",
+            },
+        },
+        "floating_window_horizontal_offset": {
+            "name": "Horizontal offset",
+            "description": "Configure the horizontal offset (in pixels) for the lottery notification floating window relative to the default position",
+        },
+        "floating_window_vertical_offset": {
+            "name": "Vertical offset",
+            "description": "Configure the vertical offset (in pixels) for the lottery notification floating window relative to the default position",
+        },
+        "floating_window_transparency": {
+            "name": "Floating window transparency",
+            "description": "Configure lottery notification floating window transparency, where a smaller value indicates higher transparency (0-100)",
+        },
+        "floating_window_auto_close_time": {
+            "name": "Floating window auto-close time",
+            "description": "Set the time to close the floating window automatically (seconds), set to 0 to not close automatically",
+        },
+    },
 }

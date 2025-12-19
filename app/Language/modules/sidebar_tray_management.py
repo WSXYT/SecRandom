@@ -85,101 +85,89 @@ floating_window_management = {
     "EN_US": {
         "title": {
             "name": "Floating window management",
-            "description": "配置浮窗相关设置",
+            "description": "Configure floating window related settings",
         },
         "basic_settings": {
             "name": "Basic settings",
-            "description": "配置浮窗基本设置",
+            "description": "Configure floating window basic settings",
         },
         "appearance_settings": {
             "name": "Appearance settings",
-            "description": "配置浮窗外观设置",
+            "description": "Configure floating window appearance settings",
         },
         "edge_settings": {
             "name": "Edge settings",
-            "description": "配置浮窗贴边设置",
+            "description": "Configure floating window edge settings",
         },
         "startup_display_floating_window": {
-            "name": "启动时显示浮窗",
-            "description": "控制软件启动时是否自动显示浮窗",
+            "name": "Show popup on startup",
+            "description": "Set whether to show the floating window after boot",
         },
         "floating_window_opacity": {
             "name": "Floating window transparency",
-            "description": "调整浮窗透明度",
+            "description": "Adjust floating window transparency",
         },
         "reset_floating_window_position_button": {
             "name": "Reset floating window position",
-            "description": "将浮窗位置重置为默认位置",
+            "description": "Reset floating window to default position",
             "pushbutton_name": "Reset position",
         },
         "floating_window_button_control": {
             "name": "Floating window controls config",
-            "description": "选择在浮窗中显示的功能按钮",
+            "description": "Select the button to show in floating window",
             "combo_items": {
                 "0": "Pick",
-                "1": "Quick pick",
-                "2": "Instant pick",
+                "1": "Quick Pick",
+                "2": "Instant Pick",
                 "3": "Custom pick",
                 "4": "Lottery",
-                "5": "Pick + Quick pick",
+                "5": "Pick + Quick Pick",
                 "6": "Pick + Custom pick",
                 "7": "Pick + Lottery",
-                "8": "Quick pick + Custom pick",
-                "9": "Quick pick + Lottery",
+                "8": "Quick Pick + Custom Pick",
+                "9": "Quick Pick + Lottery",
                 "10": "Custom pick + Lottery",
-                "11": "Pick + Quick pick + Custom pick",
-                "12": "Pick + Quick pick + Lottery",
+                "11": "Pick + Quick Pick + Custom Pick",
+                "12": "Pick + Quick Pick + Lottery",
                 "13": "Pick + Custom pick + Lottery",
-                "14": "Quick pick + Custom pick + Lottery",
-                "15": "Pick + Quick pick + Custom pick + Lottery",
+                "14": "Quick Pick + Custom Pick + Lottery",
+                "15": "Pick + Quick Pick + Custom Pick + Lottery",
             },
         },
         "floating_window_placement": {
             "name": "Floating window layout",
-            "description": "设置浮窗中控件排列方式",
-            "combo_items": {
-                "0": "Rectangle",
-                "1": "Portrait",
-                "2": "Landscape",
-            },
+            "description": "Configure layout of buttons in floating window",
+            "combo_items": {"0": "Rectangle", "1": "Portrait", "2": "Landscape"},
         },
         "floating_window_display_style": {
             "name": "Floating window style",
-            "description": "设置浮窗中控件显示样式",
-            "combo_items": {
-                "0": "Icon + Text",
-                "1": "Icon only",
-                "2": "Text only",
-            },
+            "description": "Configure style of buttons in floating window",
+            "combo_items": {"0": "Icon + Text", "1": "Icon only", "2": "Text only"},
         },
         "floating_window_stick_to_edge": {
             "name": "Edge function",
-            "description": "控制浮窗是否自动贴边",
+            "description": "Whether to dock floating window automatically",
         },
         "floating_window_stick_to_edge_recover_seconds": {
             "name": "Edge receipt time",
-            "description": "设置浮窗贴边后自动收纳时间（秒）",
+            "description": "Set the automatic reception time after the floating window near side (seconds)",
         },
         "floating_window_stick_to_edge_display_style": {
             "name": "Edge style",
-            "description": "设置浮窗贴边时显示样式",
-            "combo_items": {
-                "0": "Icon",
-                "1": "Text",
-                "2": "Arrow",
-            },
-        },
-        "floating_window_stick_to_edge_arrow_text": {
-            "name": "Draw",
-            "description": "Set the text displayed on the arrow button when the floating window is docked",
-        },
-        "floating_window_draggable": {
-            "name": "Floating window draggable",
-            "description": "Control whether the floating window can be dragged",
+            "description": "Configure docked floating window style",
+            "combo_items": {"0": "Icon", "1": "Text", "2": "Arrow"},
         },
         "floating_window_long_press_duration": {
             "name": "Long press time",
             "description": "Set floating window long by time (milliseconds)",
+        },
+        "floating_window_draggable": {
+            "name": "Floating window draggable",
+            "description": "Set if floating window is draggable",
+        },
+        "floating_window_stick_to_edge_arrow_text": {
+            "name": "Pick",
+            "description": "Set the text to show on arrow button when the floating window is docked",
         },
     },
 }
@@ -191,7 +179,13 @@ sidebar_tray_management = {
             "name": "侧边栏/托盘管理",
             "description": "配置侧边栏和系统托盘相关设置",
         }
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Sidebar/Tray management",
+            "description": "Configure sidebar and system tray related settings",
+        }
+    },
 }
 
 # 主界面侧边栏语言配置
@@ -226,7 +220,38 @@ sidebar_management_window = {
             "description": "配置设置图标在侧边栏位置",
             "combo_items": ["顶部", "底部", "不显示"],
         },
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Home sidebar",
+            "description": "Configure home sidebar related settings",
+        },
+        "roll_call_sidebar_position": {
+            "name": "Position of Picking",
+            "description": "Set the position of Pick in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+        },
+        "custom_roll_call_sidebar_position": {
+            "name": "Custom pick sidebar position",
+            "description": "Set the position of Custom Pick in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+        },
+        "lottery_sidebar_position": {
+            "name": "Position of Lottery",
+            "description": "Set the position of Lottery in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+        },
+        "main_window_history": {
+            "name": "Main window history position",
+            "description": "Set history position in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+        },
+        "settings_icon": {
+            "name": "Set icon position",
+            "description": "Set the position of Settings in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+        },
+    },
 }
 
 # 设置窗口侧边栏语言配置
@@ -281,7 +306,63 @@ sidebar_management_settings = {
             "description": "设置更多设置项在侧边栏位置",
             "combo_items": ["顶部", "底部", "不显示"],
         },
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Set window sidebar",
+            "description": "Configure set window sidebar",
+        },
+        "home": {
+            "name": "Home position",
+            "description": "Set the position of Home in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+        },
+        "base_settings": {
+            "description": "Set the position of Basic settings in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+            "name": "Basic position settings",
+        },
+        "name_management": {
+            "description": "Set the position of List management in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+            "name": "Position of List management",
+        },
+        "draw_settings": {
+            "description": "Set the position of Picking settings in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+            "name": "Position of Pick settings",
+        },
+        "notification_service": {
+            "description": "Set the position of Notification settings in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+            "name": "Position of Notification settings",
+        },
+        "security_settings": {
+            "description": "Set the position of Safety settings in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+            "name": "Position of Security settings",
+        },
+        "personal_settings": {
+            "description": "Set the position of Custom settings in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom"},
+            "name": "Position of Profile settings",
+        },
+        "voice_settings": {
+            "description": "Set the position of Voice settings in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+            "name": "Position of Voice settings",
+        },
+        "settings_history": {
+            "description": "Set history position in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+            "name": "Set history position",
+        },
+        "more_settings": {
+            "description": "Set the position of More settings in sidebar",
+            "combo_items": {"0": "Top", "1": "Bottom", "2": "Hide"},
+            "name": "Position of More settings",
+        },
+    },
 }
 
 # 托盘管理语言配置
@@ -313,5 +394,31 @@ tray_management = {
             "description": "控制是否在托盘菜单中显示退出选项",
             "switchbutton_name": {"enable": "", "disable": ""},
         },
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Tray management",
+            "description": "Configure system tray related settings",
+        },
+        "show_hide_main_window": {
+            "name": "Show/hide main window",
+            "description": "Control whether main window to show or not",
+        },
+        "open_settings": {
+            "name": "Open settings window",
+            "description": "Control whether to show settings option in the tray menu",
+        },
+        "show_hide_float_window": {
+            "name": "Show/hide float window",
+            "description": "Control whether floating window to show or not",
+        },
+        "restart": {
+            "name": "Restart app",
+            "description": "Control whether to show restart option in the tray menu",
+        },
+        "exit": {
+            "name": "Exit app",
+            "description": "Control whether to show exit option in the tray menu",
+        },
+    },
 }

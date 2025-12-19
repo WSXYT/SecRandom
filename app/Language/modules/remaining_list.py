@@ -34,28 +34,28 @@ remaining_list = {
     },
     "EN_US": {
         "title": {
-            "name": "List of students not extracted",
-            "description": "剩余名单页面标题",
+            "name": "List of students not picked",
+            "description": "Title of Remaining list page",
         },
         "title_with_class": {
-            "name": "{class_name}",
-            "description": "带班级名称的页面标题",
+            "name": "Remaining list of {class_name}",
+            "description": "Title of page with class name",
         },
         "count_label": {
-            "name": "剩余人数：{count}",
-            "description": "显示剩余人数的标签文本",
+            "name": "Remaining person: {count}",
+            "description": 'Showing the "Remaining person" label text',
         },
         "group_count_label": {
-            "name": "剩余组数：{count}",
-            "description": "显示剩余组数的标签文本",
+            "name": "Remaining group: {count}",
+            "description": 'Showing the "Remaining group" label text',
         },
         "no_students": {
-            "name": "暂无未抽取学生",
-            "description": "没有剩余学生时显示的提示文本",
+            "name": "No students remaining",
+            "description": "Error hint shown on no students on list",
         },
         "student_info": {
-            "name": "ID: {id}\nGender: {gender}\nGroup: {group}",
-            "description": "学生信息卡片的显示格式",
+            "name": "Student ID: {id}\nGender: {gender}\nGroup: {group}",
+            "description": "Student info card style",
         },
     },
 }

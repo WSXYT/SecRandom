@@ -44,13 +44,26 @@ def parse_args() -> argparse.Namespace:
 
 def load_crowdin_json(path: Path) -> list[dict[str, Any]]:
     """加载Crowdin导出的JSON文件。"""
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+            if not isinstance(data, list):
+                raise ValueError("JSON文件应包含一个对象数组")
+            return data
+    except json.JSONDecodeError as e:
+        print(f"错误：无法解析JSON文件 {path}: {e}")
+        raise
+    except Exception as e:
+        print(f"错误：读取文件 {path} 时出现问题: {e}")
+        raise
 
 
 def extract_language_code(filename: str) -> str:
     """从文件名中提取语言代码（例如：从'EN_US.json'中提取'EN_US'）。"""
-    return Path(filename).stem.upper()
+    stem = Path(filename).stem
+    if not stem:
+        raise ValueError(f"无效的文件名: {filename}")
+    return stem.upper()
 
 
 def scan_module_files() -> dict[str, tuple[Path, str]]:
@@ -64,6 +77,10 @@ def scan_module_files() -> dict[str, tuple[Path, str]]:
 
     var_pattern = re.compile(r"^([a-z_][a-z0-9_]*)\s*=\s*\{", re.MULTILINE)
 
+    if not LANGUAGE_MODULES_DIR.exists():
+        print(f"错误：语言模块目录不存在: {LANGUAGE_MODULES_DIR}")
+        return var_to_file
+
     for py_file in LANGUAGE_MODULES_DIR.glob("*.py"):
         if py_file.name == "__init__.py":
             continue
@@ -73,8 +90,12 @@ def scan_module_files() -> dict[str, tuple[Path, str]]:
             for match in var_pattern.finditer(content):
                 var_name = match.group(1)
                 start = match.end() - 1
-                if '"ZH_CN"' in content[start : start + 500]:
+                # 扩大搜索范围以确保能找到语言定义
+                search_end = min(start + 2000, len(content))
+                if '"ZH_CN"' in content[start:search_end]:
                     var_to_file[var_name] = (py_file, var_name)
+        except UnicodeDecodeError as e:
+            print(f"警告：无法以UTF-8编码读取 {py_file}，可能是编码问题: {e}")
         except Exception as e:
             print(f"警告：读取 {py_file} 时出错：{e}")
 
@@ -90,19 +111,36 @@ def group_by_module(entries: list[dict[str, Any]]) -> dict[str, dict[str, str]]:
     """
     modules: dict[str, dict[str, str]] = {}
 
-    for entry in entries:
+    for i, entry in enumerate(entries):
+        # 检查条目是否为字典
+        if not isinstance(entry, dict):
+            print(f"警告：条目 {i} 不是字典格式，跳过")
+            continue
+
         identifier = entry.get("identifier", "")
         translation = entry.get("translation", "")
 
-        if not identifier or not translation:
+        # 跳过没有标识符或翻译的条目，但记录警告
+        if not identifier:
+            print(f"警告：条目 {i} 缺少标识符，跳过")
+            continue
+
+        if not translation:
+            print(f"警告：条目 {i} 缺少翻译（标识符: {identifier}），跳过")
             continue
 
         parts = identifier.split(".")
         if len(parts) < 2:
+            print(f"警告：条目 {i} 的标识符格式不正确: {identifier}，跳过")
             continue
 
         module_name = parts[0]
         key_path = ".".join(parts[1:])
+
+        # 检查键路径是否为空
+        if not key_path:
+            print(f"警告：条目 {i} 的键路径为空: {identifier}，跳过")
+            continue
 
         if module_name not in modules:
             modules[module_name] = {}
@@ -125,6 +163,11 @@ def set_nested_value(d: dict, key_path: str, value: Any) -> None:
         if key not in current:
             current[key] = {}
         elif not isinstance(current[key], dict):
+            # 如果现有值不是字典，我们需要将其转换为字典
+            # 但这可能会丢失原有数据，所以发出警告
+            print(
+                f"警告：将非字典值 '{current[key]}' 转换为字典以适应路径 '{key_path}'"
+            )
             current[key] = {}
         current = current[key]
 
@@ -155,7 +198,7 @@ def format_dict_as_python(d: dict, indent: int = 0) -> str:
     items = list(d.items())
 
     for i, (key, value) in enumerate(items):
-        comma = "," if i < len(items) - 1 else ","
+        comma = "," if i < len(items) - 1 else ""
 
         if isinstance(value, dict):
             nested = format_dict_as_python(value, indent + 1)
@@ -207,20 +250,60 @@ def update_module_file(
         print(f"警告：在 {module_path.name} 中未找到 '{var_name} = {{' 定义")
         return False
 
-    # 检查语言代码是否已存在
-    lang_pattern = rf'"{language_code}":\s*\{{'
-    if re.search(lang_pattern, content):
-        print(
-            f"  语言 '{language_code}' 已存在于 {module_path.name}:{var_name} 中，跳过..."
-        )
-        return False
+    # 检查语言代码是否已存在（更精确的检查）
+    # 只在当前变量的作用域内查找
+    dict_start = match.end() - 1
+    brace_count = 0
+    dict_end = -1
+    in_string = False
+    escape_next = False
+    search_content = content[dict_start:]
 
-    lang_entries = list(re.finditer(r'"([A-Z_]+)":\s*\{', content))
+    for i, char in enumerate(search_content):
+        if escape_next:
+            escape_next = False
+            continue
+        if char == "\\":
+            escape_next = True
+            continue
+        if char == '"' and not escape_next:
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if char == "{":
+            brace_count += 1
+        elif char == "}":
+            brace_count -= 1
+            if brace_count == 0:
+                dict_end = i
+                break
 
-    if not lang_entries:
-        print(f"警告：在 {module_path.name} 中未找到语言条目")
-        return False
+    # 在当前变量的字典范围内查找语言代码
+    if dict_end > 0:
+        var_content = search_content[:dict_end]
+        lang_pattern = rf'"{language_code}":\s*\{{'
+        if re.search(lang_pattern, var_content):
+            print(
+                f"  语言 '{language_code}' 已存在于 {module_path.name}:{var_name} 中，将更新现有翻译..."
+            )
+            # 调用更新函数而不是直接返回
+            return update_existing_language(
+                content,
+                dict_start,
+                dict_end,
+                var_content,
+                language_code,
+                lang_dict,
+                module_path,
+                var_name,
+                dry_run,
+            )
 
+    # 移除了可能导致问题的代码段
+    # 这部分代码实际上没有被使用，而且可能会导致错误
+
+    # 重新计算字典范围
     dict_start = match.end() - 1
     brace_count = 0
     dict_end = -1
@@ -254,15 +337,24 @@ def update_module_file(
     formatted_dict = format_dict_as_python(lang_dict, indent=1)
     new_entry = f'    "{language_code}": {formatted_dict},\n'
 
+    # 更稳健地处理逗号插入逻辑
     before_close = content[dict_start:dict_end]
     last_non_ws_idx = len(before_close) - 1
     while last_non_ws_idx >= 0 and before_close[last_non_ws_idx] in " \t\n\r":
         last_non_ws_idx -= 1
 
-    if last_non_ws_idx >= 0 and before_close[last_non_ws_idx] != ",":
+    # 检查最后一个非空白字符是否为逗号
+    if (
+        last_non_ws_idx >= 0
+        and before_close[last_non_ws_idx] != ","
+        and before_close[last_non_ws_idx] != "{"
+    ):
         insert_comma_pos = dict_start + last_non_ws_idx + 1
         content = content[:insert_comma_pos] + "," + content[insert_comma_pos:]
         dict_end += 1
+    # 如果字典是空的，不需要添加逗号
+    elif last_non_ws_idx >= 0 and before_close[last_non_ws_idx] == "{":
+        pass  # 空字典，不需要逗号
 
     new_content = content[:dict_end] + new_entry + content[dict_end:]
 
@@ -278,59 +370,167 @@ def update_module_file(
     return True
 
 
-def main() -> None:
-    args = parse_args()
+def update_existing_language(
+    content,
+    dict_start,
+    dict_end,
+    var_content,
+    language_code,
+    lang_dict,
+    module_path,
+    var_name,
+    dry_run,
+):
+    """更新已存在的语言条目"""
+    # 查找现有语言条目的位置
+    lang_pattern = rf'"{language_code}"\s*:\s*\{{'
+    lang_match = re.search(lang_pattern, var_content)
 
-    crowdin_file: Path = args.crowdin_file
-    if not crowdin_file.exists():
-        print(f"错误：文件未找到：{crowdin_file}")
-        sys.exit(1)
+    if not lang_match:
+        print(f"  无法定位现有语言条目 '{language_code}'")
+        return False
 
-    language_code = extract_language_code(crowdin_file.name)
-    print(f"正在导入语言：{language_code}")
-    print(f"源文件：{crowdin_file}")
-    print(f"目标目录：{LANGUAGE_MODULES_DIR}")
-    print()
+    # 计算在完整文件中的绝对位置
+    lang_start_in_var = lang_match.start()
+    lang_start_abs = dict_start + lang_start_in_var
 
-    print("正在扫描模块文件...")
-    var_to_file = scan_module_files()
-    print(
-        f"找到 {len(var_to_file)} 个语言变量：{', '.join(sorted(var_to_file.keys()))}"
-    )
-    print()
+    # 查找语言字典的结束位置
+    brace_count = 0
+    lang_dict_end = -1
+    in_string = False
+    escape_next = False
 
-    entries = load_crowdin_json(crowdin_file)
-    print(f"已加载 {len(entries)} 个翻译条目")
+    search_area = content[lang_start_abs:]
 
-    modules = group_by_module(entries)
-    print(f"在Crowdin文件中找到 {len(modules)} 个标识符前缀")
-    print()
+    for i, char in enumerate(search_area):
+        if escape_next:
+            escape_next = False
+            continue
+        if char == "\\":
+            escape_next = True
+            continue
+        if char == '"' and not escape_next:
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if char == "{":
+            brace_count += 1
+        elif char == "}":
+            brace_count -= 1
+            if brace_count == 0:
+                lang_dict_end = lang_start_abs + i
+                break
 
-    updated_count = 0
-    unmatched_modules = []
+    if lang_dict_end == -1:
+        print(f"  无法找到语言条目 '{language_code}' 的结束位置")
+        return False
 
-    for module_name, translations in sorted(modules.items()):
-        if module_name in var_to_file:
-            file_path, var_name = var_to_file[module_name]
-            if update_module_file(
-                file_path, var_name, language_code, translations, args.dry_run
-            ):
-                updated_count += 1
-        else:
-            unmatched_modules.append(module_name)
+    # 格式化新的语言字典
+    formatted_dict = format_dict_as_python(lang_dict, indent=1)
+    new_lang_entry = f'    "{language_code}": {formatted_dict}'
 
-    print()
-    if unmatched_modules:
-        print(
-            f"未匹配的Crowdin模块 ({len(unmatched_modules)}): {', '.join(sorted(unmatched_modules))}"
+    # 构造新内容
+    # 找到语言条目后面的第一个逗号或大括号
+    after_lang_end = lang_dict_end + 1
+    while after_lang_end < len(content) and content[after_lang_end] in " \t\n\r":
+        after_lang_end += 1
+
+    # 检查下一个非空白字符是否是逗号
+    if after_lang_end < len(content) and content[after_lang_end] == ",":
+        # 包含逗号
+        new_content = (
+            content[:lang_start_abs] + new_lang_entry + content[after_lang_end:]
         )
-        print("(这些标识符在模块文件中没有匹配的变量)")
-
-    print()
-    if args.dry_run:
-        print(f"模拟运行完成。将更新 {updated_count} 个语言条目。")
     else:
-        print(f"导入完成。已更新 {updated_count} 个语言条目。")
+        # 不包含逗号
+        new_content = (
+            content[:lang_start_abs] + new_lang_entry + content[lang_dict_end + 1 :]
+        )
+
+    if dry_run:
+        print(f"将要更新 '{language_code}' 在 {module_path.name}:{var_name}")
+        return True
+
+    module_path.write_text(new_content, encoding="utf-8")
+    print(f"已更新 '{language_code}' 在 {module_path.name}:{var_name}")
+    return True
+
+
+def main() -> None:
+    try:
+        args = parse_args()
+
+        crowdin_file: Path = args.crowdin_file
+        if not crowdin_file.exists():
+            print(f"错误：文件未找到：{crowdin_file}")
+            sys.exit(1)
+
+        language_code = extract_language_code(crowdin_file.name)
+        print(f"正在导入语言：{language_code}")
+        print(f"源文件：{crowdin_file}")
+        print(f"目标目录：{LANGUAGE_MODULES_DIR}")
+        print()
+
+        print("正在扫描模块文件...")
+        var_to_file = scan_module_files()
+        if not var_to_file:
+            print("错误：未找到任何语言模块文件")
+            sys.exit(1)
+
+        print(
+            f"找到 {len(var_to_file)} 个语言变量：{', '.join(sorted(var_to_file.keys()))}"
+        )
+        print()
+
+        try:
+            entries = load_crowdin_json(crowdin_file)
+        except (json.JSONDecodeError, ValueError) as e:
+            print(f"错误：无法加载或解析JSON文件: {e}")
+            sys.exit(1)
+
+        print(f"已加载 {len(entries)} 个翻译条目")
+
+        modules = group_by_module(entries)
+        print(f"在Crowdin文件中找到 {len(modules)} 个标识符前缀")
+        print()
+
+        updated_count = 0
+        unmatched_modules = []
+
+        for module_name, translations in sorted(modules.items()):
+            if module_name in var_to_file:
+                file_path, var_name = var_to_file[module_name]
+                try:
+                    if update_module_file(
+                        file_path, var_name, language_code, translations, args.dry_run
+                    ):
+                        updated_count += 1
+                except Exception as e:
+                    print(f"警告：更新模块 {module_name} 时出错: {e}")
+                    continue
+            else:
+                unmatched_modules.append(module_name)
+
+        print()
+        if unmatched_modules:
+            print(
+                f"未匹配的Crowdin模块 ({len(unmatched_modules)}): {', '.join(sorted(unmatched_modules))}"
+            )
+            print("(这些标识符在模块文件中没有匹配的变量)")
+
+        print()
+        if args.dry_run:
+            print(f"模拟运行完成。将更新 {updated_count} 个语言条目。")
+        else:
+            print(f"导入完成。已更新 {updated_count} 个语言条目。")
+
+    except KeyboardInterrupt:
+        print("\n操作被用户取消。")
+        sys.exit(1)
+    except Exception as e:
+        print(f"发生未预期的错误: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

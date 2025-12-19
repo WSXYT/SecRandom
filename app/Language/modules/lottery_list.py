@@ -102,6 +102,133 @@ set_prize_name = {
             "description": "多个奖池消失提示内容",
         },
     },
+    "EN_US": {
+        "title": {
+            "name": "Pool name settings",
+            "description": "Set the pool name window title",
+        },
+        "description": {
+            "name": "In this window, you can set up the pool name\nto enter a pool name per line, and the system will store it in\n\nto enter only one pool name per line, e.g.:\nPool I\nPool II\nPool III",
+            "description": "Pool name settings window description",
+        },
+        "input_title": {
+            "name": "List of prize names",
+            "description": "Pool name enter area title",
+        },
+        "input_placeholder": {
+            "name": "Please enter the pool name, one pool name per row",
+            "description": "Pool name input placeholder",
+        },
+        "save_button": {"name": "Save", "description": "Button text of Save"},
+        "cancel_button": {"name": "Cancel", "description": "Button text of Cancel"},
+        "error_title": {"name": "Error", "description": "Message title of Error"},
+        "success_title": {"name": "Success", "description": "Message title of Success"},
+        "info_title": {"name": "Prompt", "description": "Message title of Info"},
+        "no_prize_names_error": {
+            "name": "Please enter at least one pool name",
+            "description": "Error hint when the pool name is not entered",
+        },
+        "invalid_names_error": {
+            "name": "The following pool names include invalid characters or reserved words: {names}",
+            "description": "Error hint when prize name validation failed",
+        },
+        "save_error": {
+            "name": "Failed to save pool name",
+            "description": "Error hint when saving pool name",
+        },
+        "success_message": {
+            "name": "Succeed creating {count} prize pools",
+            "description": "Alert message when creating prize pool successfully",
+        },
+        "no_new_prizes_message": {
+            "name": "All pool names already exist, no new pool has been created",
+            "description": "Tips when not created a new pool",
+        },
+        "unsaved_changes_title": {
+            "name": "Unsaved changes",
+            "description": "Change dialog title is not saved",
+        },
+        "unsaved_changes_message": {
+            "name": "You have unsaved changes. Are you sure you want to close the window?",
+            "description": "Change dialog content not saved",
+        },
+        "discard_button": {
+            "name": "Discard changes",
+            "description": "Discard change button text",
+        },
+        "continue_editing_button": {
+            "name": "Keep editing",
+            "description": "Continue editing button text",
+        },
+        "delete_prize_title": {
+            "name": "Delete pool",
+            "description": "Delete pool dialog title",
+        },
+        "delete_prize_message": {
+            "name": "Are you sure to delete the pool '{prize_name}'? This will delete all data of this pool and can NOT be restored",
+            "description": "Delete pool confirmation dialog",
+        },
+        "delete_prize_button": {
+            "name": "Delete pool",
+            "description": "Delete hole button text",
+        },
+        "delete_multiple_prizes_title": {
+            "name": "Delete multiple pool",
+            "description": "Delete multiple pool dialog title",
+        },
+        "delete_multiple_prizes_message": {
+            "name": "Are you sure to delete the following {count} pools? This will delete all data of these pools and can NOT be restored\n\n{prize_names}",
+            "description": "Delete multiple pool confirmation dialog content",
+        },
+        "delete_success_title": {
+            "name": "Delete success",
+            "description": "Delete successful notification title",
+        },
+        "delete_success_message": {
+            "name": "Succeed deleting {count} prize pools",
+            "description": "Delete successful notifications",
+        },
+        "delete_cancel_button": {
+            "name": "Cancel delete",
+            "description": "Cancel button text",
+        },
+        "no_deletable_prizes": {
+            "name": "No pool to delete",
+            "description": "Tips when no prize pool can be deleted",
+        },
+        "select_prize_to_delete": {
+            "name": "Please select a pool to delete",
+            "description": "Hint to select the prize pool to delete",
+        },
+        "select_prize_dialog_title": {
+            "name": "Select the pool to delete",
+            "description": "Select to delete the pool dialog title",
+        },
+        "select_prize_dialog_message": {
+            "name": "Please select the prize pool to delete:",
+            "description": "Select to delete the pool dialog",
+        },
+        "delete_selected_button": {
+            "name": "Delete selected",
+            "description": "Delete selected button text",
+        },
+        "delete_prize_error": {
+            "name": "Failed to delete prize pool: {error}",
+            "description": "Failed to delete pool error",
+        },
+        "prize_disappeared_title": {
+            "name": "Prizes lost hint",
+            "description": "Pool missing hint title",
+        },
+        "prize_disappeared_message": {
+            "name": "Detected that the pool '{prize_name}' have been removed from the input box. Please save your changes to permanently delete it",
+            "description": "Dismiss prompt content for individual prizes",
+        },
+        "multiple_prizes_disappeared_message": {
+            "name": "Detected that the following {count} prize pools have been removed from the input box. Please save your changes to permanently delete them:\n{prize_names}",
+            "description": "Multiple pool disappear tips",
+        },
+    },
 }
 
 # 导入奖池名称语言配置
@@ -244,7 +371,7 @@ import_prize_name = {
         },
         "file_selection_title": {
             "name": "File select",
-            "description": "File Selection Area Title",
+            "description": "File selection area title",
         },
         "no_file_selected": {
             "name": "No file selected",
@@ -252,11 +379,11 @@ import_prize_name = {
         },
         "select_file": {
             "name": "File select",
-            "description": "Select File Button Text",
+            "description": "Select file button text",
         },
         "supported_formats": {
             "name": "Supported formats: Excel (.xlsx, .xls) and CSV (.csv)",
-            "description": "Supported File Format Description",
+            "description": "Supported file format description",
         },
         "file_filter": {
             "name": "Excel files (*.xlsx *.xls);;CSV files (*.csv)",
@@ -271,45 +398,30 @@ import_prize_name = {
             "description": "Column map area title",
         },
         "column_mapping_description": {
-            "name": "Please select a column containing the bonus pool information",
+            "name": "Please select a column containing the pool information",
             "description": "Column map area description",
         },
         "column_mapping_id_column": {
             "name": "Serial column (required):",
-            "description": "Serial column label",
+            "description": "Serial Number Label",
         },
         "column_mapping_name_column": {
-            "name": "Pool Name Column (required):",
-            "description": "Pool Name List Label",
+            "name": "Pool name column (required):",
+            "description": "Label of Pool name list",
         },
         "column_mapping_weight_column": {
             "name": "Weight column (optional):",
-            "description": "Reorder Tags",
+            "description": "Column label of Weight",
         },
-        "column_mapping_none": {
-            "name": "None",
-            "description": "Text of None",
-        },
+        "column_mapping_none": {"name": "None", "description": "Text of None"},
         "data_preview_title": {
             "name": "Data preview",
-            "description": "Preview Area Title",
+            "description": "Preview area title",
         },
-        "prize_id": {
-            "name": "No.",
-            "description": "Serial column title",
-        },
-        "prize_name": {
-            "name": "Pool Name",
-            "description": "Pool Name Column Title",
-        },
-        "weight": {
-            "name": "Weight",
-            "description": "Reorder Title",
-        },
-        "buttons_import": {
-            "name": "Import",
-            "description": "Button text of Import",
-        },
+        "prize_id": {"name": "Serial", "description": "Serial Number Title"},
+        "prize_name": {"name": "Pool name", "description": "Title of Pool name list"},
+        "weight": {"name": "Weight", "description": "Column title of Weight"},
+        "buttons_import": {"name": "Import", "description": "Button text of Import"},
         "file_loaded_title": {
             "name": "File loaded",
             "description": "File loaded successfully dialog title",
@@ -326,10 +438,7 @@ import_prize_name = {
             "name": "File successfully loaded, please check data preview",
             "description": "File loaded with successful notifications",
         },
-        "error_title": {
-            "name": "Error",
-            "description": "Dialog title of Error",
-        },
+        "error_title": {"name": "Error", "description": "Dialog title of Error"},
         "load_failed": {
             "name": "Failed to load files",
             "description": "Failed to load file error",
@@ -351,27 +460,27 @@ import_prize_name = {
             "description": "Failed to import data notification title",
         },
         "import_failed_notification_content": {
-            "name": "Error importing data. Please check data format and content",
+            "name": "Error importing data, please check data format and content",
             "description": "Failed to import data content",
         },
         "unsupported_format": {
-            "name": "Unsupported File Format",
+            "name": "Unsupported file format",
             "description": "Unsupported file format error",
         },
         "no_name_column": {
             "name": "Please select a pool name column",
-            "description": "List of award names not selected",
+            "description": "List of prize names not selected",
         },
         "no_id_column": {
             "name": "Please select serial number column",
-            "description": "No serial number error selected",
+            "description": "Error: No serial number column selected",
         },
         "import_success_title": {
             "name": "Import success",
             "description": "Import successful dialog title",
         },
         "import_success_content_template": {
-            "name": "成功导入 {count} 个奖池信息到奖池 '{prize_name}'",
+            "name": "Succeed importing {count} prizes to pool '{prize_name}'",
             "description": "Import successful dialog content template",
         },
         "import_success_notification_title": {
@@ -379,16 +488,16 @@ import_prize_name = {
             "description": "Import successful notification title",
         },
         "import_success_notification_content_template": {
-            "name": "成功导入 {count} 个奖池信息到奖池 '{prize_name}'",
+            "name": "Succeed importing {count} prizes to pool '{prize_name}'",
             "description": "Import successful notification content template",
         },
         "existing_data_title": {
-            "name": "Bonus already has data",
+            "name": "Pool already has data",
             "description": "Holds already have data dialog title",
         },
         "existing_data_prompt": {
-            "name": "奖池 '{prize_name}' 已包含 {count} 个奖池信息，请选择处理方式:",
-            "description": "Bonus already has data dialog tip text",
+            "name": "Pool '{prize_name}' has already contained {count} prizes, please select handling method:",
+            "description": "Pool already has data dialog tip text",
         },
         "existing_data_option_overwrite": {
             "name": "Overwrite existing data",
@@ -514,6 +623,126 @@ lottery_name_setting = {
             "description": "删除奖品名称提示内容",
         },
     },
+    "EN_US": {
+        "title": {
+            "name": "Prize name settings",
+            "description": "Set the title of the prize name window",
+        },
+        "description": {
+            "name": "In this window, you can set the prize name\nto enter one prize name per line, and the system will store it in\n\nto enter only one prize name per line, e.g.:\nFirst prize\nSecond prize\nThird prize",
+            "description": "Prize name setting window description",
+        },
+        "input_title": {
+            "name": "List of prizes names",
+            "description": "Enter the area title of the prize name",
+        },
+        "input_placeholder": {
+            "name": "Please enter the prize name, one prize name per row",
+            "description": "Prize Name Input Placeholder",
+        },
+        "save_button": {"name": "Save", "description": "Button text of Save"},
+        "cancel_button": {"name": "Cancel", "description": "Button text of Cancel"},
+        "error_title": {"name": "Error", "description": "Message title of Error"},
+        "success_title": {"name": "Success", "description": "Message title of Success"},
+        "info_title": {"name": "Prompt", "description": "Message title of Info"},
+        "no_names_error": {
+            "name": "Please enter at least one prize name",
+            "description": "Incorrect reminder when the prize name is not entered",
+        },
+        "invalid_names_error": {
+            "name": "The following prize names include invalid characters or reserved words: {names}",
+            "description": "Error hint when the prize name validation failed",
+        },
+        "save_error": {
+            "name": "Failed to save prize name",
+            "description": "Error hint when saving prize name",
+        },
+        "success_message": {
+            "name": "Succeed creating {count} prize names",
+            "description": "Notification message when prize name is created successfully",
+        },
+        "no_new_names_message": {
+            "name": "All prize names already exist, no new prize names have been created",
+            "description": "Notification message when no new prize name is created",
+        },
+        "unsaved_changes_title": {
+            "name": "Unsaved changes",
+            "description": "Change dialog title is not saved",
+        },
+        "unsaved_changes_message": {
+            "name": "You have unsaved changes. Are you sure you want to close the window?",
+            "description": "Change dialog content not saved",
+        },
+        "discard_button": {
+            "name": "Discard changes",
+            "description": "Discard Change Button Text",
+        },
+        "continue_editing_button": {
+            "name": "Keep editing",
+            "description": "Continue editing button text",
+        },
+        "delete_button": {"name": "Delete", "description": "Button text of Delete"},
+        "delete_name_title": {
+            "name": "Delete prize name",
+            "description": "Remove Prize name dialog title",
+        },
+        "delete_name_message": {
+            "name": "Are you sure to delete the name '{name}'? This will delete all information of this name and can NOT be restored",
+            "description": "Delete prize name confirmation dialog",
+        },
+        "delete_multiple_names_title": {
+            "name": "Delete multiple prize names",
+            "description": "Delete multiple prize name dialog title",
+        },
+        "delete_multiple_names_message": {
+            "name": "Are you sure to delete the following {count} prize names? This will delete all information of these prize names and can NOT be restored\n\n{names}",
+            "description": "Delete multiple name confirmation dialog content",
+        },
+        "delete_name_success_title": {
+            "name": "Delete success",
+            "description": "Successfully deleted prize name notification title",
+        },
+        "delete_name_success_message": {
+            "name": "Succeed deleting {count} prize names",
+            "description": "Successfully deleted prize name",
+        },
+        "delete_name_cancel_button": {
+            "name": "Cancel delete",
+            "description": "Cancel prize name button text",
+        },
+        "no_deletable_names": {
+            "name": "There are no prizes names to delete",
+            "description": "Tips when no prize name can be deleted",
+        },
+        "select_name_to_delete": {
+            "name": "Please select the name of the prize to delete",
+            "description": "Tips to choose prize name to be deleted",
+        },
+        "select_name_dialog_title": {
+            "name": "Select the name of the prize to delete",
+            "description": "Dialog title of tips to choose prize name to be deleted",
+        },
+        "select_name_dialog_message": {
+            "name": "Please select the prize name to delete：",
+            "description": "Select item to delete the prize name dialog",
+        },
+        "delete_selected_names_button": {
+            "name": "Delete selected",
+            "description": "Delete selected prize name button text",
+        },
+        "delete_name_error": {
+            "name": "Failed to delete prize name: {error}",
+            "description": "Failed to delete prize name error",
+        },
+        "name_deleted_title": {
+            "name": "Prize name deleted",
+            "description": "Delete prize name tip title",
+        },
+        "name_deleted_message": {
+            "name": "Detected that the prize '{name}' have been removed from the input box. Please save your changes to permanently delete it",
+            "description": "Delete prize name hint",
+        },
+    },
 }
 
 # 权重设置窗口
@@ -627,6 +856,126 @@ weight_setting = {
         "weight_deleted_message": {
             "name": "权重选项 '{weight}' 已从输入框中移除，请保存更改以永久删除",
             "description": "删除权重选项提示内容",
+        },
+    },
+    "EN_US": {
+        "title": {
+            "name": "Weight settings",
+            "description": "Set the title of the replay window",
+        },
+        "description": {
+            "name": "In this window, you can set the weight of the prize\nto enter a weight per line, and the system will store it in\n\nPlease enter only one weight per line, e.g.:\n10\n20\n30",
+            "description": "Reset window description",
+        },
+        "input_title": {
+            "name": "Weight list",
+            "description": "Weight input area title",
+        },
+        "input_placeholder": {
+            "name": "Please enter weight, one weight per row",
+            "description": "Weight input box placeholder",
+        },
+        "save_button": {"name": "Save", "description": "Button text of Save"},
+        "cancel_button": {"name": "Cancel", "description": "Button text of Cancel"},
+        "error_title": {"name": "Error", "description": "Message title of Error"},
+        "success_title": {"name": "Success", "description": "Message title of Success"},
+        "info_title": {"name": "Prompt", "description": "Message title of Info"},
+        "no_genders_error": {
+            "name": "Please enter at least one weight value",
+            "description": "Error hint when no weight entered",
+        },
+        "invalid_weights_error": {
+            "name": "The following weights include invalid characters or reserved words: {weights}",
+            "description": "Error reminders when reauthenticating failed",
+        },
+        "save_error": {
+            "name": "Failed to save weights",
+            "description": "Error hint when saving weights",
+        },
+        "success_message": {
+            "name": "Succeed creating {count} weight options",
+            "description": "Notification message when weighting is created successfully",
+        },
+        "no_new_weights_message": {
+            "name": "All weight options already exist, no new weight options have been created",
+            "description": "Tips when not created new weights",
+        },
+        "unsaved_changes_title": {
+            "name": "Unsaved changes",
+            "description": "Change dialog title is not saved",
+        },
+        "unsaved_changes_message": {
+            "name": "You have unsaved changes. Are you sure you want to close the window?",
+            "description": "Change dialog content not saved",
+        },
+        "discard_button": {
+            "name": "Discard changes",
+            "description": "Discard change button text",
+        },
+        "continue_editing_button": {
+            "name": "Keep editing",
+            "description": "Continue editing button text",
+        },
+        "delete_button": {"name": "Delete", "description": "Button text of Delete"},
+        "delete_weight_title": {
+            "name": "Delete weight options",
+            "description": "Remove option dialog title",
+        },
+        "delete_weight_message": {
+            "name": "Are you sure to delete the weight option '{weight}'? This will delete all information of this weight option and can NOT be restored",
+            "description": "Delete permission to select confirmation dialog",
+        },
+        "delete_multiple_weights_title": {
+            "name": "Delete multiple weight options",
+            "description": "Delete multiple weight dialog titles",
+        },
+        "delete_multiple_weights_message": {
+            "name": "Are you sure to delete the following {count} weight options? This will delete all information of these weight options and can NOT be restored\n\n{weights}",
+            "description": "Delete multiple weight options confirmation dialog content",
+        },
+        "delete_weight_success_title": {
+            "name": "Delete success",
+            "description": "Successfully deleted priority option notification title",
+        },
+        "delete_weight_success_message": {
+            "name": "Succeed deleting {count} weight options",
+            "description": "Notification of Delete the permission weight option successfully",
+        },
+        "delete_weight_cancel_button": {
+            "name": "Cancel delete",
+            "description": "Undelete weight button text",
+        },
+        "no_deletable_weights": {
+            "name": "There are no weight options to delete",
+            "description": "There are no tips to delete the weights",
+        },
+        "select_weight_to_delete": {
+            "name": "Please select the weight option to delete",
+            "description": "Select a notification to delete the weight option",
+        },
+        "select_weight_dialog_title": {
+            "name": "Select the weight option to delete",
+            "description": "Select the title of the weight option dialog to delete",
+        },
+        "select_weight_dialog_message": {
+            "name": "Please select the weight option to delete：",
+            "description": "Select what to delete the weight option dialog",
+        },
+        "delete_selected_weights_button": {
+            "name": "Delete selected",
+            "description": "Delete selected weights button text",
+        },
+        "delete_weight_error": {
+            "name": "Failed to delete weight option: {error}",
+            "description": "Failed to delete weight option error",
+        },
+        "weight_deleted_title": {
+            "name": "The weight option has been deleted",
+            "description": "Remove the weighted option tip header",
+        },
+        "weight_deleted_message": {
+            "name": "Detected that the weight option '{weight}' have been removed from the input box. Please save your changes to permanently delete it",
+            "description": "Remove the weight selection tips",
         },
     },
 }

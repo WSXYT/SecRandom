@@ -1,6 +1,12 @@
 # 语音设置语言配置
 voice_settings = {
-    "ZH_CN": {"title": {"name": "语音设置", "description": "配置语音播报相关功能"}}
+    "ZH_CN": {"title": {"name": "语音设置", "description": "配置语音播报相关功能"}},
+    "EN_US": {
+        "title": {
+            "name": "Voice settings",
+            "description": "Configure voice playback related functions",
+        }
+    },
 }
 
 # 基础语音设置语言配置
@@ -48,36 +54,28 @@ basic_voice_settings = {
     "EN_US": {
         "title": {
             "name": "Basic voice settings",
-            "description": "配置基础语音播报功能",
+            "description": "Configure basic voice setting",
         },
         "voice_engine_group": {
             "name": "Voice engine",
-            "description": "选择语音合成引擎类型",
+            "description": "Choose TTS engine type",
         },
         "volume_group": {
             "name": "Volume settings",
-            "description": "调整语音播报音量大小",
-        },
-        "voice_enable": {
-            "name": "Voice Function Switch",
-            "description": "Turn the voice broadcast function on or off",
-            "switchbutton_name": {"enable": "ON", "disable": "OFF"},
+            "description": "Adjust speech volume",
         },
         "system_volume_group": {
             "name": "System volume control",
-            "description": "选择要控制的系统音量类型",
+            "description": "Select volume type to control",
         },
         "voice_engine": {
             "name": "Voice engine",
-            "description": "选择语音合成引擎类型",
-            "combo_items": {
-                "0": "System TTS",
-                "1": "Edge TTS",
-            },
+            "description": "Choose TTS engine",
+            "combo_items": {"0": "System TTS", "1": "Edge TTS"},
         },
         "edge_tts_voice_name": {
-            "name": "Edge TTS-语音名称",
-            "description": "选择Edge TTS语音播报角色",
+            "name": "Voice name of Edge TTS",
+            "description": "Select the voice character of Edge TTS",
             "combo_items": {
                 "0": "zh-CN-XiaoxiaoNeural",
                 "1": "zh-CN-YunxiNeural",
@@ -88,7 +86,7 @@ basic_voice_settings = {
         },
         "voice_playback": {
             "name": "Voice playback device",
-            "description": "选择语音播报播放设备",
+            "description": "Choose voice playback device",
             "combo_items": {
                 "0": "System default",
                 "1": "Speakers",
@@ -96,17 +94,11 @@ basic_voice_settings = {
                 "3": "Bluetooth devices",
             },
         },
-        "volume_size": {
-            "name": "Speech volume",
-            "description": "调整语音播报音量大小",
-        },
-        "speech_rate": {
-            "name": "Speech rate",
-            "description": "调整语音播报语速",
-        },
+        "volume_size": {"name": "Speech volume", "description": "Adjust speech volume"},
+        "speech_rate": {"name": "Speech rate", "description": "Adjust speech rate"},
         "system_volume_control": {
             "name": "System volume control",
-            "description": "选择要控制的系统音量类型",
+            "description": "Select volume type to control",
             "combo_items": {
                 "0": "Main volume",
                 "1": "App volume",
@@ -116,7 +108,7 @@ basic_voice_settings = {
         },
         "system_volume_size": {
             "name": "System volume",
-            "description": "调整系统音量大小",
+            "description": "Adjust system volume",
         },
     },
 }
@@ -170,6 +162,58 @@ specific_announcements = {
         "tts_alias": {
             "name": "替换名称",
             "description": "用于TTS发音的替换名称，留空则使用默认发音",
+        },
+    },
+    "EN_US": {
+        "title": {
+            "name": "Specific speech setting",
+            "description": "Speech for specific results",
+        },
+        "enabled": {
+            "name": "Enable specific speech",
+            "description": "Totally enable speech for specific results",
+        },
+        "header": {"name": "Enabled"},
+        "mode": {
+            "name": "Announcements mode",
+            "description": "Choose a speech mode",
+            "combo_items": {"0": "Picking mode", "1": "Lottery mode"},
+        },
+        "roll_call_title": {
+            "name": "Picking mode configuration",
+            "description": "Configure speech on drawing mode",
+        },
+        "select_class_name": {
+            "name": "Select a class/pool",
+            "description": "Choose a class or pool to manage TTS",
+        },
+        "id_field": {"name": "Student ID"},
+        "name_field": {"name": "Name"},
+        "prefix_field": {
+            "name": "Speech prefix",
+            "description": "Add text before speech content",
+        },
+        "suffix_field": {
+            "name": "Speech suffix",
+            "description": "Add text after speech content",
+        },
+        "lottery_title": {
+            "name": "Lottery mode configuration",
+            "description": "Configure speech on lottery mode",
+        },
+        "lottery_id_field": {"name": "Serial"},
+        "lottery_name_field": {"name": "Name"},
+        "lottery_prefix_field": {
+            "name": "Lottery prefix",
+            "description": "Add text before speech content",
+        },
+        "lottery_suffix_field": {
+            "name": "Lottery suffix",
+            "description": "Add text after speech content",
+        },
+        "tts_alias": {
+            "name": "Replacement",
+            "description": "Replacement names for TTS pronunciation. Leave a blank to use default pronunciation",
         },
     },
 }

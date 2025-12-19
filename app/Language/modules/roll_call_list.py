@@ -102,6 +102,133 @@ set_class_name = {
             "description": "多个班级消失提示内容",
         },
     },
+    "EN_US": {
+        "title": {
+            "name": "Class name settings",
+            "description": "Set the title of the class name window",
+        },
+        "description": {
+            "name": "In this window, you can set up the class name\nto enter a class name per line, and the system will store it in\n\nto enter only one class name per line, e.g.:\nClass 1, Senior 1\nClass 2, Senior 1\nClass 3, Senior 1",
+            "description": "Class name settings window description",
+        },
+        "input_title": {
+            "name": "Class name list",
+            "description": "Class name enter area title",
+        },
+        "input_placeholder": {
+            "name": "Please input class names here, one class name per line",
+            "description": "Class name input placeholder",
+        },
+        "save_button": {"name": "Save", "description": "Button text of Save"},
+        "cancel_button": {"name": "Cancel", "description": "Button text of Cancel"},
+        "error_title": {"name": "Error", "description": "Message title of Error"},
+        "success_title": {"name": "Success", "description": "Message title of Success"},
+        "info_title": {"name": "Prompt", "description": "Message title of Info"},
+        "no_class_names_error": {
+            "name": "Please enter at least one class name",
+            "description": "Incorrect reminder when the class name is not entered",
+        },
+        "invalid_names_error": {
+            "name": "The following class names include invalid characters or reserved words: {names}",
+            "description": "Error hint when pool validation failed",
+        },
+        "save_error": {
+            "name": "Failed to save class name",
+            "description": "Incorrect reminder when the class name is saving",
+        },
+        "success_message": {
+            "name": "Succeed creating {count} classes",
+            "description": "Message show when the classes saved successfully",
+        },
+        "no_new_classes_message": {
+            "name": "All class names already exist, no new class names have been created",
+            "description": "Notification message when no new class is created",
+        },
+        "unsaved_changes_title": {
+            "name": "Unsaved changes",
+            "description": "Dialog title of change not saved",
+        },
+        "unsaved_changes_message": {
+            "name": "You have unsaved changes. Are you sure you want to close the window?",
+            "description": "Dialog content of change not saved",
+        },
+        "discard_button": {
+            "name": "Discard changes",
+            "description": "Discard change button text",
+        },
+        "continue_editing_button": {
+            "name": "Keep editing",
+            "description": "Continue editing button text",
+        },
+        "delete_class_title": {
+            "name": "Delete class",
+            "description": "Delete class dialog title",
+        },
+        "delete_class_message": {
+            "name": "Are you sure to delete the class '{class_name}'? This will delete all student data of this class and can NOT be restored",
+            "description": "Delete class dialog message",
+        },
+        "delete_class_button": {
+            "name": "Delete class",
+            "description": "Delete class button text",
+        },
+        "delete_multiple_classes_title": {
+            "name": "Delete multiple classes",
+            "description": "Delete multiple class dialog title",
+        },
+        "delete_multiple_classes_message": {
+            "name": "Are you sure to delete the following {count} classes? This will delete all student data of these classes and can NOT be restored\n\n{class_names}",
+            "description": "Delete multiple class dialog message",
+        },
+        "delete_success_title": {
+            "name": "Delete success",
+            "description": "Delete success notification title",
+        },
+        "delete_success_message": {
+            "name": "Succeed deleting {count} classes",
+            "description": "Delete success notification content",
+        },
+        "delete_cancel_button": {
+            "name": "Cancel delete",
+            "description": "Button text of cancel delete",
+        },
+        "no_deletable_classes": {
+            "name": "No class to delete",
+            "description": "Tips when no class can be deleted",
+        },
+        "select_class_to_delete": {
+            "name": "Please select the class to delete",
+            "description": "Hint to select the class to delete",
+        },
+        "select_class_dialog_title": {
+            "name": "Select class to delete",
+            "description": "Dialog title of tips to choose classes to be deleted",
+        },
+        "select_class_dialog_message": {
+            "name": "Please select the class to delete:",
+            "description": "Dialog content of tips to choose classes to be deleted",
+        },
+        "delete_selected_button": {
+            "name": "Delete selected",
+            "description": "Delete selected button text",
+        },
+        "delete_class_error": {
+            "name": "Failed to delete class: {error}",
+            "description": "Failed to delete class error",
+        },
+        "class_disappeared_title": {
+            "name": "Class disappeared",
+            "description": "Class missing hint title",
+        },
+        "class_disappeared_message": {
+            "name": "Detected that the class '{class_name}' have been removed from the input box. Please save your changes to permanently delete it",
+            "description": "Class disappear tips",
+        },
+        "multiple_classes_disappeared_message": {
+            "name": "Detected that the following {count} classes have been removed from the input box. Please save your changes to permanently delete them:\n{class_names}",
+            "description": "Multiple classes disappear tips",
+        },
+    },
 }
 
 # 导入学生姓名语言配置
@@ -237,7 +364,163 @@ import_student_name = {
             "name": "取消导入",
             "description": "取消导入选项",
         },
-    }
+    },
+    "EN_US": {
+        "title": {
+            "name": "Import student names",
+            "description": "Import student names from Excel or CSV file",
+        },
+        "initial_subtitle": {
+            "name": "Importing to:",
+            "description": "Importing to class tips",
+        },
+        "file_selection_title": {
+            "name": "File select",
+            "description": "File selection area title",
+        },
+        "no_file_selected": {
+            "name": "No file selected",
+            "description": "Didn't select ant file hint text",
+        },
+        "select_file": {
+            "name": "File select",
+            "description": "Select file button text",
+        },
+        "supported_formats": {
+            "name": "Supported formats: Excel (.xlsx, .xls) and CSV (.csv)",
+            "description": "Supported file format description",
+        },
+        "file_filter": {
+            "name": "Excel files (*.xlsx *.xls);;CSV files (*.csv)",
+            "description": "File filter in the file selection dialog",
+        },
+        "dialog_title": {
+            "name": "File select",
+            "description": "File selection dialog title",
+        },
+        "column_mapping_title": {
+            "name": "Column mapping",
+            "description": "Column map area title",
+        },
+        "column_mapping_description": {
+            "name": "Please select a column containing the student information",
+            "description": "Column map area description",
+        },
+        "column_mapping_id_column": {
+            "name": "Student ID column (required):",
+            "description": "Column label of Student ID",
+        },
+        "column_mapping_name_column": {
+            "name": "Name column (required):",
+            "description": "Column label of name",
+        },
+        "column_mapping_gender_column": {
+            "name": "Gender column (optional):",
+            "description": "Column label of gender",
+        },
+        "column_mapping_group_column": {
+            "name": "Group column (optional):",
+            "description": "Column label of group",
+        },
+        "column_mapping_none": {"name": "Noneh", "description": "Text of None"},
+        "data_preview_title": {
+            "name": "Data preview",
+            "description": "Preview area title",
+        },
+        "student_id": {
+            "name": "Student ID",
+            "description": "Column title of Student ID",
+        },
+        "name": {"name": "Name", "description": "Column title of Name"},
+        "gender": {"name": "Gender", "description": "Column title of Gender"},
+        "group": {"name": "Group", "description": "Column title of Group"},
+        "buttons_import": {"name": "Import", "description": "Button text of Import"},
+        "file_loaded_title": {
+            "name": "File loaded",
+            "description": "File load success dialog title",
+        },
+        "file_loaded_content": {
+            "name": "Files loaded successfully",
+            "description": "File load success dialog content",
+        },
+        "file_loaded_notification_title": {
+            "name": "Files loaded successfully",
+            "description": "File load success notification title",
+        },
+        "file_loaded_notification_content": {
+            "name": "File loaded successfully, please check data preview",
+            "description": "File load success notification content",
+        },
+        "error_title": {"name": "Error", "description": "Dialog title of Error"},
+        "load_failed": {
+            "name": "Failed to load files",
+            "description": "Failed to load files error",
+        },
+        "load_failed_notification_title": {
+            "name": "Failed to load files",
+            "description": "Filed to load files notification title",
+        },
+        "load_failed_notification_content": {
+            "name": "Unable to load files, please check file format and content",
+            "description": "Failed to load files notification content",
+        },
+        "import_failed": {
+            "name": "Failed to import data",
+            "description": "Failed to import data name error",
+        },
+        "import_failed_notification_title": {
+            "name": "Failed to import data",
+            "description": "Filed to load data notification title",
+        },
+        "import_failed_notification_content": {
+            "name": "Error importing data, please check data format and content",
+            "description": "Failed to load data notification content",
+        },
+        "unsupported_format": {
+            "name": "Unsupported file format",
+            "description": "Unsupported file format error",
+        },
+        "no_name_column": {
+            "name": "Please select the name column",
+            "description": "Error: No name column selected",
+        },
+        "no_id_column": {
+            "name": "Please select the Student ID column",
+            "description": "Error: No Student ID column selected",
+        },
+        "import_success_title": {
+            "name": "Import success",
+            "description": "Import success dialog title",
+        },
+        "import_success_content_template": {
+            "name": "Succeed importing {count} students to class '{class_name}'",
+            "description": "Import success dialog content template",
+        },
+        "import_success_notification_title": {
+            "name": "Import success",
+            "description": "Import successful notification title",
+        },
+        "import_success_notification_content_template": {
+            "name": "Succeed importing {count} students to class '{class_name}'",
+            "description": "Import success notification content template",
+        },
+        "existing_data_title": {
+            "name": "Class data already available",
+            "description": "Class data already available dialog title",
+        },
+        "existing_data_prompt": {
+            "name": "Pool '{class_name}' has already contained {count} students, please select handling method:",
+            "description": "Class data already available dialog tip text",
+        },
+        "existing_data_option_overwrite": {
+            "name": "Overwrite existing data",
+            "description": "Overwrite existing data option",
+        },
+        "existing_data_option_cancel": {
+            "name": "Cancel import",
+            "description": "Option of Cancel import",
+        },
+    },
 }
 
 # 姓名设置窗口
@@ -342,6 +625,120 @@ name_setting = {
         "name_deleted_message": {
             "name": "姓名 '{name}' 已从输入框中移除，请保存更改以永久删除",
             "description": "删除姓名提示内容",
+        },
+    },
+    "EN_US": {
+        "title": {"name": "Name settings", "description": "Set name window title"},
+        "description": {
+            "name": "In this window, you can set up student names\nto enter a student name per line, and the system will store it in\n\nto enter only one student name per line, e.g.:\nTom\nDick\nHarry",
+            "description": "Name settings window description",
+        },
+        "input_title": {"name": "Name list", "description": "Name input area title"},
+        "input_placeholder": {
+            "name": "Please input names here, one name per line",
+            "description": "Name input box placeholder",
+        },
+        "save_button": {"name": "Save", "description": "Button text of Save"},
+        "cancel_button": {"name": "Cancel", "description": "Button text of Cancel"},
+        "error_title": {"name": "Error", "description": "Message title of Error"},
+        "success_title": {"name": "Success", "description": "Message title of Success"},
+        "info_title": {"name": "Prompt", "description": "Message title of Info"},
+        "no_names_error": {
+            "name": "Please enter at least one name",
+            "description": "Error hint shown on no name is input",
+        },
+        "invalid_names_error": {
+            "name": "The following names include invalid characters or reserved words: {names}",
+            "description": "Error hint when name validation failed",
+        },
+        "save_error": {
+            "name": "Failed to save names",
+            "description": "Error hint when name saved failed",
+        },
+        "success_message": {
+            "name": "Succeed creating {count} names",
+            "description": "Message show when the names saved successfully",
+        },
+        "no_new_names_message": {
+            "name": "All names already exist, no new names have been created",
+            "description": "Notification message when no new name is created",
+        },
+        "unsaved_changes_title": {
+            "name": "Unsaved changes",
+            "description": "Dialog title of change not saved",
+        },
+        "unsaved_changes_message": {
+            "name": "You have unsaved changes. Are you sure you want to close the window?",
+            "description": "Dialog content of change not saved",
+        },
+        "discard_button": {
+            "name": "Discard changes",
+            "description": "Discard change button text",
+        },
+        "continue_editing_button": {
+            "name": "Keep editing",
+            "description": "Continue editing button text",
+        },
+        "delete_button": {"name": "Delete", "description": "Button text of Delete"},
+        "delete_name_title": {
+            "name": "Delete name",
+            "description": "Delete name dialog title",
+        },
+        "delete_name_message": {
+            "name": "Are you sure to delete the name '{name}'? This will delete all information of this name and can NOT be restored",
+            "description": "Delete name dialog message",
+        },
+        "delete_multiple_names_title": {
+            "name": "Delete multiple names",
+            "description": "Delete multiple name dialog title",
+        },
+        "delete_multiple_names_message": {
+            "name": "Are you sure to delete the following {count} names? This will delete all information of these names and can NOT be restored\n\n{names}",
+            "description": "Delete multiple name dialog message",
+        },
+        "delete_name_success_title": {
+            "name": "Delete success",
+            "description": "Delete name success notification title",
+        },
+        "delete_name_success_message": {
+            "name": "Succeed deleting {count} names",
+            "description": "Delete name success notification content",
+        },
+        "delete_name_cancel_button": {
+            "name": "Cancel delete",
+            "description": "Button text of cancel delete name",
+        },
+        "no_deletable_names": {
+            "name": "No name to delete",
+            "description": "Tips when no name can be deleted",
+        },
+        "select_name_to_delete": {
+            "name": "Please select name to delete",
+            "description": "Hint to select the name to delete",
+        },
+        "select_name_dialog_title": {
+            "name": "Select names to delete",
+            "description": "Dialog title of tips to choose name to be deleted",
+        },
+        "select_name_dialog_message": {
+            "name": "Please select the name to delete:",
+            "description": "Dialog content of tips to choose names to be deleted",
+        },
+        "delete_selected_names_button": {
+            "name": "Delete selected",
+            "description": "Delete selected names button text",
+        },
+        "delete_name_error": {
+            "name": "Failed to delete name: {error}",
+            "description": "Failed to delete name error",
+        },
+        "name_deleted_title": {
+            "name": "Name deleted",
+            "description": "Delete name tip title",
+        },
+        "name_deleted_message": {
+            "name": "Detected that the name '{name}' have been removed from the input box. Please save your changes to permanently delete it",
+            "description": "Delete name hint",
         },
     },
 }
@@ -462,139 +859,121 @@ gender_setting = {
     "EN_US": {
         "title": {
             "name": "Gender settings",
-            "description": "设置性别窗口标题",
+            "description": "Set title of Gender settings window",
         },
         "description": {
-            "name": "在此窗口中，您可以设置学生性别\n每行输入一个性别，系统会将其存储到班级名单文件中\n\n请每行只输入一个性别，例如：\n男\n女\n其他",
-            "description": "性别设置窗口描述",
+            "name": "In this window, you can set up student genders\nto enter a gender per line, and the system will store it in\n\nto enter only one gender per line, e.g.:\nMale\nFemale\nNon-binary",
+            "description": "Gender settings window description",
         },
         "input_title": {
             "name": "Gender list",
-            "description": "性别输入区域标题",
+            "description": "Gender input area title",
         },
         "input_placeholder": {
-            "name": "请输入性别，每行一个性别",
-            "description": "性别输入框占位符",
+            "name": "Please input genders here, one gender per line",
+            "description": "Gender input box placeholder",
         },
-        "save_button": {
-            "name": "Save",
-            "description": "Button text of Save",
-        },
-        "cancel_button": {
-            "name": "Cancel",
-            "description": "Button text of Cancel",
-        },
-        "error_title": {
-            "name": "Error",
-            "description": "Message title of Error",
-        },
-        "success_title": {
-            "name": "Success",
-            "description": "Message title of Success",
-        },
-        "info_title": {
-            "name": "Prompt",
-            "description": "Message title of Info",
-        },
+        "save_button": {"name": "Save", "description": "Save button text"},
+        "cancel_button": {"name": "Cancel", "description": "Button text of Cancel"},
+        "error_title": {"name": "Error", "description": "Message title of Error"},
+        "success_title": {"name": "Success", "description": "Message title of Success"},
+        "info_title": {"name": "Prompt", "description": "Message title of Info"},
         "no_genders_error": {
-            "name": "请至少输入一个性别",
-            "description": "未输入性别时的错误提示",
+            "name": "Please enter at least one gender",
+            "description": "Error hint shown on no gender is input",
         },
         "invalid_genders_error": {
-            "name": "以下性别包含非法字符或为保留字: {genders}",
-            "description": "性别验证失败时的错误提示",
+            "name": "The following genders include invalid characters or reserved words: {genders}",
+            "description": "Error hint when gender validation failed",
         },
         "save_error": {
-            "name": "保存性别选项失败",
-            "description": "保存性别选项时的错误提示",
+            "name": "Failed to save gender option",
+            "description": "Error hint when gender saved failed",
         },
         "success_message": {
-            "name": "成功创建 {count} 个新性别选项",
-            "description": "成功创建性别选项时的提示消息",
+            "name": "Succeed creating {count} genders",
+            "description": "Message show when the gender settings saved successfully",
         },
         "no_new_genders_message": {
-            "name": "所有性别选项均已存在，未创建新的性别选项",
-            "description": "没有创建新性别选项时的提示消息",
+            "name": "All gender options already exist, no new gender options have been created",
+            "description": "Notification message when no new gender is created",
         },
         "unsaved_changes_title": {
             "name": "Unsaved changes",
-            "description": "未保存更改对话框标题",
+            "description": "Dialog title of change not saved",
         },
         "unsaved_changes_message": {
-            "name": "您有未保存的更改，确定要关闭窗口吗？",
-            "description": "未保存更改对话框内容",
+            "name": "You have unsaved changes. Are you sure you want to close the window?",
+            "description": "Dialog content of change not saved",
         },
         "discard_button": {
             "name": "Discard changes",
-            "description": "放弃更改按钮文本",
+            "description": "Discard change button text",
         },
         "continue_editing_button": {
             "name": "Keep editing",
-            "description": "继续编辑按钮文本",
+            "description": "Continue editing button text",
         },
-        "delete_button": {
-            "name": "Delete",
-            "description": "Button text of Delete",
-        },
+        "delete_button": {"name": "Delete", "description": "Button text of delete"},
         "delete_gender_title": {
-            "name": "Option of Delete gender",
-            "description": "删除性别选项对话框标题",
+            "name": "Option of delete gender",
+            "description": "Delete gender option dialog title",
         },
         "delete_gender_message": {
-            "name": "确定要删除性别选项 '{gender}' 吗？此操作将删除该性别选项的所有信息，且不可恢复",
-            "description": "删除性别选项确认对话框内容",
+            "name": "Are you sure to delete the gender option '{gender}'? This will delete all information of this gender and can NOT be restored",
+            "description": "Delete gender option dialog message",
         },
         "delete_multiple_genders_title": {
-            "name": "删除多个性别选项",
-            "description": "删除多个性别选项对话框标题",
+            "name": "Delete multiple gender option",
+            "description": "Delete multiple gender dialog titles",
         },
         "delete_multiple_genders_message": {
-            "name": "确定要删除以下 {count} 个性别选项吗？此操作将删除这些性别选项的所有信息，且不可恢复\n\n{genders}",
-            "description": "删除多个性别选项确认对话框内容",
+            "name": "Are you sure to delete the following {count} genders? This will delete all information of these genders and can NOT be restored\n\n{genders}",
+            "description": "Delete multiple gender dialog message",
         },
         "delete_gender_success_title": {
             "name": "Delete success",
-            "description": "删除性别选项成功通知标题",
+            "description": "Delete multiple gender dialog success titles",
         },
         "delete_gender_success_message": {
-            "name": "成功删除 {count} 个性别选项",
-            "description": "删除性别选项成功通知内容",
+            "name": "Succeed deleting {count} gender options",
+            "description": "Notification of delete the gender option successfully",
         },
         "delete_gender_cancel_button": {
             "name": "Cancel delete",
-            "description": "取消删除性别选项按钮文本",
+            "description": "Button text of cancel delete gender option",
         },
         "no_deletable_genders": {
-            "name": "没有可删除的性别选项",
-            "description": "没有可删除性别选项时的提示",
+            "name": "Option of no gender to delete",
+            "description": "Tips when no gender option can be deleted",
         },
         "select_gender_to_delete": {
-            "name": "请选择要删除的性别选项",
-            "description": "选择删除性别选项的提示",
+            "name": "Select gender option to delete",
+            "description": "Hint to select the gender option to delete",
         },
         "select_gender_dialog_title": {
-            "name": "选择要删除的性别选项",
-            "description": "选择删除性别选项对话框标题",
+            "name": "Option of select gender to delete",
+            "description": "Dialog title of tips to choose gender options to be deleted",
         },
         "select_gender_dialog_message": {
-            "name": "请选择要删除的性别选项：",
-            "description": "选择删除性别选项对话框内容",
+            "name": "Select gender option to delete:",
+            "description": "Select gender option to delete dialog message",
         },
         "delete_selected_genders_button": {
             "name": "Delete selected",
-            "description": "删除选中性别选项按钮文本",
+            "description": "Delete selected gender button text",
         },
         "delete_gender_error": {
-            "name": "删除性别选项失败: {error}",
-            "description": "删除性别选项失败错误信息",
+            "name": "Failed to delete gender option: {error}",
+            "description": "Failed to delete gender error",
         },
         "gender_deleted_title": {
             "name": "Gender option deleted",
-            "description": "删除性别选项提示标题",
+            "description": "Delete gender option tip title",
         },
         "gender_deleted_message": {
-            "name": "性别选项 '{gender}' 已从输入框中移除，请保存更改以永久删除",
-            "description": "删除性别选项提示内容",
+            "name": "Detected that the gender option '{gender}' have been removed from the input box. Please save your changes to permanently delete it",
+            "description": "Delete gender option hint",
         },
     },
 }
@@ -710,6 +1089,123 @@ group_setting = {
         "group_deleted_message": {
             "name": "小组选项 '{group}' 已从输入框中移除，请保存更改以永久删除",
             "description": "删除小组选项提示内容",
+        },
+    },
+    "EN_US": {
+        "title": {
+            "name": "Group Settings",
+            "description": "Group settings window title",
+        },
+        "description": {
+            "name": "In this window, you can set up the group name\nto enter a group name per line, and the system will store it in\n\nto enter only one group name per line, e.g.:\nGroup A\nGroup B\nGroup C",
+            "description": "Group settings window description",
+        },
+        "input_title": {"name": "Group list", "description": "Group input area title"},
+        "input_placeholder": {
+            "name": "Please input group name, one per line. ",
+            "description": "Group input box placeholder",
+        },
+        "save_button": {"name": "Save", "description": "Button text of Save"},
+        "cancel_button": {"name": "Cancel", "description": "Button text of Cancel"},
+        "error_title": {"name": "Error", "description": "Message title of Error"},
+        "success_title": {"name": "Success", "description": "Message title of Success"},
+        "info_title": {"name": "Prompt", "description": "Message title of Info"},
+        "no_groups_error": {
+            "name": "Please enter at least one group",
+            "description": "Error hint shown on no group is input",
+        },
+        "invalid_groups_error": {
+            "name": "The following groups include invalid characters or reserved words: {groups}",
+            "description": "Error hint when group name validation failed",
+        },
+        "save_error": {
+            "name": "Failed to save group option",
+            "description": "Error hint when group saved failed",
+        },
+        "success_message": {
+            "name": "Succeed creating {count} group options",
+            "description": "Message show when the group settings saved successfully",
+        },
+        "no_new_groups_message": {
+            "name": "All group options already exist, no new group options have been created",
+            "description": "Notification message when no new group is created",
+        },
+        "unsaved_changes_title": {
+            "name": "Unsaved changes",
+            "description": "Dialog title of change not saved",
+        },
+        "unsaved_changes_message": {
+            "name": "You have unsaved changes. Are you sure you want to close the window?",
+            "description": "Dialog content of change not saved",
+        },
+        "discard_button": {
+            "name": "Discard changes",
+            "description": "Discard change button text",
+        },
+        "continue_editing_button": {
+            "name": "Keep editing",
+            "description": "Continue editing button text",
+        },
+        "delete_button": {"name": "Delete", "description": "Button text of Delete"},
+        "delete_group_title": {
+            "name": "Option of Delete group",
+            "description": "Delete group option dialog title",
+        },
+        "delete_group_message": {
+            "name": "Are you sure to delete the group option '{group}'? This will delete all information of this group and can NOT be restored",
+            "description": "Delete group dialog message",
+        },
+        "delete_multiple_groups_title": {
+            "name": "Delete multiple group option",
+            "description": "Delete multiple group option dialog title",
+        },
+        "delete_multiple_groups_message": {
+            "name": "Are you sure to delete the following {count} groups? This will delete all information of these groups and can NOT be restored\n\n{groups}",
+            "description": "Delete multiple group dialog message",
+        },
+        "delete_group_success_title": {
+            "name": "Delete success",
+            "description": "Delete group dialog success titles",
+        },
+        "delete_group_success_message": {
+            "name": "Succeed deleting {count} group options",
+            "description": "Notification of delete the group option successfully",
+        },
+        "delete_group_cancel_button": {
+            "name": "Cancel delete",
+            "description": "Button text of cancel delete group option",
+        },
+        "no_deletable_groups": {
+            "name": "Option of no group to delete",
+            "description": "Tips when no group option can be deleted",
+        },
+        "select_group_to_delete": {
+            "name": "Please select the group option to delete",
+            "description": "Hint to select the group option to delete",
+        },
+        "select_group_dialog_title": {
+            "name": "Option of select group to delete",
+            "description": "Dialog title of tips to choose group options to be deleted",
+        },
+        "select_group_dialog_message": {
+            "name": "Please select the group option to delete:",
+            "description": "Dialog content of tips to choose group options to be deleted",
+        },
+        "delete_selected_groups_button": {
+            "name": "Delete selected",
+            "description": "Delete selected names button text",
+        },
+        "delete_group_error": {
+            "name": "Failed to delete group option: {error}",
+            "description": "Failed to delete prize name error",
+        },
+        "group_deleted_title": {
+            "name": "Group option deleted",
+            "description": "Delete group options tip title",
+        },
+        "group_deleted_message": {
+            "name": "Detected that the group option '{group}' have been removed from the input box. Please save your changes to permanently delete it",
+            "description": "Delete group options hint",
         },
     },
 }

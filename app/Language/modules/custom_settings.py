@@ -4,9 +4,9 @@ custom_settings = {
     "ZH_CN": {"title": {"name": "个性设置", "description": "个性化设置选项"}},
     "EN_US": {
         "title": {
-            "name": "Profile settings",
-            "description": "Profile settings",
-        },
+            "name": "Personal Settings",
+            "description": "Personalized Settings Options",
+        }
     },
 }
 
@@ -162,5 +162,161 @@ page_management = {
             "description": "控制是否显示查看剩余名单按钮",
             "switchbutton_name": {"enable": "", "disable": ""},
         },
-    }
+    },
+    "EN_US": {
+        "title": {"name": "Page management", "description": "Page management settings"},
+        "roll_call": {"name": "Pick settings", "description": "Pick function settings"},
+        "lottery": {
+            "name": "Lottery settings",
+            "description": "Lottery function settings",
+        },
+        "custom": {
+            "name": "Custom pick settings",
+            "description": "Custom pick function settings",
+        },
+        "roll_call_method": {
+            "name": "Picking control panel position",
+            "description": "Set the location of the picking control panel",
+            "combo_items": {"0": "Left", "1": "Right"},
+        },
+        "show_name": {
+            "name": "Name setting button",
+            "description": "When enabled, the software will display the name setting button",
+            "switchbutton_name": {"enable": "Show", "disable": "Hide"},
+        },
+        "reset_roll_call": {
+            "name": "Picking reset button",
+            "description": "When enabled, the software will display the picking reset button",
+            "switchbutton_name": {"enable": "Show", "disable": "Hide"},
+        },
+        "roll_call_quantity_control": {
+            "name": "Control bar of Picking quantity",
+            "description": "Control whether to display the control bar that adjusts the picking count",
+        },
+        "roll_call_start_button": {
+            "name": "Start button",
+            "description": "Control whether to display a button to start the name",
+        },
+        "roll_call_list": {
+            "name": "Name list switching down",
+            "description": "Control whether to display a name list switching down",
+        },
+        "roll_call_range": {
+            "name": "Dropdown box of Picking range",
+            "description": "Controls whether to display the name range selection dropdown",
+        },
+        "roll_call_gender": {
+            "name": "Dropdown box of picking gender range",
+            "description": "Control if you want to display the name gender range selection dropdown",
+        },
+        "roll_call_quantity_label": {
+            "name": "Quantity label",
+            "description": "Control whether to display picked numbers/groups label",
+        },
+        "roll_call_remaining_button": {
+            "name": "View remaining list button",
+            "description": "Control whether to display a button to view the remaining list",
+        },
+        "lottery_method": {
+            "name": "Lottery control panel position",
+            "description": "Set the location of the lottery control panel",
+            "combo_items": {"0": "Left", "1": "Right"},
+        },
+        "show_lottery_name": {
+            "name": "Name set button",
+            "description": "Control whether to display the prize name setting button",
+            "switchbutton_name": {"enable": "Show", "disable": "Hide"},
+        },
+        "reset_lottery": {
+            "name": "Reset lottery button",
+            "description": "Control whether to display the lottery resetting button",
+            "switchbutton_name": {"enable": "Show", "disable": "Hide"},
+        },
+        "lottery_quantity_control": {
+            "name": "Control bar of Picking quantity",
+            "description": "Control whether to display the control bar that adjusts the number of lottery",
+        },
+        "lottery_start_button": {
+            "name": "Start button",
+            "description": "Control whether to display a button to start the lottery",
+        },
+        "lottery_list": {
+            "name": "Lottery list switching down",
+            "description": "Control whether to display a lottery list switching down",
+        },
+        "lottery_quantity_label": {
+            "name": "Quantity label",
+            "description": "Control whether to display the number of meddles",
+        },
+        "lottery_remaining_button": {
+            "name": "View remaining list button",
+            "description": "Control whether to display a button to view the remaining list",
+        },
+        "custom_method": {
+            "name": "Custom pick control panel position",
+            "description": "Set the custom pick control panel display position",
+            "combo_items": {"0": "Left", "1": "Right"},
+        },
+        "reset_custom": {
+            "name": "Reset custom pick button",
+            "description": "Control whether to display the custom pick resetting button",
+            "switchbutton_name": {"enable": "Show", "disable": "Hide"},
+        },
+        "custom_quantity_control": {
+            "name": "Control bar of Picking quantity",
+            "description": "Control whether to display the control bar that adjusts the custom picking count",
+        },
+        "custom_start_button": {
+            "name": "Start button",
+            "description": "Control whether to display the custom pick starting button",
+        },
+        "custom_list": {
+            "name": "Custom picking list switching down",
+            "description": "Control whether to display a custom picking list switching down",
+        },
+        "custom_range_start": {
+            "name": "Custom pick dropdown box",
+            "description": "Control whether to display custom extraction range selection box",
+        },
+        "custom_range_end": {
+            "name": "Custom pick gender range dropdown box",
+            "description": "Control whether to display custom pick gender range selection box",
+        },
+        "draw_custom_method": {
+            "name": "Custom pick control panel position",
+            "description": "Control whether to display custom pick control panel position",
+        },
+        "custom_quantity_label": {
+            "name": "Quantity label",
+            "description": "Control whether to display custom pick numbers/groups label",
+        },
+        "custom_remaining_button": {
+            "name": "View remaining list button",
+            "description": "Control whether to display a button to view the remaining list",
+        },
+        "roll_call_reset_button": {
+            "name": "Reset picking button",
+            "description": "Show reset name buttons when enabled",
+        },
+        "lottery_reset_button": {
+            "name": "Reset lottery button",
+            "description": "Control whether to display the lottery reset button",
+        },
+        "lottery_roll_call_list": {
+            "name": "List of students in the prize switches drop-down",
+            "description": "Control whether to display the student list switching box in lottery",
+        },
+        "lottery_roll_call_range": {
+            "name": "Pick up frame for student range in lottery",
+            "description": "Controls whether to display student name selection box in lottery",
+        },
+        "lottery_roll_call_gender": {
+            "name": "Dropdown box of Gender range in Lottery",
+            "description": "Controls whether to show a gender naming box for students in lottery",
+        },
+        "custom_reset_button": {
+            "name": "Reset custom pick button",
+            "description": "Controls whether to display custom pick reset buttons",
+        },
+    },
 }

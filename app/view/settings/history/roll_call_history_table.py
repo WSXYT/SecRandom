@@ -965,35 +965,16 @@ class roll_call_history_table(GroupHeaderCardWidget):
             self.current_mode = 0
 
         if self.current_mode == 0:
-            if readme_settings_async("history_management", "select_weight"):
-                headers = get_content_name_async(
-                    "roll_call_history_table", "HeaderLabels_all_weight"
-                )
-            else:
-                headers = get_content_name_async(
-                    "roll_call_history_table", "HeaderLabels_all_not_weight"
-                )
-            self.table.setColumnCount(len(headers))
-            self.table.setHorizontalHeaderLabels(headers)
+            headers = get_content_name_async(
+                "roll_call_history_table", "HeaderLabels_all_weight"
+            )
         elif self.current_mode == 1:
-            if readme_settings_async("history_management", "select_weight"):
-                headers = get_content_name_async(
-                    "roll_call_history_table", "HeaderLabels_time_weight"
-                )
-            else:
-                headers = get_content_name_async(
-                    "roll_call_history_table", "HeaderLabels_time_not_weight"
-                )
-            self.table.setColumnCount(len(headers))
-            self.table.setHorizontalHeaderLabels(headers)
+            headers = get_content_name_async(
+                "roll_call_history_table", "HeaderLabels_time_weight"
+            )
         else:
-            if readme_settings_async("history_management", "select_weight"):
-                headers = get_content_name_async(
-                    "roll_call_history_table", "HeaderLabels_Individual_weight"
-                )
-            else:
-                headers = get_content_name_async(
-                    "roll_call_history_table", "HeaderLabels_Individual_not_weight"
-                )
-            self.table.setColumnCount(len(headers))
-            self.table.setHorizontalHeaderLabels(headers)
+            headers = get_content_name_async(
+                "roll_call_history_table", "HeaderLabels_Individual_weight"
+            )
+        self.table.setColumnCount(len(headers))
+        self.table.setHorizontalHeaderLabels(headers)
