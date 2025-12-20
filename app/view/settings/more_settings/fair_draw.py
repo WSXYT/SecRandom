@@ -188,7 +188,7 @@ class weight_range_settings(GroupHeaderCardWidget):
         # 设置基础权重
         self.base_weight_spinbox = DoubleSpinBox()
         self.base_weight_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.base_weight_spinbox.setRange(0.01, 1000.00)
+        self.base_weight_spinbox.setMinimum(0.01)
         self.base_weight_spinbox.setValue(
             readme_settings_async("fair_draw_settings", "base_weight")
         )
@@ -201,7 +201,7 @@ class weight_range_settings(GroupHeaderCardWidget):
         # 设置权重范围最小值
         self.min_weight_spinbox = DoubleSpinBox()
         self.min_weight_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.min_weight_spinbox.setRange(0.01, 1000.00)
+        self.min_weight_spinbox.setMinimum(0.01)
         self.min_weight_spinbox.setValue(
             readme_settings_async("fair_draw_settings", "min_weight")
         )
@@ -214,7 +214,7 @@ class weight_range_settings(GroupHeaderCardWidget):
         # 设置权重范围最大值
         self.max_weight_spinbox = DoubleSpinBox()
         self.max_weight_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.max_weight_spinbox.setRange(0.01, 1000.00)
+        self.max_weight_spinbox.setMinimum(0.01)
         self.max_weight_spinbox.setValue(
             readme_settings_async("fair_draw_settings", "max_weight")
         )
@@ -353,7 +353,7 @@ class frequency_settings(GroupHeaderCardWidget):
         # 频率惩罚权重
         self.frequency_weight_spinbox = DoubleSpinBox()
         self.frequency_weight_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.frequency_weight_spinbox.setRange(0.01, 5.00)
+        self.frequency_weight_spinbox.setMinimum(0.01)
         self.frequency_weight_spinbox.setValue(
             readme_settings_async("fair_draw_settings", "frequency_weight")
         )
@@ -391,7 +391,7 @@ class balance_weight_settings(GroupHeaderCardWidget):
         # 小组平衡权重
         self.group_weight_spinbox = DoubleSpinBox()
         self.group_weight_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.group_weight_spinbox.setRange(0.01, 5.00)
+        self.group_weight_spinbox.setMinimum(0.01)
         self.group_weight_spinbox.setValue(
             readme_settings_async("fair_draw_settings", "group_weight")
         )
@@ -404,7 +404,7 @@ class balance_weight_settings(GroupHeaderCardWidget):
         # 性别平衡权重
         self.gender_weight_spinbox = DoubleSpinBox()
         self.gender_weight_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.gender_weight_spinbox.setRange(0.01, 5.00)
+        self.gender_weight_spinbox.setMinimum(0.01)
         self.gender_weight_spinbox.setValue(
             readme_settings_async("fair_draw_settings", "gender_weight")
         )
@@ -419,7 +419,7 @@ class balance_weight_settings(GroupHeaderCardWidget):
         # 时间因子权重
         self.time_weight_spinbox = DoubleSpinBox()
         self.time_weight_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.time_weight_spinbox.setRange(0.01, 5.00)
+        self.time_weight_spinbox.setMinimum(0.01)
         self.time_weight_spinbox.setValue(
             readme_settings_async("fair_draw_settings", "time_weight")
         )
@@ -484,7 +484,7 @@ class cold_start_settings(GroupHeaderCardWidget):
         # 冷启动轮次
         self.cold_start_rounds_spinbox = SpinBox()
         self.cold_start_rounds_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.cold_start_rounds_spinbox.setRange(1, 100)
+        self.cold_start_rounds_spinbox.setMinimum(1)
         self.cold_start_rounds_spinbox.setValue(
             readme_settings_async("fair_draw_settings", "cold_start_rounds")
         )

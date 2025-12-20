@@ -68,7 +68,7 @@ class instant_draw_extraction_function(GroupHeaderCardWidget):
         # 半重复抽取次数输入框
         self.half_repeat_spin = SpinBox()
         self.half_repeat_spin.setFixedWidth(WIDTH_SPINBOX)
-        self.half_repeat_spin.setRange(0, 100)
+        self.half_repeat_spin.setMinimum(0)
         self.half_repeat_spin.setSuffix("次")
         self.half_repeat_spin.setValue(
             readme_settings_async("instant_draw_settings", "half_repeat")
@@ -383,7 +383,7 @@ class instant_draw_basic_animation_settings(GroupHeaderCardWidget):
         # 动画间隔输入框
         self.animation_interval_spin = SpinBox()
         self.animation_interval_spin.setFixedWidth(WIDTH_SPINBOX)
-        self.animation_interval_spin.setRange(1, 2000)
+        self.animation_interval_spin.setMinimum(1)
         self.animation_interval_spin.setSuffix("ms")
         self.animation_interval_spin.setValue(
             readme_settings_async("instant_draw_settings", "animation_interval")
@@ -399,7 +399,7 @@ class instant_draw_basic_animation_settings(GroupHeaderCardWidget):
         # 自动播放次数输入框
         self.autoplay_count_spin = SpinBox()
         self.autoplay_count_spin.setFixedWidth(WIDTH_SPINBOX)
-        self.autoplay_count_spin.setRange(0, 100)
+        self.autoplay_count_spin.setMinimum(1)
         self.autoplay_count_spin.setSuffix("次")
         self.autoplay_count_spin.setValue(
             readme_settings_async("instant_draw_settings", "autoplay_count")
