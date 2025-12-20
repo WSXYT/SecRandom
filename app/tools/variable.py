@@ -13,8 +13,8 @@ NEXT_VERSION = "v1.3.2-alpha.5"  # 软件下一个版本
 CODENAME = "Koharu"  # 软件代号
 SPECIAL_VERSION = VERSION if VERSION != "v0.0.0" else NEXT_VERSION
 SYSTEM = "windows" if os.name == "nt" else "linux"  # 软件系统
-ARCH = "x64"  # 软件架构
-STRUCT = "dir"  # 软件结构
+ARCH = "x64" if SYSTEM == "windows" else "amd64"  # 软件架构
+STRUCT = "dir" if SYSTEM == "windows" else "deb"  # 软件结构
 INITIAL_AUTHORING_YEAR = 2025  # 软件发布年份
 CURRENT_YEAR = datetime.now().year  # 软件当前年份
 AUTHOR = "lzy98276"  # 软件作者
