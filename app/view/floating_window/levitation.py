@@ -18,6 +18,8 @@ from app.tools.settings_access import (
 )
 from app.tools.path_utils import *
 from app.Language.obtain_language import get_content_combo_name_async
+from app.common.extraction.extract import _is_non_class_time
+from app.common.safety.verify_ops import require_and_run
 
 
 class LevitationWindow(QWidget):
@@ -427,6 +429,35 @@ class LevitationWindow(QWidget):
         lay.addWidget(self._bottom)
         return lay
 
+    def _emit_signal(self, signal):
+        """发出信号的辅助方法"""
+        signal.emit()
+
+    def _handle_button_click(self, signal):
+        """处理按钮点击事件，添加时间检查逻辑
+
+        Args:
+            signal: 要发出的信号
+        """
+        # 检查是否是闪抽按钮
+        if signal == self.quickDrawRequested:
+            # 检查当前时间是否在非上课时间段内
+            if _is_non_class_time():
+                # 检查是否需要验证流程
+                if readme_settings_async("time_settings", "verification_required"):
+                    # 如果需要验证流程，弹出密码验证窗口
+                    logger.info("当前时间在非上课时间段内，需要密码验证")
+                    require_and_run(
+                        "quick_draw", self, lambda: self._emit_signal(signal)
+                    )
+                    return
+                else:
+                    # 如果不需要验证流程，直接禁止点击
+                    logger.info("当前时间在非上课时间段内，禁止闪抽")
+                    return
+        # 发出信号
+        signal.emit()
+
     def _create_button(self, spec: str) -> QPushButton:
         """创建按钮
 
@@ -451,7 +482,7 @@ class LevitationWindow(QWidget):
             btn = self._create_composite_button(icon, text)
 
         # 连接信号
-        btn.clicked.connect(signal.emit)
+        btn.clicked.connect(lambda: self._handle_button_click(signal))
         btn.setAttribute(Qt.WA_TranslucentBackground)
         return btn
 

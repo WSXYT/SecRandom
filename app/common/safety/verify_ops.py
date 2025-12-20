@@ -40,6 +40,11 @@ def should_require_password(op: str) -> bool:
         "toggle_data_export_switch": "safety_switch",
         "toggle_import_overwrite_switch": "safety_switch",
         "toggle_import_version_mismatch_switch": "safety_switch",
+        "roll_call_start": "safety_switch",
+        "roll_call_reset": "safety_switch",
+        "lottery_start": "safety_switch",
+        "lottery_reset": "safety_switch",
+        "quick_draw": "safety_switch",
     }
     k = key_map.get(op)
     if not k:

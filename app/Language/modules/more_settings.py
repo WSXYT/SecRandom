@@ -33,6 +33,10 @@ time_settings = {
             "name": "课程表导入",
             "description": "从CSES格式文件导入上课时间段，用于课间禁用功能",
         },
+        "verification_function": {
+            "name": "验证流程功能",
+            "description": "启用后，在非上课时段触发时将弹出安全验证；若关闭则直接禁用控件",
+        },
         "import_from_file": {"name": "从文件导入"},
         "importing": {"name": "导入中..."},
         "view_current_config": {"name": "查看当前配置"},

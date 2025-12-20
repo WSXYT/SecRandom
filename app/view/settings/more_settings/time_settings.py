@@ -61,65 +61,49 @@ class class_break_settings(GroupHeaderCardWidget):
         )
 
         # 从设置中读取当前状态
-        current_enabled = self._get_class_break_enabled()
-        self.class_break_switch.setChecked(current_enabled)
+        self.class_break_switch.setChecked(self.class_break_switch.isChecked())
 
-        self.class_break_switch.checkedChanged.connect(self.on_class_break_changed)
+        self.class_break_switch.checkedChanged.connect(
+            lambda: update_settings(
+                "time_settings",
+                "instant_draw_disable",
+                self.class_break_switch.isChecked(),
+            )
+        )
+
+        # 验证流程开关
+        self.verification_switch = SwitchButton()
+        self.verification_switch.setOffText(
+            get_content_name_async("time_settings", "disable")
+        )
+        self.verification_switch.setOnText(
+            get_content_name_async("time_settings", "enable")
+        )
+
+        # 从设置中读取当前状态
+        self.verification_switch.setChecked(self.verification_switch.isChecked())
+
+        self.verification_switch.checkedChanged.connect(
+            lambda: update_settings(
+                "time_settings",
+                "verification_required",
+                self.verification_switch.isChecked(),
+            )
+        )
 
         # 添加设置项到分组
         self.addGroup(
             get_theme_icon("ic_fluent_clock_lock_20_filled"),
-            get_content_name_async("time_settings", "class_break_function", "name"),
-            get_content_name_async(
-                "time_settings", "class_break_function", "description"
-            ),
+            get_content_name_async("time_settings", "class_break_function"),
+            get_content_description_async("time_settings", "class_break_function"),
             self.class_break_switch,
         )
-
-    def _get_class_break_enabled(self) -> bool:
-        """获取课间禁用功能是否启用"""
-        try:
-            settings_path = get_settings_path()
-            if not file_exists(settings_path):
-                return False
-
-            with open_file(settings_path, "r", encoding="utf-8") as f:
-                settings = json.load(f)
-
-            program_functionality = settings.get("program_functionality", {})
-            return program_functionality.get("instant_draw_disable", False)
-        except Exception as e:
-            logger.error(f"读取课间禁用设置失败: {e}")
-            return False
-
-    def on_class_break_changed(self, is_checked: bool):
-        """当课间禁用开关状态改变时的处理"""
-        try:
-            settings_path = get_settings_path()
-
-            # 读取现有设置
-            if file_exists(settings_path):
-                with open_file(settings_path, "r", encoding="utf-8") as f:
-                    settings = json.load(f)
-            else:
-                settings = {}
-
-            # 更新程序功能设置
-            if "program_functionality" not in settings:
-                settings["program_functionality"] = {}
-
-            settings["program_functionality"]["instant_draw_disable"] = is_checked
-
-            # 写入设置文件
-            with open_file(settings_path, "w", encoding="utf-8") as f:
-                json.dump(settings, f, ensure_ascii=False, indent=2)
-
-            logger.info(f"课间禁用功能已{'开启' if is_checked else '关闭'}")
-
-        except Exception as e:
-            logger.error(f"保存课间禁用设置失败: {e}")
-            # 恢复开关状态
-            self.class_break_switch.setChecked(not is_checked)
+        self.addGroup(
+            get_theme_icon("ic_fluent_shield_lock_20_filled"),
+            get_content_name_async("time_settings", "verification_function"),
+            get_content_description_async("time_settings", "verification_function"),
+            self.verification_switch,
+        )
 
 
 class cses_import_settings(GroupHeaderCardWidget):

@@ -481,6 +481,11 @@ DEFAULT_SETTINGS = {
     "more_settings": {
         "title": {"default_value": None},
     },
+    "time_settings": {
+        "title": {"default_value": None},
+        "verification_required": {"default_value": True},
+        "instant_draw_disable": {"default_value": False},
+    },
     "fair_draw_settings": {
         "title": {"default_value": None},
         "fair_draw": {"default_value": True},

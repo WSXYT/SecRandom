@@ -23,6 +23,8 @@ from app.common.roll_call.roll_call_utils import RollCallUtils
 from app.tools.variable import *
 from app.common.voice.voice import TTSHandler
 from app.common.music.music_player import music_player
+from app.common.extraction.extract import _is_non_class_time
+from app.common.safety.verify_ops import require_and_run
 
 from app.page_building.another_window import *
 
@@ -533,8 +535,8 @@ class roll_call(QWidget):
         except Exception as e:
             logger.error(f"延迟更新剩余名单时发生错误: {e}")
 
-    def start_draw(self):
-        """开始抽取"""
+    def _do_start_draw(self):
+        """实际执行开始抽取的逻辑"""
         self.start_button.setText(
             get_content_pushbutton_name_async("roll_call", "start_button")
         )
@@ -591,6 +593,23 @@ class roll_call(QWidget):
             # 调用stop_animation()方法更新剩余人数
             self.stop_animation()
             self.start_button.clicked.connect(lambda: self.start_draw())
+
+    def start_draw(self):
+        """开始抽取"""
+        # 检查当前时间是否在非上课时间段内
+        if _is_non_class_time():
+            # 检查是否需要验证流程
+            if readme_settings_async("time_settings", "verification_required"):
+                # 如果需要验证流程，弹出密码验证窗口
+                logger.info("当前时间在非上课时间段内，需要密码验证")
+                require_and_run("roll_call_start", self, self._do_start_draw)
+            else:
+                # 如果不需要验证流程，直接禁止点击
+                logger.info("当前时间在非上课时间段内，禁止抽取")
+                return
+        else:
+            # 如果不在非上课时间段内，直接执行抽取
+            self._do_start_draw()
 
     def stop_animation(self):
         """停止动画"""
@@ -878,8 +897,8 @@ class roll_call(QWidget):
         )
         ResultDisplayUtils.display_results_in_grid(self.result_grid, student_labels)
 
-    def reset_count(self):
-        """重置人数"""
+    def _do_reset_count(self):
+        """实际执行重置人数的逻辑"""
         self.current_count = 1
         self.count_label.setText("1")
         self.minus_button.setEnabled(False)
@@ -904,6 +923,23 @@ class roll_call(QWidget):
             and hasattr(self.remaining_list_page, "count_changed")
         ):
             self.remaining_list_page.count_changed.emit(self.remaining_count)
+
+    def reset_count(self):
+        """重置人数"""
+        # 检查当前时间是否在非上课时间段内
+        if _is_non_class_time():
+            # 检查是否需要验证流程
+            if readme_settings_async("time_settings", "verification_required"):
+                # 如果需要验证流程，弹出密码验证窗口
+                logger.info("当前时间在非上课时间段内，需要密码验证")
+                require_and_run("roll_call_reset", self, self._do_reset_count)
+            else:
+                # 如果不需要验证流程，直接禁止点击
+                logger.info("当前时间在非上课时间段内，禁止重置")
+                return
+        else:
+            # 如果不在非上课时间段内，直接执行重置
+            self._do_reset_count()
 
     def clear_result(self):
         """清空结果显示"""
