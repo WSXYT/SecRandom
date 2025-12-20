@@ -560,6 +560,7 @@ async def install_update_async(file_path: str) -> bool:
                 import sys
                 import shutil
                 import time
+                import tempfile
                 from pathlib import Path
 
                 # 配置日志
@@ -611,13 +612,62 @@ async def install_update_async(file_path: str) -> bool:
                                     logger.info(f"文件已存在，跳过: {target_file}")
                                     continue
 
+                                # 解压文件
                                 zip_ref.extract(file, target_dir)
                                 logger.info(f"解压文件成功: {target_file}")
+
+                                # Linux系统下设置可执行权限
+                                if os.name != 'nt' and file.endswith(('.py', '.sh')):
+                                    try:
+                                        # 获取文件的当前权限
+                                        current_mode = os.stat(target_file).st_mode
+                                        # 添加执行权限
+                                        os.chmod(target_file, current_mode | 0o111)
+                                        logger.info(f"已设置文件执行权限: {target_file}")
+                                    except Exception as e:
+                                        logger.warning(f"设置文件执行权限失败: {e}")
 
                         logger.info(f"文件解压完成: {zip_path} 到 {target_dir}")
                         return True
                     except Exception as e:
                         logger.error(f"解压文件失败: {e}")
+                        return False
+
+
+                def restart_application(root_dir):
+                    try:
+                        logger.info("准备重启应用程序")
+
+                        # 确定主程序文件
+                        main_program = None
+                        possible_main_files = ['main.py', 'SecRandom', 'SecRandom.exe']
+
+                        for main_file in possible_main_files:
+                            main_path = Path(root_dir) / main_file
+                            if main_path.exists():
+                                main_program = main_path
+                                break
+
+                        if not main_program:
+                            logger.error("未找到主程序文件")
+                            return False
+
+                        logger.info(f"找到主程序文件: {main_program}")
+
+                        # 根据系统类型选择重启方式
+                        if os.name == 'nt':
+                            # Windows系统
+                            logger.info("Windows系统，使用start命令重启")
+                            os.system(f'start "" "{main_program}"')
+                        else:
+                            # Linux系统
+                            logger.info("Linux系统，使用nohup命令后台重启")
+                            os.system(f'nohup "{sys.executable}" "{main_program}" > /dev/null 2>&1 &')
+
+                        logger.info("应用程序重启成功")
+                        return True
+                    except Exception as e:
+                        logger.error(f"重启应用程序失败: {e}")
                         return False
 
 
@@ -639,6 +689,9 @@ async def install_update_async(file_path: str) -> bool:
                         success = extract_zip(update_file, root_dir, overwrite=True)
                         if success:
                             logger.info("更新安装成功")
+
+                            # 重启应用程序
+                            restart_application(root_dir)
 
                             # 删除下载的更新文件
                             logger.info(f"准备删除更新文件: {update_file}")
