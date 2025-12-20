@@ -1,0 +1,32 @@
+# CSES (Course Schedule Exchange Schema) 课程表模板
+# 更多详情请参考: https://github.com/SmartTeachCN/CSES
+
+schedule:
+  timeslots:
+    - name: "第一节课"
+      start_time: "08:00"
+      end_time: "08:45"
+      teacher: "张老师"
+      location: "教室A"
+      day_of_week: 1
+
+    - name: "第二节课"
+      start_time: "08:55"
+      end_time: "09:40"
+      teacher: "李老师"
+      location: "教室B"
+      day_of_week: 1
+
+    - name: "第三节课"
+      start_time: "10:00"
+      end_time: "10:45"
+      teacher: "王老师"
+      location: "教室C"
+      day_of_week: 1
+
+    - name: "第四节课"
+      start_time: "10:55"
+      end_time: "11:40"
+      teacher: "赵老师"
+      location: "教室D"
+      day_of_week: 1

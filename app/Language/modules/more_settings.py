@@ -35,9 +35,9 @@ time_settings = {
         },
         "import_from_file": {"name": "从文件导入"},
         "importing": {"name": "导入中..."},
-        "view_template": {"name": "查看模板"},
+        "view_current_config": {"name": "查看当前配置"},
         "no_schedule_imported": {"name": "未导入课程表"},
-        "schedule_imported": {"name": "已导入 {} 个非上课时间段"},
+        "schedule_imported": {"name": "已导入 {} 个上课时间段"},
         "copy_to_clipboard": {"name": "复制到剪贴板"},
         "save_as_file": {"name": "保存为文件"},
         "close": {"name": "关闭"},
@@ -60,6 +60,22 @@ time_settings = {
         "cses_content_format_error": {"name": "CSES内容格式错误"},
         "no_valid_time_periods": {"name": "未能从课程表中提取有效的时间段信息"},
         "save_settings_failed": {"name": "保存设置失败"},
+        "no_cses_folder": {"name": "未找到CSES文件夹"},
+        "no_schedule_file": {"name": "未导入课程表文件"},
+        "unknown": {"name": "未知"},
+        "unknown_course": {"name": "未知课程"},
+        "parse_failed": {"name": "解析失败"},
+        "load_config_failed": {"name": "加载配置失败: {}"},
+        "table_headers": {"name": ["星期", "课程名称", "开始时间", "结束时间", "老师"]},
+        "day_map": {
+            "1": "周一",
+            "2": "周二",
+            "3": "周三",
+            "4": "周四",
+            "5": "周五",
+            "6": "周六",
+            "7": "周日",
+        },
     },
     "EN_US": {
         "title": {
@@ -84,7 +100,7 @@ time_settings = {
         },
         "import_from_file": {"name": "Import from File"},
         "importing": {"name": "Importing..."},
-        "view_template": {"name": "View Template"},
+        "view_current_config": {"name": "View Current Config"},
         "no_schedule_imported": {"name": "No schedule imported"},
         "schedule_imported": {"name": "Imported {} non-class time periods"},
         "copy_to_clipboard": {"name": "Copy to Clipboard"},
@@ -113,6 +129,24 @@ time_settings = {
             "name": "Failed to extract valid time periods from the schedule"
         },
         "save_settings_failed": {"name": "Failed to save settings"},
+        "no_cses_folder": {"name": "CSES folder not found"},
+        "no_schedule_file": {"name": "No schedule file imported"},
+        "unknown": {"name": "Unknown"},
+        "unknown_course": {"name": "Unknown course"},
+        "parse_failed": {"name": "Parse failed"},
+        "load_config_failed": {"name": "Failed to load config: {}"},
+        "table_headers": {
+            "name": ["Day", "Course Name", "Start Time", "End Time", "Teacher"]
+        },
+        "day_map": {
+            "1": "Monday",
+            "2": "Tuesday",
+            "3": "Wednesday",
+            "4": "Thursday",
+            "5": "Friday",
+            "6": "Saturday",
+            "7": "Sunday",
+        },
     },
 }
 

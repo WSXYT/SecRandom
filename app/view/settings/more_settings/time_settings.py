@@ -2,6 +2,7 @@
 # 导入库
 # ==================================================
 import json
+import os
 
 from loguru import logger
 from PySide6.QtWidgets import *
@@ -17,7 +18,9 @@ from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
 from app.common.extraction.extract import import_cses_schedule
-from app.page_building.another_window import create_cses_template_viewer_window
+from app.page_building.another_window import create_current_config_viewer_window
+
+from app.common.extraction.cses_parser import CSESParser
 
 
 # ==================================================
@@ -136,17 +139,19 @@ class cses_import_settings(GroupHeaderCardWidget):
         )
         self.import_file_button.clicked.connect(self.on_import_file_clicked)
 
-        # 查看模板按钮
-        self.view_template_button = PushButton(
-            get_content_name_async("time_settings", "view_template")
+        # 查看当前配置按钮
+        self.view_current_config_button = PushButton(
+            get_content_name_async("time_settings", "view_current_config")
         )
-        self.view_template_button.setIcon(
+        self.view_current_config_button.setIcon(
             get_theme_icon("ic_fluent_document_20_filled")
         )
-        self.view_template_button.clicked.connect(self.on_view_template_clicked)
+        self.view_current_config_button.clicked.connect(
+            self.on_view_current_config_clicked
+        )
 
         # 当前课程表信息标签
-        self.schedule_info_label = QLabel(
+        self.schedule_info_label = BodyLabel(
             get_content_name_async("time_settings", "no_schedule_imported")
         )
         self._update_schedule_info()
@@ -154,7 +159,7 @@ class cses_import_settings(GroupHeaderCardWidget):
         # 创建按钮布局
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.import_file_button)
-        button_layout.addWidget(self.view_template_button)
+        button_layout.addWidget(self.view_current_config_button)
         button_layout.addStretch()
 
         # 创建信息布局
@@ -177,19 +182,43 @@ class cses_import_settings(GroupHeaderCardWidget):
     def _update_schedule_info(self):
         """更新课程表信息显示"""
         try:
+            total_class_periods = 0
+
+            # 检查data/CSES文件夹中是否有课程表文件
+            cses_dir = get_data_path("CSES")
+            if os.path.exists(cses_dir):
+                cses_files = [
+                    f for f in os.listdir(cses_dir) if f.endswith((".yaml", ".yml"))
+                ]
+                if cses_files:
+                    # 解析每个课程表文件，计算总上课时间段
+                    for file_name in cses_files:
+                        file_path = os.path.join(cses_dir, file_name)
+                        try:
+                            parser = CSESParser()
+                            if parser.load_from_file(file_path):
+                                class_info = parser.get_class_info()
+                                total_class_periods += len(class_info)
+                        except Exception as e:
+                            logger.error(f"解析文件{file_name}失败: {e}")
+
+            # 从设置文件中获取non_class_times
             settings_path = get_settings_path()
-            if not file_exists(settings_path):
-                self.schedule_info_label.setText(
-                    get_content_name_async("time_settings", "no_schedule_imported")
-                )
-                return
+            non_class_times = {}
+            if file_exists(settings_path):
+                with open_file(settings_path, "r", encoding="utf-8") as f:
+                    settings = json.load(f)
+                non_class_times = settings.get("non_class_times", {})
 
-            with open_file(settings_path, "r", encoding="utf-8") as f:
-                settings = json.load(f)
+            # 判断是否有课程表数据
+            if non_class_times or total_class_periods > 0:
+                if non_class_times:
+                    # 使用non_class_times的数量（非上课时间段）
+                    count = len(non_class_times)
+                else:
+                    # 使用上课时间段数量
+                    count = total_class_periods
 
-            non_class_times = settings.get("non_class_times", {})
-            if non_class_times:
-                count = len(non_class_times)
                 self.schedule_info_label.setText(
                     get_content_name_async("time_settings", "schedule_imported").format(
                         count
@@ -277,17 +306,17 @@ class cses_import_settings(GroupHeaderCardWidget):
                 get_content_name_async("time_settings", "import_from_file")
             )
 
-    def on_view_template_clicked(self):
-        """当点击查看模板按钮时的处理"""
+    def on_view_current_config_clicked(self):
+        """当点击查看当前配置按钮时的处理"""
         try:
-            # 使用独立窗口模板创建CSES模板查看器
-            create_cses_template_viewer_window()
+            # 使用独立窗口模板创建当前配置查看器
+            create_current_config_viewer_window()
 
         except Exception as e:
-            logger.error(f"显示模板失败: {e}")
+            logger.error(f"显示当前配置失败: {e}")
             InfoBar.error(
                 title=get_content_name_async("time_settings", "import_failed"),
-                content=f"无法显示模板: {str(e)}",
+                content=f"无法显示当前配置: {str(e)}",
                 orient=Qt.Horizontal,
                 isClosable=True,
                 position=InfoBarPosition.TOP,

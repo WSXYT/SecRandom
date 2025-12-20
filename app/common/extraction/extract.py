@@ -10,6 +10,8 @@ from PySide6.QtNetwork import *
 import json
 from typing import Dict
 from loguru import logger
+import shutil
+from pathlib import Path
 from PySide6.QtCore import QDateTime
 
 from app.tools.path_utils import *
@@ -198,6 +200,13 @@ def import_cses_schedule(file_path: str) -> tuple[bool, str]:
             return False, get_content_name_async(
                 "time_settings", "no_valid_time_periods"
             )
+
+        # 保存原始文件到data/CSES文件夹
+        original_file_name = Path(file_path).name
+        cses_data_path = get_data_path("CSES", original_file_name)
+        ensure_dir(get_data_path("CSES"))
+        shutil.copy2(file_path, cses_data_path)
+        logger.info(f"已将CSES文件保存到: {cses_data_path}")
 
         # 保存到设置文件
         success = _save_non_class_times_to_settings(non_class_times)

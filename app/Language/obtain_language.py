@@ -221,12 +221,17 @@ def get_content_name(first_level_key: str, second_level_key: str):
         second_level_key: 第二层的键
 
     Returns:
-        内容文本项的名称，如果不存在则返回None
+        内容文本项的名称，如果不存在则返回该内容本身或None
     """
     if first_level_key in Language:
         if second_level_key in Language[first_level_key]:
             # logger.debug(f"获取内容文本项: {first_level_key}.{second_level_key}")
-            return Language[first_level_key][second_level_key]["name"]
+            content = Language[first_level_key][second_level_key]
+            # 如果是字典类型，尝试获取name属性
+            if isinstance(content, dict):
+                return content.get("name") or content
+            # 否则直接返回内容
+            return content
     return None
 
 

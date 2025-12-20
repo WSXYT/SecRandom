@@ -57,21 +57,21 @@ class CSESParser:
             return False
 
         # 基本结构验证
-        if "schedule" not in self.schedule_data:
+        schedule = self.schedule_data.get("schedule")
+        if not schedule:
             logger.error("缺少'schedule'字段")
             return False
 
-        schedule = self.schedule_data["schedule"]
         if not isinstance(schedule, dict):
             logger.error("'schedule'字段必须是字典类型")
             return False
 
         # 验证时间段配置
-        if "timeslots" not in schedule:
+        timeslots = schedule.get("timeslots")
+        if timeslots is None:
             logger.error("缺少'timeslots'字段")
             return False
 
-        timeslots = schedule["timeslots"]
         if not isinstance(timeslots, list):
             logger.error("'timeslots'字段必须是列表类型")
             return False
@@ -93,6 +93,11 @@ class CSESParser:
         Returns:
             bool: 有效返回True，否则返回False
         """
+        # 检查timeslot是否为字典类型
+        if not isinstance(timeslot, dict):
+            logger.error(f"时间段{index}必须是字典类型")
+            return False
+
         required_fields = ["name", "start_time", "end_time"]
         for field in required_fields:
             if field not in timeslot:
@@ -150,17 +155,26 @@ class CSESParser:
             return {}
 
         non_class_times = {}
-        schedule = self.schedule_data["schedule"]
-        timeslots = schedule["timeslots"]
+        schedule = self.schedule_data.get("schedule", {})
+        timeslots = schedule.get("timeslots", [])
 
-        # 按开始时间排序
-        sorted_timeslots = sorted(timeslots, key=lambda x: x["start_time"])
+        # 过滤并排序有效的时间段
+        valid_timeslots = [
+            slot
+            for slot in timeslots
+            if isinstance(slot, dict)
+            and slot.get("start_time")
+            and slot.get("end_time")
+        ]
+        sorted_timeslots = sorted(
+            valid_timeslots, key=lambda x: x.get("start_time", "")
+        )
 
         # 构建上课时间段列表
         class_periods = []
         for timeslot in sorted_timeslots:
-            start_time = self._format_time_for_secrandom(timeslot["start_time"])
-            end_time = self._format_time_for_secrandom(timeslot["end_time"])
+            start_time = self._format_time_for_secrandom(timeslot.get("start_time", ""))
+            end_time = self._format_time_for_secrandom(timeslot.get("end_time", ""))
             class_periods.append((start_time, end_time))
 
         # 生成非上课时间段
@@ -209,20 +223,21 @@ class CSESParser:
         if not self.schedule_data:
             return []
 
-        schedule = self.schedule_data["schedule"]
+        schedule = self.schedule_data.get("schedule", {})
         timeslots = schedule.get("timeslots", [])
 
         class_info = []
         for timeslot in timeslots:
-            info = {
-                "name": timeslot.get("name", ""),
-                "start_time": timeslot.get("start_time", ""),
-                "end_time": timeslot.get("end_time", ""),
-                "teacher": timeslot.get("teacher", ""),
-                "location": timeslot.get("location", ""),
-                "day_of_week": timeslot.get("day_of_week", ""),
-            }
-            class_info.append(info)
+            if isinstance(timeslot, dict):
+                info = {
+                    "name": timeslot.get("name", ""),
+                    "start_time": timeslot.get("start_time", ""),
+                    "end_time": timeslot.get("end_time", ""),
+                    "teacher": timeslot.get("teacher", ""),
+                    "location": timeslot.get("location", ""),
+                    "day_of_week": timeslot.get("day_of_week", ""),
+                }
+                class_info.append(info)
 
         return class_info
 
@@ -235,15 +250,26 @@ class CSESParser:
         if not self.schedule_data:
             return "未加载课程表"
 
-        schedule = self.schedule_data["schedule"]
+        schedule = self.schedule_data.get("schedule", {})
         timeslots = schedule.get("timeslots", [])
 
         if not timeslots:
             return "课程表为空"
 
         # 获取最早和最晚时间
-        start_times = [slot["start_time"] for slot in timeslots]
-        end_times = [slot["end_time"] for slot in timeslots]
+        start_times = [
+            slot.get("start_time", "")
+            for slot in timeslots
+            if isinstance(slot, dict) and slot.get("start_time")
+        ]
+        end_times = [
+            slot.get("end_time", "")
+            for slot in timeslots
+            if isinstance(slot, dict) and slot.get("end_time")
+        ]
+
+        if not start_times or not end_times:
+            return f"课程表包含{len(timeslots)}个时间段"
 
         summary = f"课程表包含{len(timeslots)}个时间段，"
         summary += f"最早开始时间：{min(start_times)}，"
