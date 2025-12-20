@@ -2,9 +2,8 @@
 # CSES (Course Schedule Exchange Schema) 解析器
 # ==================================================
 import yaml
-import json
-from datetime import datetime, time
-from typing import Dict, List, Optional
+from datetime import time
+from typing import Dict, List
 from loguru import logger
 
 
@@ -136,7 +135,7 @@ class CSESParser:
                     return time(int(parts[0]), int(parts[1]), int(parts[2]))
             raise ValueError(f"无效的时间格式: {time_str}")
         except (ValueError, IndexError):
-            raise ValueError(f"无法解析时间: {time_str}")
+            raise ValueError(f"无法解析时间: {time_str}") from None
 
     def get_non_class_times(self) -> Dict[str, str]:
         """获取非上课时间段配置

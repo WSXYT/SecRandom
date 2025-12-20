@@ -1,9 +1,7 @@
 # ==================================================
 # 导入库
 # ==================================================
-import os
 import json
-from datetime import datetime
 
 from loguru import logger
 from PySide6.QtWidgets import *
@@ -17,9 +15,8 @@ from app.tools.path_utils import *
 from app.tools.personalised import *
 from app.tools.settings_default import *
 from app.tools.settings_access import *
-from app.tools.settings_access import get_safe_font_size
 from app.Language.obtain_language import *
-from app.common.extraction.extract import import_cses_schedule, get_cses_import_template
+from app.common.extraction.extract import import_cses_schedule
 from app.page_building.another_window import create_cses_template_viewer_window
 
 
