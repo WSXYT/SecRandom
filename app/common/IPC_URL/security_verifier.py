@@ -284,20 +284,18 @@ class SimplePasswordVerifier(SecurityVerifier):
             logger.warning("未提供密码")
             return False
 
-        # 当启用 KDF 时，为了保持一致且安全的模型，只接受明文密码：
-        # 先对明文进行 SHA-512，再对结果进行 PBKDF2 派生。
-        if self.use_kdf:
-            base_hash = hashlib.sha512(password.encode()).hexdigest()
-            derived = KeyDerivation.derive_key(base_hash)
-            candidate_hash = derived.hex()
+        # 统一使用 KDF 进行密码强化：
+        # - 明文密码：直接作为 KDF 输入
+        # - 预先哈希的 SHA-512 值：作为 KDF 输入，保持兼容性但不再直接存储/比较裸 SHA-512
+        if self._is_valid_sha512_hash(password):
+            # 预先计算的 SHA-512 字符串，作为 KDF 的输入
+            kdf_input = password
         else:
-            # 未启用 KDF 时，保留对预先哈希 SHA-512 值的兼容：
-            # - 明文密码：进行 SHA-512 哈希后比较
-            # - 预先哈希的 SHA-512 值：直接参与比较，避免重复哈希
-            if self._is_valid_sha512_hash(password):
-                candidate_hash = password
-            else:
-                candidate_hash = hashlib.sha512(password.encode()).hexdigest()
+            # 明文密码，直接作为 KDF 的输入
+            kdf_input = password
+
+        derived = KeyDerivation.derive_key(kdf_input)
+        candidate_hash = derived.hex()
 
         # 使用常数时间比较函数防止时间攻击
         # hmac.compare_digest() 会进行恒定时间的比较，不会因为字符不匹配而提前返回
@@ -321,18 +319,15 @@ class SimplePasswordVerifier(SecurityVerifier):
 
         # 验证是否为有效的SHA-512哈希
         if self._is_valid_sha512_hash(original_password):
-            # 已经是哈希形式
-            self.hashed_password = original_password
+            # 已经是哈希形式，作为 KDF 的输入以保持兼容
+            kdf_input = original_password
         else:
-            # 明文密码，进行哈希
-            password_hash = hashlib.sha512(original_password.encode()).hexdigest()
+            # 明文密码，直接作为 KDF 的输入
+            kdf_input = original_password
 
-            # 如果启用KDF，进一步强化
-            if self.use_kdf:
-                derived = KeyDerivation.derive_key(password_hash)
-                self.hashed_password = derived.hex()
-            else:
-                self.hashed_password = password_hash
+        # 始终通过 KDF 强化后再存储，避免存储裸 SHA-512 哈希
+        derived = KeyDerivation.derive_key(kdf_input)
+        self.hashed_password = derived.hex()
 
         logger.info("密码已更新")
 
