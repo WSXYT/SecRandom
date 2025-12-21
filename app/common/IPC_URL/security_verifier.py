@@ -247,20 +247,13 @@ class SimplePasswordVerifier(SecurityVerifier):
 
         # 验证是否为有效的SHA-512哈希（128个十六进制字符）
         if self._is_valid_sha512_hash(original_password):
-            # 已经是哈希形式
+            # 已经是哈希形式，视为预计算的安全散列/密钥
             self.hashed_password = original_password
         else:
-            # 明文密码，进行哈希
-            password_hash = hashlib.sha512(original_password.encode()).hexdigest()
-
-            # 如果启用KDF，进一步强化密码哈希
-            if use_kdf:
-                # 使用PBKDF2直接对原始密码进行强化，防止暴力破解
-                derived = KeyDerivation.derive_key(original_password)
-                self.hashed_password = derived.hex()
-                logger.debug("密码已使用SHA-512+PBKDF2进行双重强化")
-            else:
-                self.hashed_password = password_hash
+            # 明文密码，使用PBKDF2进行密钥派生（计算成本高，防止暴力破解）
+            derived = KeyDerivation.derive_key_hex(original_password)
+            self.hashed_password = derived
+            logger.debug("密码已使用PBKDF2进行强化派生")
 
     @staticmethod
     def _is_valid_sha512_hash(value: str) -> bool:
