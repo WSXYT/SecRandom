@@ -518,8 +518,16 @@ async def install_update_async(file_path: str) -> bool:
     Returns:
         bool: 安装成功返回 True，否则返回 False
     """
+    temp_script_path = (
+        get_path("TEMP") / "installer_temp_script.py"
+    )  # 初始化为临时脚本路径，便于后续清理
     try:
         logger.debug(f"开始安装更新文件: {file_path}")
+
+        # 验证更新文件存在
+        if not Path(file_path).exists():
+            logger.error(f"更新文件不存在: {file_path}")
+            return False
 
         # 判断是否是开发环境
         is_dev_env = False
@@ -554,189 +562,248 @@ async def install_update_async(file_path: str) -> bool:
             # 生产环境：新开进程安装，主进程关闭
             logger.info("生产环境，准备启动独立更新进程")
 
-            # 创建临时安装脚本
-            installer_script = """
-                import zipfile
-                import os
-                import sys
-                import shutil
-                import time
-                import tempfile
-                from pathlib import Path
-
-                # 配置日志
-                from loguru import logger
-
-                # 确保日志目录存在
-                log_dir = Path('logs')
-                log_dir.mkdir(exist_ok=True)
-
-                # 配置日志格式 - 文件输出
-                logger.add(
-                    log_dir / 'update_install_{time:YYYY-MM-DD}.log',
-                    rotation='1 MB',
-                    retention='30 days',
-                    compression='tar.gz',
-                    backtrace=True,
-                    diagnose=True,
-                    level='INFO',
-                    format='<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
-                )
-
-                # 配置日志格式 - 终端输出
-                if sys.stdout is not None:
-                    logger.add(
-                        sys.stdout,
-                        format='<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>',
-                        level='INFO',
-                        colorize=True
-                    )
-
-
-                def ensure_dir(path):
-                    # 确保目录存在
-                    Path(path).mkdir(parents=True, exist_ok=True)
-
-
-                def extract_zip(zip_path, target_dir, overwrite=True):
-                    # 解压zip文件
-                    try:
-                        logger.info(f"开始解压文件: {zip_path} 到 {target_dir}")
-                        ensure_dir(target_dir)
-
-                        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                            for file in zip_ref.namelist():
-                                target_file = Path(target_dir) / file
-                                ensure_dir(target_file.parent)
-
-                                if target_file.exists() and not overwrite:
-                                    logger.info(f"文件已存在，跳过: {target_file}")
-                                    continue
-
-                                # 解压文件
-                                zip_ref.extract(file, target_dir)
-                                logger.info(f"解压文件成功: {target_file}")
-
-                                # Linux系统下设置可执行权限
-                                if os.name != 'nt' and file.endswith(('.py', '.sh')):
-                                    try:
-                                        # 获取文件的当前权限
-                                        current_mode = os.stat(target_file).st_mode
-                                        # 添加执行权限
-                                        os.chmod(target_file, current_mode | 0o111)
-                                        logger.info(f"已设置文件执行权限: {target_file}")
-                                    except Exception as e:
-                                        logger.warning(f"设置文件执行权限失败: {e}")
-
-                        logger.info(f"文件解压完成: {zip_path} 到 {target_dir}")
-                        return True
-                    except Exception as e:
-                        logger.error(f"解压文件失败: {e}")
-                        return False
-
-
-                def restart_application(root_dir):
-                    try:
-                        logger.info("准备重启应用程序")
-
-                        # 确定主程序文件
-                        main_program = None
-                        possible_main_files = ['main.py', 'SecRandom', 'SecRandom.exe']
-
-                        for main_file in possible_main_files:
-                            main_path = Path(root_dir) / main_file
-                            if main_path.exists():
-                                main_program = main_path
-                                break
-
-                        if not main_program:
-                            logger.error("未找到主程序文件")
-                            return False
-
-                        logger.info(f"找到主程序文件: {main_program}")
-
-                        # 根据系统类型选择重启方式
-                        if os.name == 'nt':
-                            # Windows系统
-                            logger.info("Windows系统，使用start命令重启")
-                            os.system(f'start "" "{main_program}"')
-                        else:
-                            # Linux系统
-                            logger.info("Linux系统，使用nohup命令后台重启")
-                            os.system(f'nohup "{sys.executable}" "{main_program}" > /dev/null 2>&1 &')
-
-                        logger.info("应用程序重启成功")
-                        return True
-                    except Exception as e:
-                        logger.error(f"重启应用程序失败: {e}")
-                        return False
-
-
-                if __name__ == '__main__':
-                    try:
-                        # 获取参数
-                        update_file = sys.argv[1]
-                        root_dir = sys.argv[2]
-
-                        logger.info(f"更新安装脚本启动")
-                        logger.info(f"更新文件: {update_file}")
-                        logger.info(f"根目录: {root_dir}")
-
-                        # 等待一段时间，确保主进程已关闭
-                        logger.info("等待主进程关闭...")
-                        time.sleep(3)
-
-                        # 解压更新文件到根目录
-                        success = extract_zip(update_file, root_dir, overwrite=True)
-                        if success:
-                            logger.info("更新安装成功")
-
-                            # 重启应用程序
-                            restart_application(root_dir)
-
-                            # 删除下载的更新文件
-                            logger.info(f"准备删除更新文件: {update_file}")
-                            try:
-                                Path(update_file).unlink()
-                                logger.info(f"更新文件已删除: {update_file}")
-                            except Exception as e:
-                                logger.error(f"删除更新文件失败: {e}")
-                        else:
-                            logger.error("更新安装失败")
-                            sys.exit(1)
-
-                    except Exception as e:
-                        logger.error(f"更新安装脚本执行失败: {e}")
-                        sys.exit(1)
-            """
-
-            # 写入临时脚本文件
-            temp_script_path = ""
-            with NamedTemporaryFile(
-                mode="w", encoding="utf-8", delete=False
-            ) as temp_script:
-                temp_script.write(installer_script)
-                temp_script_path = temp_script.name
-
             # 获取根目录
             root_dir = get_app_root()
+            if not Path(root_dir).exists():
+                logger.error(f"应用根目录不存在: {root_dir}")
+                return False
 
-            # 启动独立更新进程
-            logger.info("启动独立更新进程")
+            # 创建临时安装脚本
+            installer_script = """
+import zipfile
+import os
+import sys
+import shutil
+import time
+from pathlib import Path
+
+# 配置日志
+from loguru import logger
+
+# 确保日志目录存在
+log_dir = Path('logs')
+log_dir.mkdir(exist_ok=True)
+
+# 配置日志格式 - 文件输出
+logger.add(
+    log_dir / 'update_install_{time:YYYY-MM-DD}.log',
+    rotation='1 MB',
+    retention='30 days',
+    compression='tar.gz',
+    backtrace=True,
+    diagnose=True,
+    level='INFO',
+    format='<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>'
+)
+
+# 配置日志格式 - 终端输出
+if sys.stdout is not None:
+    logger.add(
+        sys.stdout,
+        format='<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>',
+        level='INFO',
+        colorize=True
+    )
+
+
+def ensure_dir(path):
+    # 确保目录存在
+    Path(path).mkdir(parents=True, exist_ok=True)
+
+
+def extract_zip(zip_path, target_dir, overwrite=True):
+    # 解压zip文件
+    try:
+        logger.info(f"开始解压文件: {zip_path} 到 {target_dir}")
+        ensure_dir(target_dir)
+
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            for file in zip_ref.namelist():
+                target_file = Path(target_dir) / file
+                ensure_dir(target_file.parent)
+
+                if target_file.exists() and not overwrite:
+                    logger.info(f"文件已存在，跳过: {target_file}")
+                    continue
+
+                # 解压文件
+                try:
+                    zip_ref.extract(file, target_dir)
+                    logger.info(f"解压文件成功: {target_file}")
+                except PermissionError:
+                    # Windows 上可能需要删除旧文件
+                    if target_file.exists():
+                        try:
+                            target_file.unlink()
+                            zip_ref.extract(file, target_dir)
+                            logger.info(f"重新解压文件成功: {target_file}")
+                        except Exception as e:
+                            logger.warning(f"覆盖文件失败，跳过: {target_file}, 错误: {e}")
+                            continue
+                    else:
+                        raise
+
+                # Linux系统下设置可执行权限
+                if os.name != 'nt' and file.endswith(('.py', '.sh')):
+                    try:
+                        # 获取文件的当前权限
+                        current_mode = os.stat(target_file).st_mode
+                        # 添加执行权限
+                        os.chmod(target_file, current_mode | 0o111)
+                        logger.info(f"已设置文件执行权限: {target_file}")
+                    except Exception as e:
+                        logger.warning(f"设置文件执行权限失败: {e}")
+
+        logger.info(f"文件解压完成: {zip_path} 到 {target_dir}")
+        return True
+    except Exception as e:
+        logger.error(f"解压文件失败: {e}")
+        return False
+
+
+def restart_application(root_dir):
+    try:
+        logger.info("准备重启应用程序")
+
+        # 确定主程序文件
+        main_program = None
+        possible_main_files = ['main.py', 'SecRandom', 'SecRandom.exe']
+
+        for main_file in possible_main_files:
+            main_path = Path(root_dir) / main_file
+            if main_path.exists():
+                main_program = main_path
+                break
+
+        if not main_program:
+            logger.error("未找到主程序文件")
+            return False
+
+        logger.info(f"找到主程序文件: {main_program}")
+
+        # 根据系统类型选择重启方式
+        if os.name == 'nt':
+            # Windows系统 - 使用引号保护路径中的空格
+            logger.info("Windows系统，使用start命令重启")
+            import subprocess
             subprocess.Popen(
-                [sys.executable, temp_script_path, file_path, str(root_dir)],
-                close_fds=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                ['start', '""', f'"{main_program}"'],
+                shell=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+        else:
+            # Linux系统
+            logger.info("Linux系统，使用nohup命令后台重启")
+            import subprocess
+            subprocess.Popen(
+                [sys.executable, str(main_program)],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True
             )
 
-            # 关闭主进程
-            logger.info("生产环境更新进程已启动，主进程将关闭")
-            sys.exit(0)
+        logger.info("应用程序重启成功")
+        return True
+    except Exception as e:
+        logger.error(f"重启应用程序失败: {e}")
+        return False
+
+
+if __name__ == '__main__':
+    try:
+        # 获取参数
+        update_file = sys.argv[1]
+        root_dir = sys.argv[2]
+
+        logger.info(f"更新安装脚本启动")
+        logger.info(f"更新文件: {update_file}")
+        logger.info(f"根目录: {root_dir}")
+
+        # 验证参数
+        if not Path(update_file).exists():
+            logger.error(f"更新文件不存在: {update_file}")
+            sys.exit(1)
+
+        if not Path(root_dir).exists():
+            logger.error(f"根目录不存在: {root_dir}")
+            sys.exit(1)
+
+        # 等待一段时间，确保主进程已关闭（可配置）
+        wait_time = 2
+        logger.info(f"等待主进程关闭... ({wait_time}秒)")
+        time.sleep(wait_time)
+
+        # 解压更新文件到根目录
+        success = extract_zip(update_file, root_dir, overwrite=True)
+        if success:
+            logger.info("更新安装成功")
+
+            # 重启应用程序
+            restart_application(root_dir)
+
+            # 删除下载的更新文件
+            logger.info(f"准备删除更新文件: {update_file}")
+            try:
+                time.sleep(1)  # 给文件系统一点时间
+                Path(update_file).unlink()
+                logger.info(f"更新文件已删除: {update_file}")
+            except Exception as e:
+                logger.error(f"删除更新文件失败: {e}")
+        else:
+            logger.error("更新安装失败")
+            sys.exit(1)
+
+    except Exception as e:
+        logger.error(f"更新安装脚本执行失败: {e}")
+        sys.exit(1)
+"""
+
+            # 写入临时脚本文件
+            try:
+                with NamedTemporaryFile(
+                    mode="w", encoding="utf-8", delete=False, suffix=".py"
+                ) as temp_script:
+                    temp_script.write(installer_script)
+                    temp_script_path = temp_script.name
+                    logger.debug(f"临时脚本已创建: {temp_script_path}")
+            except Exception as e:
+                logger.error(f"创建临时脚本失败: {e}")
+                return False
+
+            try:
+                # 启动独立更新进程
+                logger.info("启动独立更新进程")
+                subprocess.Popen(
+                    [sys.executable, temp_script_path, file_path, str(root_dir)],
+                    close_fds=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    creationflags=subprocess.CREATE_NO_WINDOW
+                    if sys.platform == "win32"
+                    else 0,
+                )
+
+                # 给子进程足够的时间启动
+                time.sleep(1)
+
+                # 关闭主进程
+                logger.info("生产环境更新进程已启动，主进程将关闭")
+                sys.exit(0)
+            except Exception as e:
+                logger.error(f"启动更新进程失败: {e}")
+                return False
+
             return True
     except Exception as e:
         logger.error(f"安装更新文件失败: {e}")
         return False
+    finally:
+        # 说明：
+        # - 生产环境中，临时安装脚本会在子进程内部自删除；
+        # - 开发环境中，不会创建临时安装脚本（temp_script_path 为空）。
+        # 因此，此处不再尝试在主进程中清理临时脚本文件，以避免无效的清理逻辑。
+        pass
 
 
 def install_update(file_path: str) -> bool:
