@@ -1,16 +1,17 @@
 # ==================================================
 # 导入模块
 # ==================================================
-import yaml
-import aiohttp
 import asyncio
-import zipfile
+import shutil
 import subprocess
 import sys
-import tempfile
+from tempfile import NamedTemporaryFile
 import time
 from typing import Any, Tuple, Callable, Optional
+import zipfile
+import aiohttp
 from loguru import logger
+import yaml
 from app.tools.path_utils import *
 from app.tools.variable import *
 from app.tools.settings_access import *
@@ -710,9 +711,12 @@ async def install_update_async(file_path: str) -> bool:
             """
 
             # 写入临时脚本文件
-            temp_script_path = tempfile.mktemp(suffix=".py")
-            with open(temp_script_path, "w", encoding="utf-8") as f:
-                f.write(installer_script)
+            temp_script_path = ""
+            with NamedTemporaryFile(
+                mode="w", encoding="utf-8", delete=False
+            ) as temp_script:
+                temp_script.write(installer_script)
+                temp_script_path = temp_script.name
 
             # 获取根目录
             root_dir = get_app_root()

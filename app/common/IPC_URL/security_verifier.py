@@ -2,10 +2,64 @@
 # 安全验证器
 # ==================================================
 import hashlib
+import hmac
 import time
 from typing import Dict, Any
 from loguru import logger
 from PySide6.QtCore import QObject, Signal
+
+
+# ==================================================
+# 密钥派生函数 (KDF) - 密钥强化
+# ==================================================
+class KeyDerivation:
+    """密钥派生函数，使用PBKDF2进行密钥强化
+
+    防止弱密钥和暴力破解攻击
+    """
+
+    # PBKDF2 参数
+    PBKDF2_ITERATIONS = 100000  # 迭代次数（遵循 OWASP 最新建议）
+    PBKDF2_SALT = b"SecRandom_KDF_SALT_V1"  # 固定盐值（用于确定性派生）
+    PBKDF2_HASH_NAME = "sha512"
+
+    @classmethod
+    def derive_key(cls, secret: str, salt: bytes = None) -> bytes:
+        """使用PBKDF2进行密钥派生
+
+        Args:
+            secret: 原始密钥或密码
+            salt: 盐值（如果为None，使用默认盐值）
+
+        Returns:
+            派生的密钥（字节形式）
+        """
+        if not secret:
+            raise ValueError("秘密密钥不能为空")
+
+        salt = salt or cls.PBKDF2_SALT
+
+        # 使用PBKDF2进行密钥派生
+        # PBKDF2应用多次哈希和盐化来强化弱密钥
+        derived = hashlib.pbkdf2_hmac(
+            cls.PBKDF2_HASH_NAME, secret.encode(), salt, cls.PBKDF2_ITERATIONS
+        )
+
+        return derived
+
+    @classmethod
+    def derive_key_hex(cls, secret: str, salt: bytes = None) -> str:
+        """获取十六进制格式的派生密钥
+
+        Args:
+            secret: 原始密钥或密码
+            salt: 盐值
+
+        Returns:
+            十六进制形式的派生密钥
+        """
+        derived = cls.derive_key(secret, salt)
+        return derived.hex()
 
 
 # ==================================================
@@ -102,12 +156,18 @@ class SecurityVerifier(QObject):
             self.verification_history[key] = []
         self.verification_history[key].append(current_time)
 
-        # 记录验证结果
+        # 在记录验证结果前对验证数据进行脱敏，避免存储明文密码等敏感信息
+        sensitive_keys = {"password", "passwd", "pwd"}
+        sanitized_data = {
+            k: v for k, v in verification_data.items() if k not in sensitive_keys
+        }
+
+        # 记录验证结果（仅保存脱敏后的数据）
         result_key = f"result_{command}"
         self.verification_history[result_key] = {
             "result": result,
             "timestamp": current_time,
-            "data": verification_data,
+            "data": sanitized_data,
         }
 
     def get_verification_status(self, command: str = "") -> Dict[str, Any]:
@@ -166,40 +226,89 @@ class SimplePasswordVerifier(SecurityVerifier):
     """简单密码验证器
 
     使用预设密码进行验证
+    
+    安全特性：
+    - 支持明文密码和预计算哈希值
+    - 使用SHA-512进行密码哈希
+    - 使用hmac.compare_digest()进行恒定时间比较（防止时间攻击）
+    - 支持可选的PBKDF2密钥派生强化（用于弱密码）
     """
 
-    def __init__(self, password: str = None):
+    def __init__(self, password: str = None, use_kdf: bool = False):
+        """初始化密码验证器
+        
+        Args:
+            password: 密码（明文或SHA-512哈希）
+            use_kdf: 是否使用PBKDF2进行密钥强化（针对弱密码）
+        """
         super().__init__()
-        self.correct_password = password or "SecRandom2024"
+        original_password = password or "SecRandom2024"
+        self.use_kdf = use_kdf
 
-        # 支持哈希密码
-        if len(self.correct_password) == 64:  # SHA256哈希长度
-            self.is_hashed = True
+        # 验证是否为有效的SHA-512哈希（128个十六进制字符）
+        if self._is_valid_sha512_hash(original_password):
+            # 已经是哈希形式
+            self.hashed_password = original_password
         else:
-            self.is_hashed = False
-            self.hashed_password = hashlib.sha256(
-                self.correct_password.encode()
-            ).hexdigest()
+            # 明文密码，进行哈希
+            password_hash = hashlib.sha512(original_password.encode()).hexdigest()
+            
+            # 如果启用KDF，进一步强化密码哈希
+            if use_kdf:
+                # 使用PBKDF2直接对原始密码进行强化，防止暴力破解
+                derived = KeyDerivation.derive_key(original_password)
+                self.hashed_password = derived.hex()
+                logger.debug("密码已使用SHA-512+PBKDF2进行双重强化")
+            else:
+                self.hashed_password = password_hash
+
+    @staticmethod
+    def _is_valid_sha512_hash(value: str) -> bool:
+        """验证是否为有效的SHA-512哈希值
+
+        SHA-512哈希必须是：
+        - 长度为128个字符
+        - 全部为十六进制字符（0-9, a-f）
+        """
+        if not isinstance(value, str) or len(value) != 128:
+            return False
+        try:
+            # 尝试将其作为十六进制字符串
+            int(value, 16)
+            return True
+        except ValueError:
+            return False
 
     def _perform_verification(
         self, password: str, verification_data: Dict[str, Any]
     ) -> bool:
-        """执行密码验证"""
+        """执行密码验证
+
+        将输入密码（明文或预先哈希的SHA-512值）与存储的哈希值比较
+        使用 hmac.compare_digest() 进行常数时间比较，防止时间攻击
+        """
         if not password:
             logger.warning("未提供密码")
             return False
 
-        # 如果输入的是明文密码，先哈希
-        if len(password) != 64:
-            password_hash = hashlib.sha256(password.encode()).hexdigest()
+        # 当启用 KDF 时，为了保持一致且安全的模型，只接受明文密码：
+        # 先对明文进行 SHA-512，再对结果进行 PBKDF2 派生。
+        if self.use_kdf:
+            base_hash = hashlib.sha512(password.encode()).hexdigest()
+            derived = KeyDerivation.derive_key(base_hash)
+            candidate_hash = derived.hex()
         else:
-            password_hash = password
+            # 未启用 KDF 时，保留对预先哈希 SHA-512 值的兼容：
+            # - 明文密码：进行 SHA-512 哈希后比较
+            # - 预先哈希的 SHA-512 值：直接参与比较，避免重复哈希
+            if self._is_valid_sha512_hash(password):
+                candidate_hash = password
+            else:
+                candidate_hash = hashlib.sha512(password.encode()).hexdigest()
 
-        # 比较哈希值
-        expected_hash = (
-            self.correct_password if self.is_hashed else self.hashed_password
-        )
-        result = password_hash == expected_hash
+        # 使用常数时间比较函数防止时间攻击
+        # hmac.compare_digest() 会进行恒定时间的比较，不会因为字符不匹配而提前返回
+        result = hmac.compare_digest(candidate_hash, self.hashed_password)
 
         if result:
             logger.info("密码验证成功")
@@ -209,13 +318,31 @@ class SimplePasswordVerifier(SecurityVerifier):
         return result
 
     def set_password(self, new_password: str):
-        """设置新密码"""
-        self.correct_password = new_password
-        if len(new_password) == 64:
-            self.is_hashed = True
+        """设置新密码
+
+        支持明文密码或有效的SHA-512哈希值
+        自动应用KDF强化（如果已启用）
+        """
+        # 与 __init__ 保持一致：空值使用默认密码
+        original_password = new_password or "SecRandom2024"
+
+        # 验证是否为有效的SHA-512哈希
+        if self._is_valid_sha512_hash(original_password):
+            # 已经是哈希形式
+            self.hashed_password = original_password
         else:
-            self.is_hashed = False
-            self.hashed_password = hashlib.sha256(new_password.encode()).hexdigest()
+            # 明文密码，进行哈希
+            password_hash = hashlib.sha512(
+                original_password.encode()
+            ).hexdigest()
+            
+            # 如果启用KDF，进一步强化
+            if self.use_kdf:
+                derived = KeyDerivation.derive_key(password_hash)
+                self.hashed_password = derived.hex()
+            else:
+                self.hashed_password = password_hash
+
         logger.info("密码已更新")
 
 
@@ -226,12 +353,22 @@ class DynamicPasswordVerifier(SecurityVerifier):
     """动态密码验证器
 
     基于时间窗口生成动态密码
+
+    安全特性：
+    - 使用HMAC-SHA512防止长度扩展攻击
+    - 使用PBKDF2派生密钥防止弱密钥和暴力破解
+    - 支持多时间窗口验证（容错机制）
     """
 
     def __init__(self, secret: str = None, time_window: int = 30):
         super().__init__()
-        self.secret = secret or "SecRandomSecretKey"
+        original_secret = secret or "SecRandomSecretKey"
         self.time_window = time_window  # 时间窗口（秒）
+
+        # 使用PBKDF2进行密钥派生强化
+        # 即使原始密钥较弱，派生密钥也会很强
+        self.derived_key = KeyDerivation.derive_key(original_secret)
+        logger.debug("动态密码验证器已使用PBKDF2进行密钥强化")
 
     def _perform_verification(
         self, password: str, verification_data: Dict[str, Any]
@@ -256,15 +393,19 @@ class DynamicPasswordVerifier(SecurityVerifier):
         return False
 
     def _generate_password(self, timestamp: int) -> str:
-        """生成指定时间戳的密码"""
+        """生成指定时间戳的密码
+
+        使用 HMAC-SHA512 结合 PBKDF2 派生密钥来防止：
+        - 长度扩展攻击（使用HMAC）
+        - 弱密钥和暴力破解（使用PBKDF2派生的密钥）
+        """
         # 计算时间窗口
         time_window = timestamp // self.time_window
 
-        # 组合密钥和时间窗口
-        data = f"{self.secret}{time_window}"
-
-        # 生成哈希
-        password_hash = hashlib.sha256(data.encode()).hexdigest()
+        # 使用 HMAC-SHA512 + PBKDF2派生密钥
+        # derived_key 已通过PBKDF2强化，抗暴力破解
+        h = hmac.new(self.derived_key, str(time_window).encode(), hashlib.sha512)
+        password_hash = h.hexdigest()
 
         # 取前6位作为密码
         return password_hash[:6]
@@ -275,9 +416,17 @@ class DynamicPasswordVerifier(SecurityVerifier):
         return self._generate_password(current_time)
 
     def set_secret(self, new_secret: str):
-        """设置新密钥"""
-        self.secret = new_secret
-        logger.info("动态密码密钥已更新")
+        """设置新密钥
+
+        自动使用PBKDF2进行强化处理
+        """
+        if not new_secret:
+            logger.warning("秘密密钥不能为空")
+            return
+
+        # 重新派生密钥
+        self.derived_key = KeyDerivation.derive_key(new_secret)
+        logger.info("动态密码密钥已更新并使用PBKDF2进行强化")
 
 
 # ==================================================
