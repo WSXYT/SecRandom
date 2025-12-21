@@ -43,43 +43,54 @@ class PageTemplate(QFrame):
         if self.ui_created:
             return
 
-        self.scroll_area_personal = SingleDirectionScrollArea(self)
-        self.scroll_area_personal.setWidgetResizable(True)
-        self.scroll_area_personal.setStyleSheet("""
-            QScrollArea {
-                border: none;
-                background-color: transparent;
-            }
-            QScrollArea QWidget {
-                border: none;
-                background-color: transparent;
-            }
-        """)
-        QScroller.grabGesture(
-            self.scroll_area_personal.viewport(),
-            QScroller.ScrollerGestureType.LeftMouseButtonGesture,
-        )
-
-        self.inner_frame_personal = QWidget(self.scroll_area_personal)
-        self.inner_layout_personal = QVBoxLayout(self.inner_frame_personal)
-        self.inner_layout_personal.setAlignment(
-            Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
-        )
-
-        self.scroll_area_personal.setWidget(self.inner_frame_personal)
-
-        self.main_layout = QVBoxLayout(self)
-        self.main_layout.addWidget(self.scroll_area_personal)
-
+        # 内存优化：延迟创建滚动区域，只在需要时创建
+        self._scroll_area_lazy = None
+        self._inner_frame_lazy = None
+        self._inner_layout_lazy = None
+        self._main_layout_lazy = None
         self.ui_created = True
 
         if self.content_widget_class:
             self.create_content()
 
+    def _ensure_scroll_area(self):
+        """确保滚动区域已创建 - 延迟创建以减少内存使用"""
+        if self._scroll_area_lazy is None:
+            self._scroll_area_lazy = SingleDirectionScrollArea(self)
+            self._scroll_area_lazy.setWidgetResizable(True)
+            self._scroll_area_lazy.setStyleSheet("""
+                QScrollArea {
+                    border: none;
+                    background-color: transparent;
+                }
+                QScrollArea QWidget {
+                    border: none;
+                    background-color: transparent;
+                }
+            """)
+            QScroller.grabGesture(
+                self._scroll_area_lazy.viewport(),
+                QScroller.ScrollerGestureType.LeftMouseButtonGesture,
+            )
+
+            self._inner_frame_lazy = QWidget(self._scroll_area_lazy)
+            self._inner_layout_lazy = QVBoxLayout(self._inner_frame_lazy)
+            self._inner_layout_lazy.setAlignment(
+                Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignTop
+            )
+
+            self._scroll_area_lazy.setWidget(self._inner_frame_lazy)
+
+            self._main_layout_lazy = QVBoxLayout(self)
+            self._main_layout_lazy.addWidget(self._scroll_area_lazy)
+
     def create_content(self):
-        """后台创建内容组件，避免堵塞进程"""
+        """后台创建内容组件，避免堵塞进程 - 使用延迟创建的布局"""
         if not self.ui_created or self.content_created or not self.content_widget_class:
             return
+
+        # 确保滚动区域已创建
+        self._ensure_scroll_area()
 
         # 支持传入三种类型的 content_widget_class:
         # 1) 直接的类 / 可调用对象 -> content_widget_class(self)
@@ -102,9 +113,9 @@ class PageTemplate(QFrame):
                 content_cls = self.content_widget_class
                 content_name = getattr(content_cls, "__name__", str(content_cls))
 
-            # 实例化并添加到布局
+            # 实例化并添加到延迟创建的布局
             self.contentWidget = content_cls(self)
-            self.inner_layout_personal.addWidget(self.contentWidget)
+            self._inner_layout_lazy.addWidget(self.contentWidget)
             self.content_created = True
 
             elapsed = time.perf_counter() - start

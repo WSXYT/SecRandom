@@ -491,11 +491,15 @@ class SettingsWindow(FluentWindow):
                 )
                 ordered = names
 
-            # 仅预热有限数量的页面，避免一次性占用主线程
-            names_to_preload = ordered[:max_preload]
+            # 内存优化：大幅减少预加载页面数量，优先加载核心页面
+            # 只预加载基础设置页面，其他页面完全按需加载
+            core_pages = ["basicSettingsInterface"]  # 只预加载最核心的页面
+            names_to_preload = [name for name in ordered if name in core_pages]
+
             logger.debug(
                 f"后台预热将创建 {len(names_to_preload)} / {len(names)} 个页面"
             )
+
             # 仅为要预热的页面调度创建，避免一次性调度所有页面
             for i, name in enumerate(names_to_preload):
                 # 延迟创建，避免短时间内占用主线程
@@ -510,21 +514,15 @@ class SettingsWindow(FluentWindow):
         """
         在设置窗口首次打开时，分批延时创建所有非 pivot（单页面）项，避免用户首次打开时卡顿。
 
+        内存优化：禁用自动预热，完全按需加载
+
         Args:
             interval_ms: 每个页面创建的间隔毫秒数。
         """
         try:
-            names = list(getattr(self, "_deferred_factories", {}).keys())
-            if not names:
-                return
-
-            meta = getattr(self, "_deferred_factories_meta", {})
-            non_pivot = [n for n in names if not meta.get(n, {}).get("is_pivot", False)]
-            # 逐个调度创建非 pivot 页面，分散开以减少瞬时主线程负载
-            for i, name in enumerate(non_pivot):
-                QTimer.singleShot(
-                    interval_ms * i, (lambda n=name: self._create_deferred_page(n))
-                )
+            # 内存优化：完全禁用非pivot页面的自动预热
+            # 所有页面都将在用户首次访问时按需创建
+            pass
         except Exception as e:
             logger.error(f"后台预热非 pivot 页面失败: {e}")
 

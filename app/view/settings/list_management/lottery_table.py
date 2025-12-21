@@ -18,6 +18,7 @@ from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
 from app.common.data.list import *
+from .shared_file_watcher import get_shared_file_watcher
 
 
 # ==================================================
@@ -113,7 +114,7 @@ class lottery_table(GroupHeaderCardWidget):
         self.layout().addWidget(self.table)
 
     def setup_file_watcher(self):
-        """设置文件系统监视器，监控班级名单文件夹的变化"""
+        """设置文件系统监视器，监控奖池名单文件夹的变化 - 使用共享监视器"""
         # 获取抽奖名单文件夹路径
         lottery_list_dir = get_data_path("list/lottery_list")
 
@@ -122,15 +123,13 @@ class lottery_table(GroupHeaderCardWidget):
             logger.warning(f"奖池文件夹不存在: {lottery_list_dir}")
             return
 
-        # 创建文件系统监视器
-        self.file_watcher = QFileSystemWatcher()
+        # 使用共享文件系统监视器管理器
+        self._shared_watcher = get_shared_file_watcher()
+        self._shared_watcher.add_watcher(
+            str(lottery_list_dir), self.on_directory_changed
+        )
 
-        # 监视目录
-        self.file_watcher.addPath(str(lottery_list_dir))
-
-        # 连接信号
-        self.file_watcher.directoryChanged.connect(self.on_directory_changed)
-        # logger.debug(f"已设置文件监视器，监控目录: {lottery_list_dir}")
+        # logger.debug(f"已设置共享文件监视器，监控目录: {lottery_list_dir}")
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法
@@ -303,10 +302,8 @@ class lottery_table(GroupHeaderCardWidget):
 
         # 保存更新后的数据
         try:
-            # 暂时禁用文件监视器，避免保存时触发刷新循环
-            if hasattr(self, "file_watcher"):
-                self.file_watcher.removePath(str(pool_file))
-
+            # 使用共享文件监视器时，不需要手动移除和重新添加路径
+            # 共享监视器会自动处理多个回调，避免循环触发
             with open_file(pool_file, "w", encoding="utf-8") as f:
                 json.dump(pool_data, f, ensure_ascii=False, indent=4)
             # logger.debug(f"抽奖池数据更新成功: {pool_name}")
@@ -318,10 +315,6 @@ class lottery_table(GroupHeaderCardWidget):
                     i, QHeaderView.ResizeMode.Stretch
                 )
             self.table.blockSignals(False)
-
-            # 重新启用文件监视器
-            if hasattr(self, "file_watcher"):
-                self.file_watcher.addPath(str(pool_file))
         except Exception as e:
             logger.error(f"保存抽奖池数据失败: {str(e)}")
             # 如果保存失败，恢复原来的值
@@ -339,6 +332,13 @@ class lottery_table(GroupHeaderCardWidget):
                 item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             self.table.blockSignals(False)  # 恢复信号
 
-            # 即使保存失败也要重新启用文件监视器
-            if hasattr(self, "file_watcher"):
-                self.file_watcher.addPath(str(pool_file))
+            # 共享文件监视器不需要手动重新启用
+
+    def cleanup_file_watcher(self):
+        """清理文件系统监视器"""
+        if hasattr(self, "_shared_watcher"):
+            lottery_list_dir = get_data_path("list/lottery_list")
+            if lottery_list_dir.exists():
+                self._shared_watcher.remove_watcher(
+                    str(lottery_list_dir), self.on_directory_changed
+                )

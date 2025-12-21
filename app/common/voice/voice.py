@@ -284,8 +284,8 @@ class VoiceCacheManager:
     """智能语音缓存系统"""
 
     # 智能语音缓存系统
-    # 内存缓存大小限制（条）
-    MEMORY_CACHE_SIZE = 100
+    # 内存缓存大小限制（条） - 优化为更小的缓存以减少内存占用
+    MEMORY_CACHE_SIZE = 25
     # 缓存过期时间（秒）
     CACHE_EXPIRY_TIME = 3600 * 24  # 24小时
     # 清理间隔时间（秒）

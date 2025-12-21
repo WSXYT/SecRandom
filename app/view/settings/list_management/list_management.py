@@ -19,6 +19,7 @@ from app.tools.config import *
 from app.common.data.list import *
 
 from app.page_building.another_window import *
+from .shared_file_watcher import get_shared_file_watcher
 
 
 # ==================================================
@@ -353,7 +354,7 @@ class roll_call_list(GroupHeaderCardWidget):
             logger.error(f"学生名单导出失败: {message}")
 
     def setup_file_watcher(self):
-        """设置文件系统监视器，监控班级名单文件夹的变化"""
+        """设置文件系统监视器，监控班级名单文件夹的变化 - 使用共享监视器"""
         roll_call_list_dir = get_data_path("list", "roll_call_list")
 
         # 确保目录存在
@@ -361,15 +362,13 @@ class roll_call_list(GroupHeaderCardWidget):
             logger.warning(f"班级名单文件夹不存在: {roll_call_list_dir}")
             return
 
-        # 创建文件系统监视器
-        self.file_watcher = QFileSystemWatcher()
+        # 使用共享文件系统监视器管理器
+        self._shared_watcher = get_shared_file_watcher()
+        self._shared_watcher.add_watcher(
+            str(roll_call_list_dir), self.on_directory_changed
+        )
 
-        # 监视目录
-        self.file_watcher.addPath(str(roll_call_list_dir))
-
-        # 连接信号
-        self.file_watcher.directoryChanged.connect(self.on_directory_changed)
-        # logger.debug(f"已设置文件监视器，监控目录: {roll_call_list_dir}")
+        # logger.debug(f"已设置共享文件监视器，监控目录: {roll_call_list_dir}")
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法
@@ -392,6 +391,15 @@ class roll_call_list(GroupHeaderCardWidget):
         self.gender_setting_button.setEnabled(has_class)
         self.group_setting_button.setEnabled(has_class)
         self.export_student_button.setEnabled(has_class)
+
+    def cleanup_file_watcher(self):
+        """清理文件系统监视器"""
+        if hasattr(self, "_shared_watcher"):
+            roll_call_list_dir = get_data_path("list", "roll_call_list")
+            if roll_call_list_dir.exists():
+                self._shared_watcher.remove_watcher(
+                    str(roll_call_list_dir), self.on_directory_changed
+                )
 
     def refresh_class_list(self):
         """刷新班级下拉框列表"""
@@ -711,7 +719,7 @@ class lottery_list(GroupHeaderCardWidget):
             logger.error(f"奖品名单导出失败: {message}")
 
     def setup_file_watcher(self):
-        """设置文件系统监视器，监控奖池名单文件夹的变化"""
+        """设置文件系统监视器，监控奖池名单文件夹的变化 - 使用共享监视器"""
         # 获取奖池名单文件夹路径
         lottery_list_dir = get_data_path("list/lottery_list")
 
@@ -720,15 +728,13 @@ class lottery_list(GroupHeaderCardWidget):
             logger.warning(f"奖池名单文件夹不存在: {lottery_list_dir}")
             return
 
-        # 创建文件系统监视器
-        self.file_watcher = QFileSystemWatcher()
+        # 使用共享文件系统监视器管理器
+        self._shared_watcher = get_shared_file_watcher()
+        self._shared_watcher.add_watcher(
+            str(lottery_list_dir), self.on_directory_changed
+        )
 
-        # 监视目录
-        self.file_watcher.addPath(str(lottery_list_dir))
-
-        # 连接信号
-        self.file_watcher.directoryChanged.connect(self.on_directory_changed)
-        # logger.debug(f"已设置文件监视器，监控目录: {lottery_list_dir}")
+        # logger.debug(f"已设置共享文件监视器，监控目录: {lottery_list_dir}")
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法
@@ -750,6 +756,15 @@ class lottery_list(GroupHeaderCardWidget):
         self.prize_setting_button.setEnabled(has_pool)
         self.prize_weight_setting_button.setEnabled(has_pool)
         self.export_prize_button.setEnabled(has_pool)
+
+    def cleanup_file_watcher(self):
+        """清理文件系统监视器"""
+        if hasattr(self, "_shared_watcher"):
+            lottery_list_dir = get_data_path("list/lottery_list")
+            if lottery_list_dir.exists():
+                self._shared_watcher.remove_watcher(
+                    str(lottery_list_dir), self.on_directory_changed
+                )
 
     def refresh_pool_list(self):
         """刷新奖池下拉框列表"""

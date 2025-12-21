@@ -18,6 +18,7 @@ from app.tools.settings_default import *
 from app.tools.settings_access import *
 from app.Language.obtain_language import *
 from app.common.data.list import *
+from .shared_file_watcher import get_shared_file_watcher
 
 # ==================================================
 # 点名名单表格
@@ -114,7 +115,7 @@ class roll_call_table(GroupHeaderCardWidget):
         self.layout().addWidget(self.table)
 
     def setup_file_watcher(self):
-        """设置文件系统监视器，监控班级名单文件夹的变化"""
+        """设置文件系统监视器，监控班级名单文件夹的变化 - 使用共享监视器"""
         # 获取班级名单文件夹路径
         roll_call_list_dir = get_data_path("list", "roll_call_list")
 
@@ -123,15 +124,13 @@ class roll_call_table(GroupHeaderCardWidget):
             logger.warning(f"班级名单文件夹不存在: {roll_call_list_dir}")
             return
 
-        # 创建文件系统监视器
-        self.file_watcher = QFileSystemWatcher()
+        # 使用共享文件系统监视器管理器
+        self._shared_watcher = get_shared_file_watcher()
+        self._shared_watcher.add_watcher(
+            str(roll_call_list_dir), self.on_directory_changed
+        )
 
-        # 监视目录
-        self.file_watcher.addPath(str(roll_call_list_dir))
-
-        # 连接信号
-        self.file_watcher.directoryChanged.connect(self.on_directory_changed)
-        # logger.debug(f"已设置文件监视器，监控目录: {roll_call_list_dir}")
+        # logger.debug(f"已设置共享文件监视器，监控目录: {roll_call_list_dir}")
 
     def on_directory_changed(self, path):
         """当目录内容发生变化时调用此方法
@@ -312,10 +311,8 @@ class roll_call_table(GroupHeaderCardWidget):
 
         # 保存更新后的数据
         try:
-            # 暂时禁用文件监视器，避免保存时触发刷新循环
-            if hasattr(self, "file_watcher"):
-                self.file_watcher.removePath(str(roll_call_list_dir))
-
+            # 使用共享文件监视器时，不需要手动移除和重新添加路径
+            # 共享监视器会自动处理多个回调，避免循环触发
             with open_file(student_file, "w", encoding="utf-8") as f:
                 json.dump(student_data, f, ensure_ascii=False, indent=4)
             # logger.debug(f"学生数据更新成功: {student_name}")
@@ -327,10 +324,6 @@ class roll_call_table(GroupHeaderCardWidget):
                     i, QHeaderView.ResizeMode.Stretch
                 )
             self.table.blockSignals(False)
-
-            # 重新启用文件监视器
-            if hasattr(self, "file_watcher"):
-                self.file_watcher.addPath(str(roll_call_list_dir))
         except Exception as e:
             logger.error(f"保存学生数据失败: {str(e)}")
             # 如果保存失败，恢复原来的值
@@ -352,6 +345,13 @@ class roll_call_table(GroupHeaderCardWidget):
                 item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             self.table.blockSignals(False)  # 恢复信号
 
-            # 即使保存失败也要重新启用文件监视器
-            if hasattr(self, "file_watcher"):
-                self.file_watcher.addPath(str(roll_call_list_dir))
+            # 共享文件监视器不需要手动重新启用
+
+    def cleanup_file_watcher(self):
+        """清理文件系统监视器"""
+        if hasattr(self, "_shared_watcher"):
+            roll_call_list_dir = get_data_path("list", "roll_call_list")
+            if roll_call_list_dir.exists():
+                self._shared_watcher.remove_watcher(
+                    str(roll_call_list_dir), self.on_directory_changed
+                )
