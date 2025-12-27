@@ -106,6 +106,26 @@ class basic_settings_function(GroupHeaderCardWidget):
             self.__on_show_startup_window_changed
         )
 
+        # 自动保存窗口大小设置
+        self.auto_save_window_size_switch = SwitchButton()
+        self.auto_save_window_size_switch.setOffText(
+            get_content_switchbutton_name_async(
+                "basic_settings", "auto_save_window_size", "disable"
+            )
+        )
+        self.auto_save_window_size_switch.setOnText(
+            get_content_switchbutton_name_async(
+                "basic_settings", "auto_save_window_size", "enable"
+            )
+        )
+        _auto_save = readme_settings_async("basic_settings", "auto_save_window_size")
+        self.auto_save_window_size_switch.setChecked(
+            True if _auto_save is None else _auto_save
+        )
+        self.auto_save_window_size_switch.checkedChanged.connect(
+            self.__on_auto_save_window_size_changed
+        )
+
         # 后台驻留设置
         self.resident_switch = SwitchButton()
         self.resident_switch.setOffText(
@@ -155,6 +175,12 @@ class basic_settings_function(GroupHeaderCardWidget):
             get_content_name_async("basic_settings", "show_startup_window"),
             get_content_description_async("basic_settings", "show_startup_window"),
             self.show_startup_window_switch,
+        )
+        self.addGroup(
+            get_theme_icon("ic_fluent_save_20_filled"),
+            get_content_name_async("basic_settings", "auto_save_window_size"),
+            get_content_description_async("basic_settings", "auto_save_window_size"),
+            self.auto_save_window_size_switch,
         )
         self.addGroup(
             get_theme_icon("ic_fluent_resize_20_filled"),
@@ -257,6 +283,31 @@ class basic_settings_function(GroupHeaderCardWidget):
                         "basic_settings", "background_resident"
                     ),
                     content="已关闭后台驻留",
+                ),
+                parent=self.window(),
+            )
+
+    def __on_auto_save_window_size_changed(self, checked):
+        update_settings("basic_settings", "auto_save_window_size", checked)
+        if checked:
+            show_notification(
+                NotificationType.SUCCESS,
+                NotificationConfig(
+                    title=get_content_name_async(
+                        "basic_settings", "auto_save_window_size"
+                    ),
+                    content="已开启自动保存窗口大小",
+                ),
+                parent=self.window(),
+            )
+        else:
+            show_notification(
+                NotificationType.INFO,
+                NotificationConfig(
+                    title=get_content_name_async(
+                        "basic_settings", "auto_save_window_size"
+                    ),
+                    content="已关闭自动保存窗口大小",
                 ),
                 parent=self.window(),
             )

@@ -895,9 +895,16 @@ class SettingsWindow(FluentWindow):
     def save_window_size(self, setting_window_width, setting_window_height):
         """保存窗口大小
         记录当前窗口尺寸，下次启动时自动恢复"""
-        if not self.isMaximized():
-            update_settings("settings", "height", setting_window_height)
-            update_settings("settings", "width", setting_window_width)
+        # 检查是否启用了自动保存窗口大小功能
+        auto_save_enabled = readme_settings_async(
+            "basic_settings", "auto_save_window_size"
+        )
+        auto_save_enabled = True if auto_save_enabled is None else auto_save_enabled
+
+        if auto_save_enabled:
+            if not self.isMaximized():
+                update_settings("settings", "height", setting_window_height)
+                update_settings("settings", "width", setting_window_width)
 
     def show_settings_window(self):
         """显示设置窗口"""

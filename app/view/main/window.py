@@ -533,10 +533,17 @@ class MainWindow(FluentWindow):
     def save_window_size(self, width, height):
         """保存窗口大小
         记录当前窗口尺寸，下次启动时自动恢复"""
-        # 只有在非最大化状态下才保存窗口大小
-        if not self.isMaximized():
-            update_settings("window", "height", height)
-            update_settings("window", "width", width)
+        # 检查是否启用了自动保存窗口大小功能
+        auto_save_enabled = readme_settings_async(
+            "basic_settings", "auto_save_window_size"
+        )
+        auto_save_enabled = True if auto_save_enabled is None else auto_save_enabled
+
+        if auto_save_enabled:
+            # 只有在非最大化状态下才保存窗口大小
+            if not self.isMaximized():
+                update_settings("window", "height", height)
+                update_settings("window", "width", width)
 
     def toggle_window(self):
         """切换窗口显示状态

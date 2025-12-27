@@ -23,6 +23,11 @@ basic_settings = {
             "description": "关闭所有窗口后是否仍在后台常驻",
             "switchbutton_name": {"enable": "", "disable": ""},
         },
+        "auto_save_window_size": {
+            "name": "自动保存窗口大小",
+            "description": "是否自动保存窗口大小",
+            "switchbutton_name": {"enable": "", "disable": ""},
+        },
         "url_protocol": {
             "name": "URL协议注册",
             "description": "注册自定义URL协议(secrandom://)，支持通过链接启动应用",
@@ -230,6 +235,11 @@ basic_settings = {
         "background_resident": {
             "name": "Run in background",
             "description": "Whether to remain in the back office after closing all windows",
+        },
+        "auto_save_window_size": {
+            "name": "Auto save window size",
+            "description": "Whether to automatically save window size",
+            "switchbutton_name": {"enable": "", "disable": ""},
         },
         "url_protocol": {
             "name": "URL protocol register",

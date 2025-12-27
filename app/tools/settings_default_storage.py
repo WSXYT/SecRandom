@@ -32,6 +32,7 @@ DEFAULT_SETTINGS = {
         "autostart": {"default_value": False},
         "show_startup_window": {"default_value": True},
         "background_resident": {"default_value": True},
+        "auto_save_window_size": {"default_value": True},
         "url_protocol": {"default_value": False},
         "export_diagnostic_data": {"default_value": None},
         "export_settings": {"default_value": None},
