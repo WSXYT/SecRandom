@@ -111,19 +111,21 @@ class BindUsbWindow(QWidget):
             if not letters:
                 # 回退到驱动类型为可移动盘的枚举
                 letters = list_removable_drives()
-            logger.debug(f"刷新可绑定设备，数量：{len(letters)}")
+            logger.debug(f"刷新可绑定设备，数量：{len(letters)}, 设备列表：{letters}")
             for device in letters:
                 if platform.system() == "Windows":
                     # Windows 平台：device 是盘符（如 "E"）
                     name = get_volume_label(device)
                     text = f"{name} ({device}:)" if name else f"({device}:)"
                     self.drive_combo.addItem(text, device)
+                    logger.debug(f"添加设备到下拉框：显示文本={text}, 数据={device}")
                 else:
                     # Linux 平台：device 是挂载点路径（如 "/media/user/USB Drive"）
                     name = get_volume_label(device)
                     # 在Linux上，name 可能就是挂载点的目录名，所以直接使用 device 作为显示文本
                     text = device
                     self.drive_combo.addItem(text, device)
+                    logger.debug(f"添加设备到下拉框：显示文本={text}, 数据={device}")
             if not letters:
                 self.drive_combo.setCurrentIndex(-1)
                 # 使占位文本可见
@@ -141,6 +143,7 @@ class BindUsbWindow(QWidget):
             else:
                 try:
                     self.drive_combo.setEditable(False)
+                    self.drive_combo.setCurrentIndex(0)
                 except Exception:
                     pass
                 self.bind_button.setEnabled(True)
@@ -149,6 +152,7 @@ class BindUsbWindow(QWidget):
 
     def __bind(self):
         idx = self.drive_combo.currentIndex()
+        logger.debug(f"当前选中索引：{idx}")
         if idx < 0:
             self._notify_error(
                 get_content_name_async("basic_safety_settings", "usb_no_removable")
@@ -156,12 +160,27 @@ class BindUsbWindow(QWidget):
             return
         text = self.drive_combo.currentText()
         device = self.drive_combo.currentData()
-        import platform
+        logger.debug(
+            f"当前选中项：显示文本={text}, 数据={device}, 数据类型={type(device)}"
+        )
+
+        # 如果 currentData() 返回 None，尝试通过索引获取数据
+        if device is None:
+            logger.warning("currentData() 返回 None，尝试通过索引获取数据")
+            # 从文本中提取盘符
+            import re
+
+            match = re.search(r"\(([A-Z]):\)", text)
+            if match:
+                device = match.group(1)
+                logger.debug(f"从文本中提取到盘符：{device}")
 
         try:
             # 允许来自USB设备的逻辑盘（包括部分显示为固定盘的外置硬盘）
             serial = get_volume_serial(device)
+            logger.debug(f"尝试绑定设备：{device}, 序列号：{serial}")
             if not serial or serial == "00000000":
+                logger.warning(f"设备序列号无效：{device}, serial={serial}")
                 raise RuntimeError(
                     get_content_name_async("basic_safety_settings", "usb_no_removable")
                 )
@@ -192,14 +211,12 @@ class BindUsbWindow(QWidget):
                 key_value=key_value,
                 name=display_name,
             )
-            if platform.system() == "Windows":
-                logger.debug(f"绑定设备成功：{device}:")
-            else:
-                logger.debug(f"绑定设备成功：{device}")
+            logger.debug(f"绑定设备成功：{device}")
             self._notify_success(
                 f"{get_content_name_async('basic_safety_settings', 'usb_bind_success')}: {text}"
             )
         except Exception as e:
+            logger.error(f"绑定设备失败：{device}, 错误：{e}")
             self._notify_error(str(e))
 
     def __cancel(self):

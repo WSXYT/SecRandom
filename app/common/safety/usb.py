@@ -213,23 +213,32 @@ def is_drive_removable(letter_or_path: str) -> bool:
 
 def get_volume_serial(letter_or_path: str) -> str:
     if platform.system() == "Windows":
-        buf_name = ctypes.create_unicode_buffer(256)
-        vol_serial = ctypes.c_uint()
-        max_comp_len = ctypes.c_uint()
-        fs_flags = ctypes.c_uint()
-        fs_name = ctypes.create_unicode_buffer(256)
-        ctypes.windll.kernel32.GetVolumeInformationW(
-            f"{letter_or_path}:\\",
-            buf_name,
-            ctypes.sizeof(buf_name),
-            ctypes.byref(vol_serial),
-            ctypes.byref(max_comp_len),
-            ctypes.byref(fs_flags),
-            fs_name,
-            ctypes.sizeof(fs_name),
-        )
-        if vol_serial.value:
-            return f"{vol_serial.value:08X}"
+        try:
+            buf_name = ctypes.create_unicode_buffer(256)
+            vol_serial = ctypes.c_uint()
+            max_comp_len = ctypes.c_uint()
+            fs_flags = ctypes.c_uint()
+            fs_name = ctypes.create_unicode_buffer(256)
+            result = ctypes.windll.kernel32.GetVolumeInformationW(
+                f"{letter_or_path}:\\",
+                buf_name,
+                ctypes.sizeof(buf_name),
+                ctypes.byref(vol_serial),
+                ctypes.byref(max_comp_len),
+                ctypes.byref(fs_flags),
+                fs_name,
+                ctypes.sizeof(fs_name),
+            )
+            if result and vol_serial.value:
+                logger.debug(
+                    f"获取卷序列号成功（GetVolumeInformationW）：{letter_or_path}: -> {vol_serial.value:08X}"
+                )
+                return f"{vol_serial.value:08X}"
+            logger.debug(
+                f"GetVolumeInformationW 返回失败或序列号为空：{letter_or_path}:, result={result}"
+            )
+        except Exception as e:
+            logger.warning(f"GetVolumeInformationW 异常：{letter_or_path}:, {e}")
         # 尝试获取卷GUID作为备用唯一标识
         try:
             buf = ctypes.create_unicode_buffer(64)
@@ -238,9 +247,17 @@ def get_volume_serial(letter_or_path: str) -> str:
             )
             if ok:
                 guid = buf.value  # 形如 "\\\\?\Volume{GUID}\""
+                logger.debug(
+                    f"获取卷GUID成功：{letter_or_path}: -> {guid.strip().upper()}"
+                )
                 return guid.strip().upper()
-        except Exception:
-            pass
+            logger.debug(
+                f"GetVolumeNameForVolumeMountPointW 返回失败：{letter_or_path}:"
+            )
+        except Exception as e:
+            logger.warning(
+                f"GetVolumeNameForVolumeMountPointW 异常：{letter_or_path}:, {e}"
+            )
         # 最终回退：QueryDosDevice 映射路径的哈希
         try:
             size = 256
@@ -253,9 +270,12 @@ def get_volume_serial(letter_or_path: str) -> str:
                     .hexdigest()
                     .upper()
                 )
+                logger.debug(f"使用设备路径哈希：{letter_or_path}: -> {h[:16]}")
                 return f"DEV-{h}"
-        except Exception:
-            pass
+            logger.debug(f"QueryDosDeviceW 返回失败：{letter_or_path}:")
+        except Exception as e:
+            logger.warning(f"QueryDosDeviceW 异常：{letter_or_path}:, {e}")
+        logger.warning(f"所有方法均失败，返回默认值：{letter_or_path}: -> 00000000")
         return "00000000"
     else:  # Linux
         try:
@@ -289,13 +309,13 @@ def get_volume_serial(letter_or_path: str) -> str:
 
 def get_volume_label(letter_or_path: str) -> str:
     if platform.system() == "Windows":
-        buf_name = ctypes.create_unicode_buffer(256)
-        vol_serial = ctypes.c_uint()
-        max_comp_len = ctypes.c_uint()
-        fs_flags = ctypes.c_uint()
-        fs_name = ctypes.create_unicode_buffer(256)
         try:
-            ctypes.windll.kernel32.GetVolumeInformationW(
+            buf_name = ctypes.create_unicode_buffer(256)
+            vol_serial = ctypes.c_uint()
+            max_comp_len = ctypes.c_uint()
+            fs_flags = ctypes.c_uint()
+            fs_name = ctypes.create_unicode_buffer(256)
+            result = ctypes.windll.kernel32.GetVolumeInformationW(
                 f"{letter_or_path}:\\",
                 buf_name,
                 ctypes.sizeof(buf_name),
@@ -305,8 +325,13 @@ def get_volume_label(letter_or_path: str) -> str:
                 fs_name,
                 ctypes.sizeof(fs_name),
             )
-            return buf_name.value
-        except Exception:
+            if result:
+                logger.debug(f"获取卷标成功：{letter_or_path}: -> {buf_name.value}")
+                return buf_name.value
+            logger.debug(f"获取卷标失败：{letter_or_path}:, result={result}")
+            return ""
+        except Exception as e:
+            logger.warning(f"获取卷标异常：{letter_or_path}:, {e}")
             return ""
     else:  # Linux
         try:

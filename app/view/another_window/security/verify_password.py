@@ -234,13 +234,18 @@ class VerifyPasswordWindow(QWidget):
             self._required = list(dict.fromkeys(r))
             self._any_one = False
 
-        self.password_label.setVisible("password" in self._required)
-        self.password_edit.setVisible("password" in self._required)
-        self.totp_label.setVisible("totp" in self._required)
-        self.totp_edit.setVisible("totp" in self._required)
-        # 始终显示U盘解锁控件
-        self.usb_status_label.setVisible(True)
-        self.usb_refresh_button.setVisible(True)
+        # 只在需要密码验证时显示密码控件
+        password_visible = "password" in self._required
+        self.password_label.setVisible(password_visible)
+        self.password_edit.setVisible(password_visible)
+        # 只在需要TOTP验证时显示TOTP控件
+        totp_visible = "totp" in self._required
+        self.totp_label.setVisible(totp_visible)
+        self.totp_edit.setVisible(totp_visible)
+        # 只在需要USB验证时显示USB控件
+        usb_visible = "usb" in self._required
+        self.usb_status_label.setVisible(usb_visible)
+        self.usb_refresh_button.setVisible(usb_visible)
         present = bool(is_bound_present())
         self._last_usb_present = present
         self.usb_status_label.setText(
