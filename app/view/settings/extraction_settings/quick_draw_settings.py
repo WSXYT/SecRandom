@@ -355,6 +355,44 @@ class quick_draw_display_settings(GroupHeaderCardWidget):
             )
         )
 
+        # 是否使用全局字体下拉框
+        self.use_global_font_combo = ComboBox()
+        self.use_global_font_combo.addItems(
+            get_content_combo_name_async("quick_draw_settings", "use_global_font")
+        )
+        self.use_global_font_combo.setCurrentIndex(
+            readme_settings_async("quick_draw_settings", "use_global_font")
+        )
+        self.use_global_font_combo.currentIndexChanged.connect(
+            lambda: update_settings(
+                "quick_draw_settings",
+                "use_global_font",
+                self.use_global_font_combo.currentIndex(),
+            )
+        )
+
+        # 自定义字体下拉框
+        self.custom_font_combo = ComboBox()
+        self.custom_font_combo.addItems(QFontDatabase.families())
+        current_custom_font = readme_settings_async(
+            "quick_draw_settings", "custom_font"
+        )
+        try:
+            index = self.custom_font_combo.findText(current_custom_font)
+            if index >= 0:
+                self.custom_font_combo.setCurrentIndex(index)
+            else:
+                self.custom_font_combo.setCurrentIndex(0)
+        except:
+            self.custom_font_combo.setCurrentIndex(0)
+        self.custom_font_combo.currentTextChanged.connect(
+            lambda: update_settings(
+                "quick_draw_settings",
+                "custom_font",
+                self.custom_font_combo.currentText(),
+            )
+        )
+
         # 结果显示格式下拉框
         self.display_format_combo = ComboBox()
         self.display_format_combo.addItems(
@@ -388,6 +426,18 @@ class quick_draw_display_settings(GroupHeaderCardWidget):
         )
 
         # 添加设置项到分组
+        self.addGroup(
+            get_theme_icon("ic_fluent_text_font_size_20_filled"),
+            get_content_name_async("quick_draw_settings", "use_global_font"),
+            get_content_description_async("quick_draw_settings", "use_global_font"),
+            self.use_global_font_combo,
+        )
+        self.addGroup(
+            get_theme_icon("ic_fluent_text_font_20_filled"),
+            get_content_name_async("quick_draw_settings", "custom_font"),
+            get_content_description_async("quick_draw_settings", "custom_font"),
+            self.custom_font_combo,
+        )
         self.addGroup(
             get_theme_icon("ic_fluent_text_font_20_filled"),
             get_content_name_async("quick_draw_settings", "font_size"),

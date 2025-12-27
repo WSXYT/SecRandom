@@ -54,6 +54,12 @@ roll_call_settings = {
             "description": "设置默认抽取名单",
         },
         "font_size": {"name": "字体大小", "description": "设置点名结果字体大小"},
+        "use_global_font": {
+            "name": "使用全局字体",
+            "description": "是否使用全局字体设置",
+            "combo_items": ["跟随全局字体", "使用自定义字体"],
+        },
+        "custom_font": {"name": "自定义字体", "description": "选择自定义字体"},
         "display_format": {
             "name": "结果显示格式",
             "description": "设置点名结果显示格式",
@@ -153,6 +159,15 @@ roll_call_settings = {
         "font_size": {
             "name": "Font size",
             "description": "Set picking result font size",
+        },
+        "use_global_font": {
+            "name": "Use global font",
+            "description": "Whether to use global font settings",
+            "combo_items": {"0": "Follow global font", "1": "Use custom font"},
+        },
+        "custom_font": {
+            "name": "Custom font",
+            "description": "Select custom font",
         },
         "display_format": {
             "name": "Result display format",
@@ -260,6 +275,12 @@ quick_draw_settings = {
             "description": "设置点击一次闪抽后禁用闪抽功能的时间（秒）",
         },
         "font_size": {"name": "字体大小", "description": "设置闪抽结果字体大小"},
+        "use_global_font": {
+            "name": "使用全局字体",
+            "description": "是否使用全局字体设置",
+            "combo_items": ["跟随全局字体", "使用自定义字体"],
+        },
+        "custom_font": {"name": "自定义字体", "description": "选择自定义字体"},
         "display_format": {
             "name": "结果显示格式",
             "description": "设置闪抽结果显示格式",
@@ -359,6 +380,15 @@ quick_draw_settings = {
         "font_size": {
             "name": "Font size",
             "description": "Set Quick Pick result font size",
+        },
+        "use_global_font": {
+            "name": "Use global font",
+            "description": "Whether to use global font settings",
+            "combo_items": {"0": "Follow global font", "1": "Use custom font"},
+        },
+        "custom_font": {
+            "name": "Custom font",
+            "description": "Select custom font",
         },
         "display_format": {
             "name": "Result display format",
@@ -473,6 +503,12 @@ lottery_settings = {
             "description": "设置默认使用的抽取名单",
         },
         "font_size": {"name": "字体大小", "description": "设置抽奖结果字体大小"},
+        "use_global_font": {
+            "name": "使用全局字体",
+            "description": "是否使用全局字体设置",
+            "combo_items": ["跟随全局字体", "使用自定义字体"],
+        },
+        "custom_font": {"name": "自定义字体", "description": "选择自定义字体"},
         "display_format": {
             "name": "结果显示格式",
             "description": "设置抽奖结果显示格式",
@@ -567,6 +603,15 @@ lottery_settings = {
         "font_size": {
             "name": "Font size",
             "description": "Set the lottery result font size",
+        },
+        "use_global_font": {
+            "name": "Use global font",
+            "description": "Whether to use global font settings",
+            "combo_items": {"0": "Follow global font", "1": "Use custom font"},
+        },
+        "custom_font": {
+            "name": "Custom font",
+            "description": "Select custom font",
         },
         "display_format": {
             "name": "Result display format",

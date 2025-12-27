@@ -340,7 +340,11 @@ class ResultDisplayUtils:
 
     @staticmethod
     def _apply_label_style(
-        label, font_size, animation_color, settings_group="roll_call_settings"
+        label,
+        font_size,
+        animation_color,
+        settings_group="roll_call_settings",
+        custom_font_family="",
     ):
         """
         应用标签样式
@@ -350,7 +354,18 @@ class ResultDisplayUtils:
             font_size: 字体大小
             animation_color: 动画颜色模式
             settings_group: 设置组名称，默认为roll_call_settings
+            custom_font_family: 自定义字体族
         """
+        # 检查是否使用全局字体
+        use_global_font = readme_settings_async(settings_group, "use_global_font")
+        custom_font = None
+        if use_global_font == 1:  # 不使用全局字体，使用自定义字体
+            custom_font = readme_settings_async(settings_group, "custom_font")
+
+        # 如果传入了自定义字体族，则使用传入的字体族
+        if custom_font_family:
+            custom_font = custom_font_family
+
         fixed_color = readme_settings_async(settings_group, "animation_fixed_color")
         if (
             isinstance(label, QWidget)
@@ -364,7 +379,10 @@ class ResultDisplayUtils:
                     widget = item.widget()
                     if isinstance(widget, BodyLabel):
                         widget.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                        style_sheet = f"font-size: {font_size}pt; "
+                        if custom_font and use_global_font == 1:
+                            style_sheet = f"font-family: '{custom_font}'; font-size: {font_size}pt; "
+                        else:
+                            style_sheet = f"font-size: {font_size}pt; "
 
                         if animation_color == 1:
                             style_sheet += f"color: {ResultDisplayUtils._generate_vibrant_color()} !important;"
@@ -385,7 +403,13 @@ class ResultDisplayUtils:
                         widget.setStyleSheet(style_sheet)
         else:
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            style_sheet = f"font-size: {font_size}pt; "
+            if custom_font and use_global_font == 1:
+                style_sheet = (
+                    f"font-family: '{custom_font}'; font-size: {font_size}pt; "
+                )
+            else:
+                style_sheet = f"font-size: {font_size}pt; "
+
             fixed_color = readme_settings_async(settings_group, "animation_fixed_color")
             if animation_color == 1:
                 style_sheet += (
@@ -416,6 +440,7 @@ class ResultDisplayUtils:
         group_index=0,
         show_random=0,
         settings_group="roll_call_settings",
+        custom_font_family="",
     ):
         """
         创建学生显示标签
@@ -430,6 +455,7 @@ class ResultDisplayUtils:
             group_index: 小组索引 (0:全班, 1:随机小组, >1:指定小组)
             show_random: 随机组员显示格式 (0:不显示, 1:组名[换行]姓名, 2:组名[短横杠]姓名)
             settings_group: 设置组名称，默认为roll_call_settings
+            custom_font_family: 自定义字体族
 
         返回:
             list: 创建的标签列表
@@ -499,7 +525,7 @@ class ResultDisplayUtils:
                 label.setAttribute(Qt.WA_DeleteOnClose)  # 自动清理
 
             ResultDisplayUtils._apply_label_style(
-                label, font_size, animation_color, settings_group
+                label, font_size, animation_color, settings_group, custom_font_family
             )
 
             # 将标签添加到触屏容器中

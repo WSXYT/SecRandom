@@ -8,6 +8,7 @@ from qfluentwidgets import CardWidget, BodyLabel
 from app.page_building.page_template import PageTemplate
 from app.tools.variable import WINDOW_BOTTOM_POSITION_FACTOR
 from app.Language.obtain_language import get_any_position_value
+from app.tools.settings_access import readme_settings_async
 
 
 class NotificationContentWidget(QWidget):
@@ -730,12 +731,13 @@ class FloatingNotificationWindow(CardWidget):
         # 隐藏窗口
         self.hide()
 
-    def update_content(self, student_labels, settings=None):
+    def update_content(self, student_labels, settings=None, font_settings_group=None):
         """更新通知窗口的内容
 
         Args:
             student_labels: 包含学生信息的BodyLabel控件列表
             settings: 通知设置参数
+            font_settings_group: 字体设置组名称
         """
         # 清除现有内容
         while self.content_layout.count():
@@ -747,6 +749,23 @@ class FloatingNotificationWindow(CardWidget):
         # 添加新内容
         if student_labels:
             for label in student_labels:
+                # 如果有字体设置，则应用到标签上
+                if font_settings_group:
+                    # 检查是否使用全局字体
+                    use_global_font = readme_settings_async(
+                        font_settings_group, "use_global_font"
+                    )
+                    custom_font = None
+                    if use_global_font == 1:  # 不使用全局字体，使用自定义字体
+                        custom_font = readme_settings_async(
+                            font_settings_group, "custom_font"
+                        )
+                        if custom_font and hasattr(label, "setStyleSheet"):
+                            # 获取当前样式表并添加字体设置
+                            current_style = label.styleSheet()
+                            label.setStyleSheet(
+                                f"font-family: '{custom_font}'; {current_style}"
+                            )
                 self.content_layout.addWidget(label)
 
         # 确保颜色与当前主题同步
@@ -853,8 +872,18 @@ class FloatingNotificationManager:
         from app.common.display.result_display import ResultDisplayUtils
 
         # 确定使用的设置组
+        # 如果 settings_group 是通知设置组，则使用对应的功能设置组的字体设置
         if settings_group is None:
             settings_group = "notification_settings"
+        # 根据通知设置组名称确定对应的功能设置组
+        if settings_group == "roll_call_notification_settings":
+            font_settings_group = "roll_call_settings"
+        elif settings_group == "quick_draw_notification_settings":
+            font_settings_group = "quick_draw_settings"
+        elif settings_group == "lottery_notification_settings":
+            font_settings_group = "lottery_settings"
+        else:
+            font_settings_group = settings_group
 
         student_labels = ResultDisplayUtils.create_student_label(
             class_name=class_name,
@@ -865,6 +894,7 @@ class FloatingNotificationManager:
             display_format=display_format,
             show_student_image=show_student_image,
             settings_group=settings_group,
+            custom_font_family=font_settings_group,
         )
 
         # 创建或获取通知窗口
@@ -876,7 +906,7 @@ class FloatingNotificationManager:
         # 如果窗口已经存在并且有活动的自动关闭定时器，停止它以防止窗口被隐藏
         if window.auto_close_timer.isActive():
             window.auto_close_timer.stop()
-        window.update_content(student_labels, settings)
+        window.update_content(student_labels, settings, font_settings_group)
 
     def close_all_notifications(self):
         """关闭所有浮动通知窗口"""

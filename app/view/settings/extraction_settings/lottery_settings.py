@@ -349,6 +349,39 @@ class lottery_display_settings(GroupHeaderCardWidget):
             )
         )
 
+        # 是否使用全局字体下拉框
+        self.use_global_font_combo = ComboBox()
+        self.use_global_font_combo.addItems(
+            get_content_combo_name_async("lottery_settings", "use_global_font")
+        )
+        self.use_global_font_combo.setCurrentIndex(
+            readme_settings_async("lottery_settings", "use_global_font")
+        )
+        self.use_global_font_combo.currentIndexChanged.connect(
+            lambda: update_settings(
+                "lottery_settings",
+                "use_global_font",
+                self.use_global_font_combo.currentIndex(),
+            )
+        )
+
+        # 自定义字体下拉框
+        self.custom_font_combo = ComboBox()
+        self.custom_font_combo.addItems(QFontDatabase.families())
+        current_custom_font = readme_settings_async("lottery_settings", "custom_font")
+        current_font_index = self.custom_font_combo.findText(current_custom_font)
+        if current_font_index >= 0:
+            self.custom_font_combo.setCurrentIndex(current_font_index)
+        else:
+            self.custom_font_combo.setCurrentText(current_custom_font)
+        self.custom_font_combo.currentIndexChanged.connect(
+            lambda: update_settings(
+                "lottery_settings",
+                "custom_font",
+                self.custom_font_combo.currentText(),
+            )
+        )
+
         # 结果显示格式下拉框
         self.display_format_combo = ComboBox()
         self.display_format_combo.addItems(
@@ -371,6 +404,18 @@ class lottery_display_settings(GroupHeaderCardWidget):
             get_content_name_async("lottery_settings", "font_size"),
             get_content_description_async("lottery_settings", "font_size"),
             self.font_size_spin,
+        )
+        self.addGroup(
+            get_theme_icon("ic_fluent_text_font_20_filled"),
+            get_content_name_async("lottery_settings", "use_global_font"),
+            get_content_description_async("lottery_settings", "use_global_font"),
+            self.use_global_font_combo,
+        )
+        self.addGroup(
+            get_theme_icon("ic_fluent_text_font_20_filled"),
+            get_content_name_async("lottery_settings", "custom_font"),
+            get_content_description_async("lottery_settings", "custom_font"),
+            self.custom_font_combo,
         )
         self.addGroup(
             get_theme_icon("ic_fluent_slide_text_sparkle_20_filled"),
