@@ -382,6 +382,9 @@ class LevitationWindow(QWidget):
         geo = scr.availableGeometry()
         cx = max(geo.left(), min(x, geo.right() - self.width() + 1))
         cy = max(geo.top(), min(y, geo.bottom() - self.height() + 1))
+        logger.debug(
+            f"_clamp_to_screen: 输入({x}, {y}), 输出({cx}, {cy}), 屏幕区域: {geo}"
+        )
         return cx, cy
 
     def _create_container_layout(self):
@@ -794,7 +797,6 @@ class LevitationWindow(QWidget):
             self._retracted = True
 
     def _expand_from_edge(self):
-        # 基于当前屏幕可用区域展开
         fg = self.frameGeometry()
         scr = QGuiApplication.screenAt(fg.center()) or QApplication.primaryScreen()
         geo = scr.availableGeometry()
@@ -803,6 +805,7 @@ class LevitationWindow(QWidget):
         elif self.x() + self.width() > geo.right():
             self.move(geo.right() - self.width() + 1, self.y())
         self._retracted = False
+        logger.debug(f"_expand_from_edge: 窗口位置已展开到 ({self.x()}, {self.y()})")
 
     def _check_edge_proximity(self):
         """检测窗口是否靠近屏幕边缘，并实现贴边隐藏功能（带动画效果）"""
@@ -850,9 +853,9 @@ class LevitationWindow(QWidget):
             # 设置动画起始值（当前位置）
             self.animation.setStartValue(self.geometry())
 
-            # 设置动画结束值（隐藏位置）- 完全移出屏幕
+            # 设置动画结束值（隐藏位置）- 移出屏幕但保留部分在屏幕内以保持screenAt()正常工作
             end_rect = QRect(
-                -window_width,
+                screen.left() - window_width + 1,
                 window_pos.y(),
                 window_width,
                 window_height,
@@ -893,9 +896,9 @@ class LevitationWindow(QWidget):
             # 设置动画起始值（当前位置）
             self.animation.setStartValue(self.geometry())
 
-            # 设置动画结束值（隐藏位置）- 完全移出屏幕
+            # 设置动画结束值（隐藏位置）- 移出屏幕但保留部分在屏幕内以保持screenAt()正常工作
             end_rect = QRect(
-                screen.width(),
+                screen.right() - 1,
                 window_pos.y(),
                 window_width,
                 window_height,
@@ -1133,7 +1136,7 @@ class LevitationWindow(QWidget):
         if storage_pos.x() < screen.width() // 2:
             # 左侧收纳浮窗，向右移出屏幕
             storage_end_rect = QRect(
-                screen.width(),
+                screen.right() - 1,
                 storage_pos.y(),
                 storage_width,
                 storage_height,
@@ -1141,7 +1144,7 @@ class LevitationWindow(QWidget):
         else:
             # 右侧收纳浮窗，向左移出屏幕
             storage_end_rect = QRect(
-                -storage_width,
+                screen.left() - storage_width + 1,
                 storage_pos.y(),
                 storage_width,
                 storage_height,
@@ -1242,6 +1245,7 @@ class LevitationWindow(QWidget):
         self.arrow_widget = DraggableWidget()
         self.arrow_widget.setFixedSize(30, 30)
         self.arrow_widget.move(x, y)
+        self.arrow_widget.setFixedX(x)
         self.arrow_widget.setWindowFlags(
             Qt.FramelessWindowHint
             | Qt.WindowStaysOnTopHint
@@ -1322,6 +1326,10 @@ class LevitationWindow(QWidget):
 
     def _show_hidden_window(self, direction):
         """显示隐藏的窗口（带动画效果）"""
+        logger.debug(
+            f"_show_hidden_window: 方向={direction}, 当前窗口位置=({self.x()}, {self.y()})"
+        )
+
         # 如果有正在进行的动画，先停止它
         if (
             hasattr(self, "animation")
@@ -1331,6 +1339,7 @@ class LevitationWindow(QWidget):
 
         # 获取屏幕尺寸
         screen = QApplication.primaryScreen().availableGeometry()
+        logger.debug(f"_show_hidden_window: 屏幕区域={screen}")
 
         # 获取窗口当前位置和尺寸
         window_width = self.width()
@@ -1378,6 +1387,9 @@ class LevitationWindow(QWidget):
 
         # 启动动画
         self.animation.start()
+        logger.debug(
+            f"_show_hidden_window: 动画已启动，目标位置=({end_rect.x()}, {end_rect.y()})"
+        )
 
         # 删除箭头按钮
         self._delete_arrow_button()
@@ -1552,39 +1564,22 @@ class DraggableWidget(QWidget):
             self._long_press_timer.start(self._long_press_duration)
 
     def mouseMoveEvent(self, event):
-        """鼠标移动事件"""
-        if event.buttons() & Qt.LeftButton:  # 确保左键按下
+        """鼠标移动事件 - 只允许在y轴移动，x轴位置固定"""
+        if event.buttons() & Qt.LeftButton:
             current_time = QDateTime.currentMSecsSinceEpoch()
-            # 检查是否已经长按或者移动距离足够大
             if self._long_press_triggered or (
                 current_time - self._press_start_time > 100
                 and abs(event.globalY() - self._drag_start_y) > 5
             ):
                 if not self._dragging:
                     self._dragging = True
-                    # 设置拖动标志，表示发生了拖动操作
                     self._was_dragging = True
                     self.setCursor(Qt.ClosedHandCursor)
-                    # 如果还没触发长按，停止计时器
                     if not self._long_press_triggered:
                         self._long_press_timer.stop()
 
-                # 计算新的y坐标
                 new_y = self._original_y + (event.globalY() - self._drag_start_y)
-                # 保持x坐标不变
                 self.move(self._fixed_x, new_y)
-
-                # 同时更新主窗口的位置
-                if (
-                    hasattr(self, "parent")
-                    and self.parent()
-                    and hasattr(self.parent(), "move")
-                ):
-                    # 获取主窗口的当前位置
-                    parent_x = self.parent().x()
-                    parent_y = self.parent().y()
-                    # 更新主窗口的y坐标，保持x坐标不变
-                    self.parent().move(parent_x, new_y)
 
     def mouseReleaseEvent(self, event):
         """鼠标释放事件"""
