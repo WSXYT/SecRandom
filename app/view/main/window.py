@@ -227,74 +227,82 @@ class MainWindow(FluentWindow):
         roll_call_sidebar_pos = readme_settings_async(
             "sidebar_management_window", "roll_call_sidebar_position"
         )
-        roll_call_position = (
-            NavigationItemPosition.TOP
-            if (roll_call_sidebar_pos is None or roll_call_sidebar_pos != 1)
-            else NavigationItemPosition.BOTTOM
-        )
+        # 只有当设置不为"不显示"（值为2）时才添加到导航栏
+        if roll_call_sidebar_pos is None or roll_call_sidebar_pos != 2:
+            roll_call_position = (
+                NavigationItemPosition.TOP
+                if (roll_call_sidebar_pos is None or roll_call_sidebar_pos != 1)
+                else NavigationItemPosition.BOTTOM
+            )
 
-        self.addSubInterface(
-            self.roll_call_page,
-            get_theme_icon("ic_fluent_people_20_filled"),
-            get_content_name_async("roll_call", "title"),
-            position=roll_call_position,
-        )
+            self.addSubInterface(
+                self.roll_call_page,
+                get_theme_icon("ic_fluent_people_20_filled"),
+                get_content_name_async("roll_call", "title"),
+                position=roll_call_position,
+            )
 
         # 获取奖池侧边栏位置设置
         lottery_sidebar_pos = readme_settings_async(
             "sidebar_management_window", "lottery_sidebar_position"
         )
-        lottery_position = (
-            NavigationItemPosition.TOP
-            if (lottery_sidebar_pos is None or lottery_sidebar_pos != 1)
-            else NavigationItemPosition.BOTTOM
-        )
+        # 只有当设置不为"不显示"（值为2）时才添加到导航栏
+        if lottery_sidebar_pos is None or lottery_sidebar_pos != 2:
+            lottery_position = (
+                NavigationItemPosition.TOP
+                if (lottery_sidebar_pos is None or lottery_sidebar_pos != 1)
+                else NavigationItemPosition.BOTTOM
+            )
 
-        self.addSubInterface(
-            self.lottery_page,
-            get_theme_icon("ic_fluent_gift_20_filled"),
-            get_content_name_async("lottery", "title"),
-            position=lottery_position,
-        )
+            self.addSubInterface(
+                self.lottery_page,
+                get_theme_icon("ic_fluent_gift_20_filled"),
+                get_content_name_async("lottery", "title"),
+                position=lottery_position,
+            )
 
         # 获取历史记录侧边栏位置设置
         history_sidebar_pos = readme_settings_async(
             "sidebar_management_window", "main_window_history"
         )
-        history_position = (
-            NavigationItemPosition.TOP
-            if (history_sidebar_pos is None or history_sidebar_pos != 1)
-            else NavigationItemPosition.BOTTOM
-        )
+        # 只有当设置不为"不显示"（值为2）时才添加到导航栏
+        if history_sidebar_pos is None or history_sidebar_pos != 2:
+            history_position = (
+                NavigationItemPosition.TOP
+                if (history_sidebar_pos is None or history_sidebar_pos != 1)
+                else NavigationItemPosition.BOTTOM
+            )
 
-        self.addSubInterface(
-            self.history_page,
-            get_theme_icon("ic_fluent_history_20_filled"),
-            get_content_name_async("history", "title"),
-            position=history_position,
-        )
+            self.addSubInterface(
+                self.history_page,
+                get_theme_icon("ic_fluent_history_20_filled"),
+                get_content_name_async("history", "title"),
+                position=history_position,
+            )
 
         # 获取设置图标位置设置
         settings_icon_pos = readme_settings_async(
             "sidebar_management_window", "settings_icon"
         )
-        settings_position = (
-            NavigationItemPosition.BOTTOM
-            if (settings_icon_pos == 1)
-            else NavigationItemPosition.TOP
-        )
+        # 只有当设置不为"不显示"（值为2）时才添加到导航栏
+        if settings_icon_pos is None or settings_icon_pos != 2:
+            settings_position = (
+                NavigationItemPosition.BOTTOM
+                if (settings_icon_pos == 1)
+                else NavigationItemPosition.TOP
+            )
 
-        settings_item = self.addSubInterface(
-            self.settingsInterface,
-            get_theme_icon("ic_fluent_settings_20_filled"),
-            get_content_name_async("settings", "title"),
-            position=settings_position,
-        )
-        # 直接打开设置界面（预览模式），无需验证
-        settings_item.clicked.connect(
-            lambda: self.showSettingsRequested.emit("basicSettingsInterface")
-        )
-        settings_item.clicked.connect(lambda: self.switchTo(self.roll_call_page))
+            settings_item = self.addSubInterface(
+                self.settingsInterface,
+                get_theme_icon("ic_fluent_settings_20_filled"),
+                get_content_name_async("settings", "title"),
+                position=settings_position,
+            )
+            # 直接打开设置界面（预览模式），无需验证
+            settings_item.clicked.connect(
+                lambda: self.showSettingsRequested.emit("basicSettingsInterface")
+            )
+            settings_item.clicked.connect(lambda: self.switchTo(self.roll_call_page))
 
     def _toggle_float_window(self):
         if self.float_window.isVisible():
