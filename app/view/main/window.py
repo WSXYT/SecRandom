@@ -11,6 +11,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtCore import QTimer, QEvent, Signal
 from qfluentwidgets import FluentWindow, NavigationItemPosition
 
+from app.common.IPC_URL.csharp_ipc_handler import CSharpIPCHandler
 from app.tools.variable import MINIMUM_WINDOW_SIZE, APP_INIT_DELAY
 from app.tools.path_utils import get_data_path, get_app_root
 from app.tools.personalised import get_theme_icon
@@ -622,6 +623,7 @@ class MainWindow(FluentWindow):
             logger.error(f"日志系统关闭出错: {e}")
 
         QApplication.quit()
+        CSharpIPCHandler.instance().stop_ipc_client()
         sys.exit(0)
 
     def restart_app(self):
@@ -653,6 +655,7 @@ class MainWindow(FluentWindow):
 
         # 完全退出当前应用程序
         QApplication.quit()
+        CSharpIPCHandler.instance().stop_ipc_client()
         sys.exit(0)
 
     def _handle_class_island_data(self, class_island_data: dict):

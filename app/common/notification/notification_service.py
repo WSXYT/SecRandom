@@ -10,6 +10,7 @@ from app.tools.variable import WINDOW_BOTTOM_POSITION_FACTOR
 from app.Language.obtain_language import get_any_position_value
 from app.tools.settings_access import readme_settings_async
 from app.common.IPC_URL.url_ipc_handler import URLIPCHandler
+from app.common.IPC_URL.csharp_ipc_handler import CSharpIPCHandler
 
 
 class NotificationContentWidget(QWidget):
@@ -831,7 +832,7 @@ class FloatingNotificationManager:
             self.ipc_handler = URLIPCHandler("SecRandom", "secrandom")
             self._initialized = True
 
-    def send_to_classisland(
+    def send_to_classisland2(
         self,
         class_name,
         selected_students,
@@ -839,7 +840,7 @@ class FloatingNotificationManager:
         settings=None,
         settings_group=None,
     ):
-        """发送通知到ClassIsland
+        """发送通知到ClassIsland（旧版）
 
         Args:
             class_name: 班级名称
@@ -898,6 +899,36 @@ class FloatingNotificationManager:
                     class_name, selected_students, draw_count, settings, settings_group
                 )
 
+        except Exception as e:
+            logger.exception("发送通知到ClassIsland时出错: {}", e)
+            # 如果发生异常，回退到SecRandom通知服务
+            logger.info("因错误回退到SecRandom通知服务")
+            self._show_secrandom_notification(
+                class_name, selected_students, draw_count, settings, settings_group
+            )
+
+    def send_to_classisland(
+        self,
+        class_name,
+        selected_students,
+        draw_count=1,
+        settings=None,
+        settings_group=None,
+    ):
+        """发送通知到ClassIsland
+
+        Args:
+            class_name: 班级名称
+            selected_students: 选中的学生列表 [(学号, 姓名, 是否存在), ...]
+            draw_count: 抽取的学生数量
+            settings: 通知设置参数
+            settings_group: 设置组名称
+        """
+
+        try:
+            cs_ipc = CSharpIPCHandler.instance()
+            cs_ipc.send_notification(class_name, selected_students, draw_count, settings, settings_group)
+            logger.info("成功发送通知到ClassIsland，结果未知")
         except Exception as e:
             logger.exception("发送通知到ClassIsland时出错: {}", e)
             # 如果发生异常，回退到SecRandom通知服务

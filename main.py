@@ -31,6 +31,7 @@ local_server = None
 
 # 全局URL处理器实例
 url_handler = None
+cs_ipc_handler = None
 
 # 全局更新检查线程实例
 update_check_thread = None
@@ -117,6 +118,7 @@ from app.tools.config import send_system_notification
 project_root = str(get_app_root())
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
+sys.path.append(str(get_data_path("dlls")))
 
 
 # ==================================================
@@ -722,6 +724,9 @@ def initialize_app():
     # 初始化URL处理器
     initialize_url_handler()
 
+    # 初始化 C# IPC 处理器
+    initialize_cs_ipc_handler()
+
     # 加载主题
     QTimer.singleShot(
         APP_INIT_DELAY,
@@ -780,6 +785,19 @@ def initialize_url_handler():
     except Exception as e:
         logger.error(f"初始化URL处理器失败: {e}")
 
+
+def initialize_cs_ipc_handler():
+    """初始化 C# IPC 处理器"""
+    global cs_ipc_handler
+    try:
+        from app.common.IPC_URL.csharp_ipc_handler import CSharpIPCHandler
+        
+        cs_ipc_handler = CSharpIPCHandler()
+        cs_ipc_handler.start_ipc_client()
+
+        logger.debug("C# IPC 处理器初始化完成")
+    except Exception as e:
+        logger.error(f"初始化 C# IPC 处理器失败: {e}")
 
 # ==================================================
 # 主程序入口
@@ -870,6 +888,9 @@ if __name__ == "__main__":
         # 关闭本地服务器
         if local_server:
             local_server.close()
+
+        # 关闭 C# IPC
+        cs_ipc_handler.stop_ipc_client()
 
         # 等待更新检查线程完成
         if update_check_thread and update_check_thread.isRunning():
