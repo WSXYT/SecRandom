@@ -153,7 +153,7 @@ class basic_settings(GroupHeaderCardWidget):
         # 主窗口显示阈值
         self.main_window_threshold_spinbox = SpinBox()
         self.main_window_threshold_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.main_window_threshold_spinbox.setMinimum(1)
+        self.main_window_threshold_spinbox.setRange(1, 1000)
         self.main_window_threshold_spinbox.setValue(
             readme_settings_async(
                 "roll_call_notification_settings", "main_window_display_threshold"
@@ -308,7 +308,7 @@ class floating_window_settings(GroupHeaderCardWidget):
         # 浮窗自动关闭时间
         self.floating_window_auto_close_time_spinbox = SpinBox()
         self.floating_window_auto_close_time_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.floating_window_auto_close_time_spinbox.setMinimum(1)
+        self.floating_window_auto_close_time_spinbox.setRange(0, 60)
         self.floating_window_auto_close_time_spinbox.setSuffix("s")
         self.floating_window_auto_close_time_spinbox.setValue(
             readme_settings_async(
@@ -458,8 +458,7 @@ class classisland_notification_service_settings(GroupHeaderCardWidget):
         # 通知显示时长
         self.notification_display_duration_spinbox = SpinBox()
         self.notification_display_duration_spinbox.setFixedWidth(WIDTH_SPINBOX)
-        self.notification_display_duration_spinbox.setMinimum(1)
-        self.notification_display_duration_spinbox.setMaximum(60)
+        self.notification_display_duration_spinbox.setRange(1, 60)
         self.notification_display_duration_spinbox.setSuffix("s")
         self.notification_display_duration_spinbox.setValue(
             readme_settings_async(

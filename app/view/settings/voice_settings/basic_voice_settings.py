@@ -195,8 +195,7 @@ class basic_settings_volume(GroupHeaderCardWidget):
         # 语速调节设置
         self.speech_rate = SpinBox()
         self.speech_rate.setFixedWidth(WIDTH_SPINBOX)
-        self.speech_rate.setMinimum(1)
-        self.speech_rate.setMaximum(500)
+        self.speech_rate.setRange(1, 500)
         self.speech_rate.setSuffix("wpm")
         self.speech_rate.setValue(
             int(readme_settings_async("basic_voice_settings", "speech_rate"))

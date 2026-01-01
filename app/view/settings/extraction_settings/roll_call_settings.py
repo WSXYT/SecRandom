@@ -81,7 +81,7 @@ class roll_call_extraction_function(GroupHeaderCardWidget):
         # 半重复抽取次数输入框
         self.half_repeat_spin = SpinBox()
         self.half_repeat_spin.setFixedWidth(WIDTH_SPINBOX)
-        self.half_repeat_spin.setMinimum(0)
+        self.half_repeat_spin.setRange(0, 100)
         self.half_repeat_spin.setValue(
             readme_settings_async("roll_call_settings", "half_repeat")
         )
@@ -464,7 +464,7 @@ class roll_call_basic_animation_settings(GroupHeaderCardWidget):
         # 动画间隔输入框
         self.animation_interval_spin = SpinBox()
         self.animation_interval_spin.setFixedWidth(WIDTH_SPINBOX)
-        self.animation_interval_spin.setMinimum(1)
+        self.animation_interval_spin.setRange(1, 1000)
         self.animation_interval_spin.setSuffix("ms")
         self.animation_interval_spin.setValue(
             readme_settings_async("roll_call_settings", "animation_interval")
@@ -480,7 +480,7 @@ class roll_call_basic_animation_settings(GroupHeaderCardWidget):
         # 自动播放次数输入框
         self.autoplay_count_spin = SpinBox()
         self.autoplay_count_spin.setFixedWidth(WIDTH_SPINBOX)
-        self.autoplay_count_spin.setMinimum(1)
+        self.autoplay_count_spin.setRange(1, 1000)
         self.autoplay_count_spin.setValue(
             readme_settings_async("roll_call_settings", "autoplay_count")
         )

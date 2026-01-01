@@ -380,7 +380,7 @@ class floating_window_edge_settings(GroupHeaderCardWidget):
         self.floating_window_stick_to_edge_recover_seconds_spinbox.setFixedWidth(
             WIDTH_SPINBOX
         )
-        self.floating_window_stick_to_edge_recover_seconds_spinbox.setMinimum(1)
+        self.floating_window_stick_to_edge_recover_seconds_spinbox.setRange(1, 60)
         self.floating_window_stick_to_edge_recover_seconds_spinbox.setSuffix("s")
         self.floating_window_stick_to_edge_recover_seconds_spinbox.setValue(
             readme_settings_async(
