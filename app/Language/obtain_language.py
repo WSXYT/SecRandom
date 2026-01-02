@@ -25,8 +25,10 @@
 注意：所有异步函数在失败时会自动回退到对应的同步方法，确保功能稳定性。
 """
 
-from app.tools.language_manager import *
-from app.tools.settings_access import *
+import asyncio
+from PySide6.QtCore import QObject, QThread, Signal
+from app.tools.language_manager import get_current_language_data
+
 
 from loguru import logger
 
