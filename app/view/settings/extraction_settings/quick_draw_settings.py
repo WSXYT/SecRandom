@@ -98,6 +98,21 @@ class quick_draw_extraction_function(GroupHeaderCardWidget):
             )
         )
 
+        # 抽取人数输入框
+        self.draw_count_spin = SpinBox()
+        self.draw_count_spin.setFixedWidth(WIDTH_SPINBOX)
+        self.draw_count_spin.setRange(1, 100)
+        self.draw_count_spin.setValue(
+            readme_settings_async("quick_draw_settings", "draw_count")
+        )
+        self.draw_count_spin.valueChanged.connect(
+            lambda: update_settings(
+                "quick_draw_settings",
+                "draw_count",
+                self.draw_count_spin.value(),
+            )
+        )
+
         # 点击后禁用时间输入框
         self.disable_after_click_spin = SpinBox()
         self.disable_after_click_spin.setFixedWidth(WIDTH_SPINBOX)
@@ -145,6 +160,13 @@ class quick_draw_extraction_function(GroupHeaderCardWidget):
             get_content_description_async("quick_draw_settings", "default_class"),
             self.default_class_combo,
         )
+        if is_setting_visible("quick_draw_settings", "draw_count"):
+            self.addGroup(
+                get_theme_icon("ic_fluent_people_20_filled"),
+                get_content_name_async("quick_draw_settings", "draw_count"),
+                get_content_description_async("quick_draw_settings", "draw_count"),
+                self.draw_count_spin,
+            )
         self.addGroup(
             get_theme_icon("ic_fluent_timer_20_filled"),
             get_content_name_async("quick_draw_settings", "disable_after_click"),

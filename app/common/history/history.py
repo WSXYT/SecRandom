@@ -638,42 +638,44 @@ def calculate_weight(students_data: list, class_name: str) -> list:
     """
     # 从设置中加载权重相关配置
     settings = {
-        "fair_draw_enabled": readme_settings_async("advanced_settings", "fair_draw")
+        "fair_draw_enabled": readme_settings_async("fair_draw_settings", "fair_draw")
         or False,
         "fair_draw_group_enabled": readme_settings_async(
-            "advanced_settings", "fair_draw_group"
+            "fair_draw_settings", "fair_draw_group"
         )
         or False,
         "fair_draw_gender_enabled": readme_settings_async(
-            "advanced_settings", "fair_draw_gender"
+            "fair_draw_settings", "fair_draw_gender"
         )
         or False,
         "fair_draw_time_enabled": readme_settings_async(
-            "advanced_settings", "fair_draw_time"
+            "fair_draw_settings", "fair_draw_time"
         )
         or False,
-        "base_weight": readme_settings_async("advanced_settings", "base_weight") or 1.0,
-        "min_weight": readme_settings_async("advanced_settings", "min_weight") or 0.1,
-        "max_weight": readme_settings_async("advanced_settings", "max_weight") or 5.0,
+        "base_weight": readme_settings_async("fair_draw_settings", "base_weight")
+        or 1.0,
+        "min_weight": readme_settings_async("fair_draw_settings", "min_weight") or 0.1,
+        "max_weight": readme_settings_async("fair_draw_settings", "max_weight") or 5.0,
         "frequency_function": readme_settings_async(
-            "advanced_settings", "frequency_function"
+            "fair_draw_settings", "frequency_function"
         )
         or 1,
         "frequency_weight": readme_settings_async(
-            "advanced_settings", "frequency_weight"
+            "fair_draw_settings", "frequency_weight"
         )
         or 1.0,
-        "group_weight": readme_settings_async("advanced_settings", "group_weight")
+        "group_weight": readme_settings_async("fair_draw_settings", "group_weight")
         or 1.0,
-        "gender_weight": readme_settings_async("advanced_settings", "gender_weight")
+        "gender_weight": readme_settings_async("fair_draw_settings", "gender_weight")
         or 1.0,
-        "time_weight": readme_settings_async("advanced_settings", "time_weight") or 1.0,
+        "time_weight": readme_settings_async("fair_draw_settings", "time_weight")
+        or 1.0,
         "cold_start_enabled": readme_settings_async(
-            "advanced_settings", "cold_start_enabled"
+            "fair_draw_settings", "cold_start_enabled"
         )
         or False,
         "cold_start_rounds": readme_settings_async(
-            "advanced_settings", "cold_start_rounds"
+            "fair_draw_settings", "cold_start_rounds"
         )
         or 10,
         "shield_enabled": readme_settings_async("advanced_settings", "shield_enabled")
@@ -745,9 +747,13 @@ def calculate_weight(students_data: list, class_name: str) -> list:
                 )
             elif settings["frequency_function"] == 2:  # 指数函数
                 # 指数函数：exp((max_count - current_count) / max_count)
-                frequency_factor = math.exp(
-                    (max_total_count - total_count) / max_total_count
-                )
+                # 当max_total_count为0时，避免除零错误
+                if max_total_count == 0:
+                    frequency_factor = 1.0  # 所有学生都未被抽中时，频率因子为1
+                else:
+                    frequency_factor = math.exp(
+                        (max_total_count - total_count) / max_total_count
+                    )
             else:  # 默认平方根函数
                 frequency_factor = math.sqrt(max_total_count + 1) / math.sqrt(
                     total_count + 1
@@ -842,8 +848,6 @@ def calculate_weight(students_data: list, class_name: str) -> list:
                 days_diff = (current_time - last_time).days
                 time_factor = min(1.0, days_diff / 30.0) * settings["time_weight"]
             except Exception as e:
-                from loguru import logger
-
                 logger.exception(
                     "Error calculating time factor for student weights: {}", e
                 )
@@ -878,13 +882,11 @@ def calculate_weight(students_data: list, class_name: str) -> list:
                         shield_duration - (current_time - last_time)
                     ).total_seconds()
             except Exception as e:
-                from loguru import logger
-
                 logger.exception("Error calculating shield time for student: {}", e)
 
         # 计算总权重
         student_weights = {
-            "base": settings["base_weight"] * 0.2,  # 基础权重占比20%
+            "base": settings["base_weight"],  # 基础权重
             "frequency": frequency_penalty,  # 频率惩罚
             "group": group_balance,  # 小组平衡
             "gender": gender_balance,  # 性别平衡

@@ -173,6 +173,27 @@ class floating_window_basic_settings(GroupHeaderCardWidget):
             )
         )
 
+        # 无焦点模式开关
+        self.do_not_steal_focus_switch = SwitchButton()
+        self.do_not_steal_focus_switch.setOffText(
+            get_content_switchbutton_name_async(
+                "floating_window_management", "do_not_steal_focus", "disable"
+            )
+        )
+        self.do_not_steal_focus_switch.setOnText(
+            get_content_switchbutton_name_async(
+                "floating_window_management", "do_not_steal_focus", "enable"
+            )
+        )
+        self.do_not_steal_focus_switch.setChecked(
+            readme_settings_async("floating_window_management", "do_not_steal_focus")
+        )
+        self.do_not_steal_focus_switch.checkedChanged.connect(
+            lambda checked: update_settings(
+                "floating_window_management", "do_not_steal_focus", checked
+            )
+        )
+
         # 添加设置项到分组
         self.addGroup(
             get_theme_icon("ic_fluent_desktop_sync_20_filled"),
@@ -219,6 +240,17 @@ class floating_window_basic_settings(GroupHeaderCardWidget):
                     "floating_window_management", "floating_window_long_press_duration"
                 ),
                 self.floating_window_long_press_duration_spinbox,
+            )
+        if is_setting_visible("floating_window_management", "do_not_steal_focus"):
+            self.addGroup(
+                get_theme_icon("ic_fluent_lock_open_20_filled"),
+                get_content_name_async(
+                    "floating_window_management", "do_not_steal_focus"
+                ),
+                get_content_description_async(
+                    "floating_window_management", "do_not_steal_focus"
+                ),
+                self.do_not_steal_focus_switch,
             )
         self.addGroup(
             get_theme_icon("ic_fluent_arrow_reset_20_filled"),

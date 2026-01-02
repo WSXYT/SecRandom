@@ -77,6 +77,11 @@ floating_window_management = {
             "description": "设置浮窗按钮和图标的大小",
             "combo_items": ["超级小", "超小", "小", "中", "大", "超大", "超级大"],
         },
+        "do_not_steal_focus": {
+            "name": "无焦点模式",
+            "description": "通知窗口显示时不抢占焦点，保持原有顶层软件焦点",
+            "switchbutton_name": {"enable": "", "disable": ""},
+        },
     },
     "EN_US": {
         "title": {
@@ -169,6 +174,11 @@ floating_window_management = {
                 "5": "Extra Large",
                 "6": "Extra Extra Large",
             },
+        },
+        "do_not_steal_focus": {
+            "name": "Focusless mode",
+            "description": "Do not steal focus when notification window appears, keep focus on original top-level software",
+            "switchbutton_name": {"enable": "", "disable": ""},
         },
     },
 }

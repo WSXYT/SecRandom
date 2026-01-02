@@ -274,6 +274,10 @@ quick_draw_settings = {
             "name": "点击后禁用时间",
             "description": "设置点击一次闪抽后禁用闪抽功能的时间（秒）",
         },
+        "draw_count": {
+            "name": "抽取人数",
+            "description": "设置每次闪抽抽取的人数",
+        },
         "font_size": {"name": "字体大小", "description": "设置闪抽结果字体大小"},
         "use_global_font": {
             "name": "使用全局字体",
@@ -454,6 +458,10 @@ quick_draw_settings = {
         "disable_after_click": {
             "name": "Disable after click",
             "description": "Set the time to disable Quick Pick after one click (s)",
+        },
+        "draw_count": {
+            "name": "Draw count",
+            "description": "Set the number of students to draw in Quick Pick",
         },
     },
 }

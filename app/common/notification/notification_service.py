@@ -292,7 +292,7 @@ class FloatingNotificationWindow(CardWidget):
                 }}
             """)
 
-    def apply_settings(self, settings=None):
+    def apply_settings(self, settings=None, settings_group=None):
         """应用设置到通知窗口"""
         if settings:
             # 使用传递的设置
@@ -303,6 +303,9 @@ class FloatingNotificationWindow(CardWidget):
             transparency = 0.6
             auto_close_time = 5
             self.is_animation_enabled = True
+
+        # 保存设置组，用于后续判断是否抢占焦点
+        self.settings_group = settings_group
 
         # 设置透明度（背景和字体透明度统一）
         self.setWindowOpacity(transparency)
@@ -687,14 +690,24 @@ class FloatingNotificationWindow(CardWidget):
         if hasattr(self, "auto_close_timer") and self.auto_close_timer.interval() > 0:
             self.auto_close_timer.start()
 
-        # 确保窗口保持在最前面
-        self.raise_()
-        # 仅在窗口允许接受焦点时调用激活，避免 QWindow::requestActivate 警告
+        # 检查是否设置了"无焦点模式"
+        do_not_steal_focus = False
         try:
-            if not (self.windowFlags() & Qt.WindowDoesNotAcceptFocus):
-                self.activateWindow()
-        except Exception as e:
-            logger.exception("激活窗口时出错（已忽略）: {}", e)
+            do_not_steal_focus = readme_settings_async(
+                "floating_window_management", "do_not_steal_focus"
+            )
+        except Exception:
+            pass
+
+        # 如果没有设置"无焦点模式"，则确保窗口保持在最前面并激活
+        if not do_not_steal_focus:
+            self.raise_()
+            # 仅在窗口允许接受焦点时调用激活，避免 QWindow::requestActivate 警告
+            try:
+                if not (self.windowFlags() & Qt.WindowDoesNotAcceptFocus):
+                    self.activateWindow()
+            except Exception as e:
+                logger.exception("激活窗口时出错（已忽略）: {}", e)
 
         # 更新倒计时显示
         self.update_countdown_display()
@@ -737,14 +750,33 @@ class FloatingNotificationWindow(CardWidget):
         # 隐藏窗口
         self.hide()
 
-    def update_content(self, student_labels, settings=None, font_settings_group=None):
+    def update_content(
+        self,
+        student_labels,
+        settings=None,
+        font_settings_group=None,
+        settings_group=None,
+    ):
         """更新通知窗口的内容
 
         Args:
             student_labels: 包含学生信息的BodyLabel控件列表
             settings: 通知设置参数
             font_settings_group: 字体设置组名称
+            settings_group: 通知设置组名称
         """
+        # 保存设置组，用于后续判断是否抢占焦点
+        if settings_group:
+            self.settings_group = settings_group
+        elif font_settings_group:
+            # 如果没有提供settings_group，尝试从font_settings_group推断
+            if font_settings_group == "roll_call_settings":
+                self.settings_group = "roll_call_notification_settings"
+            elif font_settings_group == "quick_draw_settings":
+                self.settings_group = "quick_draw_notification_settings"
+            elif font_settings_group == "lottery_settings":
+                self.settings_group = "lottery_notification_settings"
+
         # 清除现有内容
         while self.content_layout.count():
             item = self.content_layout.takeAt(0)
@@ -972,11 +1004,15 @@ class FloatingNotificationManager:
         # 应用显示时长设置到窗口
         if settings:
             display_duration = settings.get("notification_display_duration", 5)
-            window.apply_settings({**settings, "auto_close_time": display_duration})
+            window.apply_settings(
+                {**settings, "auto_close_time": display_duration}, settings_group
+            )
         else:
-            window.apply_settings({"auto_close_time": 5})  # 默认5秒
+            window.apply_settings({"auto_close_time": 5}, settings_group)  # 默认5秒
 
-        window.update_content(student_labels, settings, font_settings_group)
+        window.update_content(
+            student_labels, settings, font_settings_group, settings_group
+        )
 
     def get_notification_title(self):
         """获取通知标题文本（支持多语言）"""
@@ -1084,11 +1120,15 @@ class FloatingNotificationManager:
         # 应用显示时长设置到窗口
         if settings:
             display_duration = settings.get("notification_display_duration", 5)
-            window.apply_settings({**settings, "auto_close_time": display_duration})
+            window.apply_settings(
+                {**settings, "auto_close_time": display_duration}, settings_group
+            )
         else:
-            window.apply_settings({"auto_close_time": 5})  # 默认5秒
+            window.apply_settings({"auto_close_time": 5}, settings_group)  # 默认5秒
 
-        window.update_content(student_labels, settings, font_settings_group)
+        window.update_content(
+            student_labels, settings, font_settings_group, settings_group
+        )
 
     def close_all_notifications(self):
         """关闭所有浮动通知窗口"""

@@ -47,7 +47,7 @@ class about_banner(QWidget):
         super().__init__(parent)
         banner_path = get_data_path("assets/icon", "secrandom-banner.png")
         self.banner_image = ImageLabel(f"{banner_path}")
-        self.banner_image.scaledToHeight(350)
+        self.banner_image.scaledToHeight(300)
         self.banner_image.setBorderRadius(12, 12, 12, 12)
         self.banner_image.setScaledContents(True)
 
@@ -99,7 +99,7 @@ class about_info(GroupHeaderCardWidget):
 
         # 查看当前软件版权所属
         # 根据发布年份和当前年份是否相同，决定显示格式
-        if INITIAL_AUTHORING_YEAR == CURRENT_YEAR:
+        if INITIAL_AUTHORING_YEAR <= CURRENT_YEAR:
             copyright_text = f"Copyright © {INITIAL_AUTHORING_YEAR} {COPYRIGHT_HOLDER}"
         else:
             copyright_text = f"Copyright © {INITIAL_AUTHORING_YEAR}-{CURRENT_YEAR} {COPYRIGHT_HOLDER}"

@@ -96,7 +96,6 @@ class LevitationWindow(QWidget):
             | Qt.WindowStaysOnTopHint
             | Qt.Tool
             | Qt.NoDropShadowWindowHint
-            | Qt.NoFocus
         )
 
     def _init_drag_properties(self):
@@ -315,6 +314,12 @@ class LevitationWindow(QWidget):
         )
         self._apply_size_setting(size_idx)
 
+        # 无焦点模式设置
+        self._do_not_steal_focus = self._get_bool_setting(
+            "floating_window_management", "do_not_steal_focus", False
+        )
+        self._apply_focus_mode()
+
         # 贴边隐藏功能配置
         self._init_edge_hide_settings()
 
@@ -447,6 +452,19 @@ class LevitationWindow(QWidget):
             QTimer.singleShot(100, self._check_edge_proximity)
         else:
             self.hide()
+
+    def _apply_focus_mode(self):
+        """应用无焦点模式设置"""
+        if self._do_not_steal_focus:
+            # 无焦点模式：添加 WindowDoesNotAcceptFocus 标志
+            self.setWindowFlags(self.windowFlags() | Qt.WindowDoesNotAcceptFocus)
+        else:
+            # 正常模式：移除 WindowDoesNotAcceptFocus 标志
+            self.setWindowFlags(self.windowFlags() & ~Qt.WindowDoesNotAcceptFocus)
+        # 重新显示窗口以应用新的窗口标志
+        if self.isVisible():
+            self.hide()
+            self.show()
 
     def showEvent(self, event):
         """重写showEvent，当浮窗显示时检测边缘"""
@@ -1026,7 +1044,6 @@ class LevitationWindow(QWidget):
                 logger.debug(
                     f"贴边隐藏动画完成，选择显示样式: {self._stick_indicator_style}"
                 )
-                logger.debug("创建DraggableWidget箭头按钮")
                 self._create_arrow_button(
                     "right",
                     0,
@@ -1074,7 +1091,6 @@ class LevitationWindow(QWidget):
                     f"贴边隐藏动画完成，选择显示样式: {self._stick_indicator_style}"
                 )
                 # 根据配置选择创建收纳浮窗或箭头按钮
-                logger.debug("创建DraggableWidget箭头按钮")
                 self._create_arrow_button(
                     "left",
                     screen.width() - self._storage_btn_size.width(),
@@ -1654,6 +1670,9 @@ class LevitationWindow(QWidget):
             elif second == "floating_window_button_control":
                 self._buttons_spec = self._map_button_control(int(value or 0))
                 self.rebuild_ui()
+            elif second == "do_not_steal_focus":
+                self._do_not_steal_focus = bool(value)
+                self._apply_focus_mode()
             # 当任何影响外观的设置改变时，重新应用主题样式
             self._apply_theme_style()
         elif first == "float_position":

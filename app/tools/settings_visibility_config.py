@@ -21,6 +21,7 @@ SETTINGS_VISIBILITY_CONFIG = {
         "animation_interval": False,
         "autoplay_count": False,
         "color_theme": False,
+        "draw_count": False,
     },
     "lottery_settings": {
         "use_global_font": False,
@@ -45,5 +46,6 @@ SETTINGS_VISIBILITY_CONFIG = {
         "floating_window_stick_to_edge_display_style": False,
         "floating_window_draggable": False,
         "floating_window_size": False,
+        "do_not_steal_focus": False,
     },
 }

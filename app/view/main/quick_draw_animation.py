@@ -168,8 +168,8 @@ class QuickDrawAnimation(QObject):
             gender_index
         ]
 
-        # 从roll_call_widget获取当前抽取数量
-        current_count = self.roll_call_widget.current_count
+        # 从闪抽设置中读取抽取人数
+        current_count = readme_settings_async("quick_draw_settings", "draw_count")
 
         # 从闪抽设置中读取半重复设置
         half_repeat = readme_settings_async("quick_draw_settings", "half_repeat")
@@ -270,11 +270,14 @@ class QuickDrawAnimation(QObject):
         try:
             # 检查是否有抽取结果
             if self.final_selected_students and self.final_class_name:
+                # 从闪抽设置中读取抽取人数
+                draw_count = readme_settings_async("quick_draw_settings", "draw_count")
+
                 # 使用闪抽设置重新显示结果
                 student_labels = ResultDisplayUtils.create_student_label(
                     class_name=self.final_class_name,
                     selected_students=self.final_selected_students,
-                    draw_count=1,
+                    draw_count=draw_count,
                     font_size=quick_draw_settings["font_size"],
                     animation_color=quick_draw_settings["animation_color_theme"],
                     display_format=quick_draw_settings["display_format"],
@@ -351,7 +354,7 @@ class QuickDrawAnimation(QObject):
                     ResultDisplayUtils.show_notification_if_enabled(
                         self.final_class_name,
                         self.final_selected_students,
-                        1,
+                        draw_count,
                         settings,
                         settings_group="quick_draw_notification_settings",
                     )
@@ -409,6 +412,11 @@ class QuickDrawAnimation(QObject):
             if call_notification_service:
                 # 检查是否有抽取结果
                 if self.final_selected_students and self.final_class_name:
+                    # 从闪抽设置中读取抽取人数
+                    draw_count = readme_settings_async(
+                        "quick_draw_settings", "draw_count"
+                    )
+
                     # 准备通知设置
                     settings = {
                         "animation": readme_settings_async(
@@ -453,7 +461,7 @@ class QuickDrawAnimation(QObject):
                     ResultDisplayUtils.show_notification_if_enabled(
                         self.final_class_name,
                         self.final_selected_students,
-                        1,
+                        draw_count,
                         settings,
                         settings_group="quick_draw_notification_settings",
                     )
