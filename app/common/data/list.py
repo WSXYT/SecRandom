@@ -5,7 +5,7 @@ import json
 from typing import List, Dict, Any, Tuple
 from loguru import logger
 
-from app.tools.path_utils import *
+from app.tools.path_utils import get_data_path
 
 
 # ==================================================

@@ -10,10 +10,9 @@ import sounddevice as sd
 import soundfile as sf
 from loguru import logger
 
-from app.tools.path_utils import *
-from app.tools.settings_default import *
-from app.tools.settings_access import *
-from app.Language.obtain_language import *
+from app.Language.obtain_language import get_content_name_async
+from app.tools.path_utils import get_audio_path
+from app.tools.settings_access import readme_settings_async
 
 
 # ==================================================

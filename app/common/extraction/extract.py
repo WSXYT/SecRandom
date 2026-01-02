@@ -4,16 +4,18 @@ from pathlib import Path
 from typing import Dict, Tuple
 
 from PySide6.QtCore import QDateTime
-from PySide6.QtGui import *
-from PySide6.QtNetwork import *
-from PySide6.QtWidgets import *
 from loguru import logger
-from qfluentwidgets import *
 
 from app.Language.obtain_language import get_content_name_async
 from app.common.IPC_URL.csharp_ipc_handler import CSharpIPCHandler
 from app.common.extraction.cses_parser import CSESParser
-from app.tools.path_utils import *
+from app.tools.path_utils import (
+    get_data_path,
+    get_settings_path,
+    file_exists,
+    open_file,
+    ensure_dir,
+)
 from app.tools.settings_access import readme_settings_async
 
 

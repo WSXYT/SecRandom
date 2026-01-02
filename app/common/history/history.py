@@ -7,22 +7,17 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Union
 from pathlib import Path
 
+from PySide6.QtGui import Qt
+from PySide6.QtWidgets import QTableWidgetItem
 from loguru import logger
-from PySide6.QtWidgets import *
-from PySide6.QtGui import *
-from PySide6.QtCore import *
-from PySide6.QtNetwork import *
-from qfluentwidgets import *
 
-from app.tools.variable import *
-from app.tools.path_utils import *
-from app.tools.personalised import *
-from app.tools.settings_default import *
-from app.tools.settings_access import *
-from app.Language.obtain_language import *
-from app.common.data.list import *
+from app.Language.obtain_language import get_content_combo_name_async
+from app.common.data.list import get_pool_list, get_student_list
 
 from random import SystemRandom
+
+from app.tools.path_utils import get_path
+from app.tools.settings_access import readme_settings_async
 
 system_random = SystemRandom()
 
