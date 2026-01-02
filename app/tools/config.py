@@ -1933,8 +1933,21 @@ def remove_record(class_name: str, gender: str, group: str, _prefix: str = "0"):
 
 def reset_drawn_record(self, class_name: str, gender: str, group: str):
     """删除已抽取记录文件"""
-    clear_record = readme_settings_async("roll_call_settings", "clear_record")
-    if clear_record in [0, 1]:  # 重启后清除、直至全部抽取完
+    draw_mode = readme_settings_async("roll_call_settings", "draw_mode")
+
+    if draw_mode == 0:  # 重复抽取模式 - 不需要清除
+        message = f"当前处于重复抽取状态，无需清除{class_name}已抽取记录"
+        show_notification(
+            NotificationType.INFO,
+            NotificationConfig(
+                title="提示",
+                content=message,
+                icon=get_theme_icon("ic_fluent_warning_20_filled"),
+            ),
+            parent=self,
+        )
+        logger.info(f"{message}_{gender}_{group}已抽取记录")
+    else:  # 不重复抽取模式或半重复抽取模式 - 需要清除
         remove_record(class_name, gender, group)
         show_notification(
             NotificationType.INFO,
@@ -1946,19 +1959,6 @@ def reset_drawn_record(self, class_name: str, gender: str, group: str):
             parent=self,
         )
         logger.info(f"已重置{class_name}_{gender}_{group}已抽取记录")
-    else:  # 重复抽取
-        show_notification(
-            NotificationType.INFO,
-            NotificationConfig(
-                title="提示",
-                content=f"当前处于重复抽取状态，无需清除{class_name}已抽取记录",
-                icon=get_theme_icon("ic_fluent_warning_20_filled"),
-            ),
-            parent=self,
-        )
-        logger.info(
-            f"当前处于重复抽取状态，无需清除{class_name}_{gender}_{group}已抽取记录"
-        )
 
 
 # ======= 计算剩余人数 =======
@@ -2082,22 +2082,39 @@ def read_drawn_record_simple(pool_name: str):
 
 
 def reset_drawn_prize_record(self, pool_name: str):
+    """删除奖池抽取记录文件"""
     try:
-        pattern = os.path.join("data", "TEMP", f"draw_*_prize_{pool_name}.json")
-        for fp in glob.glob(pattern):
-            try:
-                os.remove(fp)
-            except OSError as e:
-                logger.error(f"删除文件{fp}失败: {e}")
-        show_notification(
-            NotificationType.INFO,
-            NotificationConfig(
-                title="提示",
-                content=f"已重置{pool_name}奖池抽取记录",
-                icon=FluentIcon.INFO,
-            ),
-            parent=self,
-        )
+        draw_mode = readme_settings_async("lottery_settings", "draw_mode")
+
+        if draw_mode == 0:  # 重复抽取模式 - 不需要清除
+            message = f"当前处于重复抽取状态，无需清除{pool_name}奖池抽取记录"
+            show_notification(
+                NotificationType.INFO,
+                NotificationConfig(
+                    title="提示",
+                    content=message,
+                    icon=get_theme_icon("ic_fluent_warning_20_filled"),
+                ),
+                parent=self,
+            )
+            logger.info(f"{message}")
+        else:  # 不重复抽取模式或半重复抽取模式 - 需要清除
+            pattern = os.path.join("data", "TEMP", f"draw_*_prize_{pool_name}.json")
+            for fp in glob.glob(pattern):
+                try:
+                    os.remove(fp)
+                except OSError as e:
+                    logger.error(f"删除文件{fp}失败: {e}")
+            show_notification(
+                NotificationType.INFO,
+                NotificationConfig(
+                    title="提示",
+                    content=f"已重置{pool_name}奖池抽取记录",
+                    icon=FluentIcon.INFO,
+                ),
+                parent=self,
+            )
+            logger.info(f"已重置{pool_name}奖池抽取记录")
     except Exception as e:
         logger.error(f"重置奖池抽取记录失败: {e}")
 
