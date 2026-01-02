@@ -776,7 +776,7 @@ class lottery_history_table(GroupHeaderCardWidget):
                         self._load_more_lotterys_data()
                 elif self.current_mode == 1:
                     # 获取会话记录数量
-                    sessions_count = get_draw_sessions_history("lottery", pool_name)
+                    sessions_count = get_session_statistics("lottery", pool_name)
                     if sessions_count:
                         self.total_rows = sessions_count
                         # 设置初始行数为批次大小或总行数，取较小值
@@ -815,7 +815,7 @@ class lottery_history_table(GroupHeaderCardWidget):
                     self._load_more_lotterys_data()
             elif self.current_mode == 1:
                 # 获取会话记录数量
-                sessions_count = get_draw_sessions_history("lottery", pool_name)
+                sessions_count = get_session_statistics("lottery", pool_name)
                 if sessions_count:
                     self.total_rows = sessions_count
                     # 设置初始行数为批次大小或总行数，取较小值
