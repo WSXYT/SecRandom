@@ -320,6 +320,82 @@ def init_lightweight_stats_from_history(history_type: str, class_name: str):
         logger.error(f"初始化轻量级统计结构失败: {e}")
 
 
+def read_history_and_update_stats(history_type: str, class_name: str) -> Dict[str, Any]:
+    """读取历史记录并更新轻量级统计结构
+
+    Args:
+        history_type: 历史记录类型 (roll_call, lottery 等)
+        class_name: 班级名称
+
+    Returns:
+        Dict[str, Any]: 历史记录数据（只包含必要信息，不保留完整历史）
+    """
+    try:
+        history_data = load_history_data(history_type, class_name)
+
+        if not history_data:
+            return {}
+
+        # 更新轻量级统计结构
+        if history_type == "roll_call":
+            students_key = "students"
+        elif history_type == "lottery":
+            students_key = "lotterys"
+        else:
+            return history_data
+
+        # 处理学生统计信息
+        students_data = history_data.get(students_key, {})
+        for student_name, student_info in students_data.items():
+            if isinstance(student_info, dict):
+                total_count = student_info.get("total_count", 0)
+                last_drawn_time = student_info.get("last_drawn_time", "")
+                rounds_missed = student_info.get("rounds_missed", 0)
+
+                # 更新学生统计（不保留详细历史记录）
+                lightweight_stats.students[student_name] = {
+                    "total_count": total_count,
+                    "last_drawn_time": last_drawn_time,
+                    "group_count": 0,  # 简化处理，不详细统计
+                    "gender_count": 0,  # 简化处理，不详细统计
+                    "rounds_missed": rounds_missed,
+                }
+
+                # 更新最大抽取次数
+                lightweight_stats.global_stats["max_total_count"] = max(
+                    lightweight_stats.global_stats["max_total_count"], total_count
+                )
+
+        # 复制全局统计
+        if "group_stats" in history_data:
+            lightweight_stats.global_stats["group_stats"] = history_data[
+                "group_stats"
+            ].copy()
+        if "gender_stats" in history_data:
+            lightweight_stats.global_stats["gender_stats"] = history_data[
+                "gender_stats"
+            ].copy()
+        if "total_stats" in history_data:
+            lightweight_stats.global_stats["total_stats"] = history_data["total_stats"]
+        if "total_rounds" in history_data:
+            lightweight_stats.global_stats["total_rounds"] = history_data[
+                "total_rounds"
+            ]
+
+        # 返回精简的历史数据，不包含详细历史记录
+        return {
+            "students": {},  # 不返回详细学生历史
+            "group_stats": lightweight_stats.global_stats["group_stats"],
+            "gender_stats": lightweight_stats.global_stats["gender_stats"],
+            "total_rounds": lightweight_stats.global_stats["total_rounds"],
+            "total_stats": lightweight_stats.global_stats["total_stats"],
+        }
+
+    except Exception as e:
+        logger.error(f"读取历史记录并更新统计失败: {e}")
+        return {}
+
+
 # ==================================================
 # 历史记录文件路径处理函数
 # ==================================================
@@ -504,7 +580,7 @@ def save_lottery_history(
     group_filter: str,
     gender_filter: str,
 ) -> bool:
-    """保存抽奖历史（基于奖池名称）
+    """保存抽奖历史（基于奖池名称，使用新结构）
 
     Args:
         pool_name: 奖池名称
@@ -516,58 +592,56 @@ def save_lottery_history(
         bool: 保存是否成功
     """
     try:
-        history_data = load_history_data("lottery", pool_name)
-        lotterys = history_data.get("lotterys", {})
-        group_stats = history_data.get("group_stats", {})
-        gender_stats = history_data.get("gender_stats", {})
-        total_stats = history_data.get("total_stats", 0)
-
+        # 读取现有历史记录并更新轻量级统计结构
+        history_summary = read_history_and_update_stats("lottery", pool_name)
+        
         now_str = datetime.now().isoformat(timespec="seconds")
 
+        # 更新每个被选中学生的统计信息
         for student in selected_students or []:
             name = student.get("name", "")
             if not name:
                 continue
-            entry = lotterys.get(name)
-            if not isinstance(entry, dict):
-                entry = {
-                    "total_count": 0,
-                    "rounds_missed": 0,
-                    "last_drawn_time": "",
-                    "history": [],
-                }
-            entry["total_count"] = int(entry.get("total_count", 0)) + 1
-            entry["last_drawn_time"] = now_str
-            hist = entry.get("history", [])
-            if not isinstance(hist, list):
-                hist = []
-            hist.append(
-                {
-                    "draw_time": now_str,
-                    "draw_group": group_filter,
-                    "draw_gender": gender_filter,
-                }
-            )
-            entry["history"] = hist
-            lotterys[name] = entry
+                
+            # 更新轻量级统计结构中的学生信息
+            lightweight_stats.update_student_stats(name)
 
-        # 更新统计
+        # 更新小组和性别统计
         if group_filter:
-            group_stats[group_filter] = int(group_stats.get(group_filter, 0)) + len(
-                selected_students or []
-            )
+            if group_filter not in lightweight_stats.global_stats["group_stats"]:
+                lightweight_stats.global_stats["group_stats"][group_filter] = 0
+            lightweight_stats.global_stats["group_stats"][group_filter] += len(selected_students or [])
+            
         if gender_filter:
-            gender_stats[gender_filter] = int(gender_stats.get(gender_filter, 0)) + len(
-                selected_students or []
-            )
-        total_stats = int(total_stats) + len(selected_students or [])
+            if gender_filter not in lightweight_stats.global_stats["gender_stats"]:
+                lightweight_stats.global_stats["gender_stats"][gender_filter] = 0
+            lightweight_stats.global_stats["gender_stats"][gender_filter] += len(selected_students or [])
+            
+        # 更新总统计数
+        lightweight_stats.global_stats["total_stats"] += len(selected_students or [])
 
-        history_data["lotterys"] = lotterys
-        history_data["group_stats"] = group_stats
-        history_data["gender_stats"] = gender_stats
-        history_data["total_stats"] = total_stats
+        # 构建要保存的精简历史数据
+        history_data_to_save = {
+            "lotterys": {},  # 不保存详细历史记录
+            "group_stats": lightweight_stats.global_stats["group_stats"],
+            "gender_stats": lightweight_stats.global_stats["gender_stats"],
+            "total_stats": lightweight_stats.global_stats["total_stats"],
+        }
+        
+        # 只保存学生的基本统计信息
+        for student in selected_students or []:
+            name = student.get("name", "")
+            if name and name in lightweight_stats.students:
+                student_stats = lightweight_stats.students[name]
+                history_data_to_save["lotterys"][name] = {
+                    "total_count": student_stats["total_count"],
+                    "last_drawn_time": now_str,
+                }
 
-        return save_history_data("lottery", pool_name, history_data)
+        # 使用异步写入保存历史记录
+        write_history_async("lottery", pool_name, history_data_to_save)
+        return True
+        
     except Exception as e:
         logger.error(f"保存抽奖历史失败: {e}")
         return False
@@ -935,7 +1009,7 @@ def save_roll_call_history(
     group_filter: Optional[str] = None,
     gender_filter: Optional[str] = None,
 ) -> bool:
-    """保存点名历史记录
+    """保存点名历史记录（使用新结构，不保留完整历史）
 
     Args:
         class_name: 班级名称
@@ -951,95 +1025,62 @@ def save_roll_call_history(
         # 获取当前时间
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        # 加载现有历史记录
-        history_data = load_history_data("roll_call", class_name)
-
-        # 初始化数据结构
-        if "students" not in history_data:
-            history_data["students"] = {}
-        if "group_stats" not in history_data:
-            history_data["group_stats"] = {}
-        if "gender_stats" not in history_data:
-            history_data["gender_stats"] = {}
-        if "total_rounds" not in history_data:
-            history_data["total_rounds"] = 0
-        if "total_stats" not in history_data:
-            history_data["total_stats"] = 0
+        # 读取现有历史记录并更新轻量级统计结构
+        history_summary = read_history_and_update_stats("roll_call", class_name)
 
         # 获取被选中的学生名称列表
         selected_names = [s.get("name", "") for s in selected_students]
 
-        # 计算权重
-        students_dict_list = get_student_list(class_name)
-        students_with_weight = calculate_weight(students_dict_list, class_name)
-
-        # 更新每个被选中学生的历史记录
+        # 更新每个被选中学生的统计信息
         for student in selected_students:
             student_name = student.get("name", "")
             if not student_name:
                 continue
 
-            # 如果学生不存在于历史记录中，创建新记录
-            if student_name not in history_data["students"]:
-                history_data["students"][student_name] = {
-                    "total_count": 0,
-                    "group_gender_count": 0,
-                    "last_drawn_time": "",
-                    "rounds_missed": 0,
-                    "history": [],
-                }
-
-            # 更新学生的基本信息
-            student_data = history_data["students"][student_name]
-            student_data["total_count"] += 1
-            student_data["last_drawn_time"] = current_time
-            student_data["rounds_missed"] = 0  # 重置未选中次数
-
-            draw_method = 1
-
-            # 获取当前被选中学生的权重信息
-            current_student_weight = None
-            for student_with_weight in students_with_weight:
-                if student_with_weight.get("name") == student_name:
-                    current_student_weight = student_with_weight.get("next_weight", 0)
-                    break
-
-            history_entry = {
-                "draw_method": draw_method,
-                "draw_time": current_time,
-                "draw_people_numbers": len(selected_students),
-                "draw_group": group_filter,
-                "draw_gender": gender_filter,
-                "weight": current_student_weight,
-            }
-            student_data["history"].append(history_entry)
-
-        # 更新未被选中的学生的未选中次数
-        for student_name, student_data in history_data["students"].items():
-            if student_name not in selected_names:
-                student_data["rounds_missed"] += 1
+            # 更新轻量级统计结构中的学生信息
+            lightweight_stats.update_student_stats(student_name)
 
         # 更新小组和性别统计
         for student in selected_students:
             group = student.get("group", "")
             gender = student.get("gender", "")
 
-            # 更新小组统计
-            if group not in history_data["group_stats"]:
-                history_data["group_stats"][group] = 0
-            history_data["group_stats"][group] += 1
+            if group:
+                if group not in lightweight_stats.global_stats["group_stats"]:
+                    lightweight_stats.global_stats["group_stats"][group] = 0
+                lightweight_stats.global_stats["group_stats"][group] += 1
 
-            # 更新性别统计
-            if gender not in history_data["gender_stats"]:
-                history_data["gender_stats"][gender] = 0
-            history_data["gender_stats"][gender] += 1
+            if gender:
+                if gender not in lightweight_stats.global_stats["gender_stats"]:
+                    lightweight_stats.global_stats["gender_stats"][gender] = 0
+                lightweight_stats.global_stats["gender_stats"][gender] += 1
 
         # 更新总轮数和总统计数
-        history_data["total_rounds"] += 1
-        history_data["total_stats"] += len(selected_students)
+        lightweight_stats.global_stats["total_rounds"] += 1
+        lightweight_stats.global_stats["total_stats"] += len(selected_students)
 
-        # 保存历史记录
-        return save_history_data("roll_call", class_name, history_data)
+        # 构建要保存的精简历史数据（只包含统计信息，不包含详细历史）
+        history_data_to_save = {
+            "students": {},  # 不保存详细学生历史
+            "group_stats": lightweight_stats.global_stats["group_stats"],
+            "gender_stats": lightweight_stats.global_stats["gender_stats"],
+            "total_rounds": lightweight_stats.global_stats["total_rounds"],
+            "total_stats": lightweight_stats.global_stats["total_stats"],
+        }
+
+        # 只保存学生的基本统计信息
+        for student_name in selected_names:
+            if student_name and student_name in lightweight_stats.students:
+                student_stats = lightweight_stats.students[student_name]
+                history_data_to_save["students"][student_name] = {
+                    "total_count": student_stats["total_count"],
+                    "last_drawn_time": current_time,
+                    "rounds_missed": 0,  # 被选中的学生重置未选中次数
+                }
+
+        # 使用异步写入保存历史记录
+        write_history_async("roll_call", class_name, history_data_to_save)
+        return True
 
     except Exception as e:
         logger.error(f"保存点名历史记录失败: {e}")
