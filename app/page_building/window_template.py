@@ -4,18 +4,21 @@
 from typing import Dict, Optional, Type
 
 from loguru import logger
-from PySide6.QtWidgets import *
-from PySide6.QtGui import *
-from PySide6.QtCore import *
-from PySide6.QtNetwork import *
-from qfluentwidgets import *
-from qframelesswindow import *
+from PySide6.QtWidgets import (
+    QApplication, QVBoxLayout, QWidget, QLabel, QStackedWidget
+)
+from PySide6.QtGui import QIcon, QFont, Qt
+from PySide6.QtCore import Signal
 
-from app.tools.variable import *
-from app.tools.settings_access import *
-from app.tools.path_utils import *
-from app.tools.personalised import *
-from app.Language.obtain_language import *
+from qfluentwidgets import (
+    BodyLabel, qconfig, is_dark_theme
+)
+from qframelesswindow import FramelessWindow, StandardTitleBar
+
+from app.tools.variable import MINIMUM_WINDOW_SIZE
+from app.tools.settings_access import readme_settings
+from app.tools.path_utils import get_data_path
+from app.tools.personalised import load_custom_font
 
 
 class SimpleWindowTemplate(FramelessWindow):

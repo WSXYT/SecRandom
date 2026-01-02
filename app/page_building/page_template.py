@@ -6,16 +6,13 @@ import time
 
 from loguru import logger
 
-from PySide6.QtWidgets import *
-from PySide6.QtGui import *
-from PySide6.QtCore import *
-from PySide6.QtNetwork import *
-import loguru
-from qfluentwidgets import *
+from PySide6.QtWidgets import QFrame, QScroller, QWidget, QVBoxLayout, QStackedWidget, QScrollArea
+from PySide6.QtGui import QFont
+from PySide6.QtCore import Qt, QTimer
+from qfluentwidgets import qconfig, setTheme, SingleDirectionScrollArea, BodyLabel, SegmentedWidget
 
-from app.tools.variable import *
-from app.tools.path_utils import *
-from app.tools.personalised import *
+from app.tools.variable import APP_INIT_DELAY, MAX_CACHED_PAGES
+from app.tools.personalised import load_custom_font
 
 
 class PageTemplate(QFrame):
@@ -169,10 +166,9 @@ class PageTemplate(QFrame):
                         pass
 
             elapsed = time.perf_counter() - start
-            loguru.logger.debug(f"创建内容组件 {content_name} 耗时: {elapsed:.3f}s")
+            logger.debug(f"创建内容组件 {content_name} 耗时: {elapsed:.3f}s")
         except Exception as e:
             elapsed = time.perf_counter() - start
-            from loguru import logger
 
             logger.exception(f"创建内容组件失败 ({elapsed:.3f}s): {e}")
 
