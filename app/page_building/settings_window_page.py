@@ -2,7 +2,9 @@
 from PySide6.QtWidgets import QFrame
 
 # 导入页面模板
+from app.Language.obtain_language import get_content_name_async
 from app.page_building.page_template import PageTemplate, PivotPageTemplate
+from app.tools.settings_access import readme_settings_async
 
 # 导入自定义页面内容组件
 # 为了延迟导入，传入字符串路径，实际类将在 PageTemplate.create_content 动态导入
@@ -14,11 +16,6 @@ FLOATING_WINDOW_MANAGEMENT_PATH = (
 SAFETY_SETTINGS_PATH = "app.view.settings.safety_settings:safety_settings"
 UPDATE_PATH = "app.view.settings.update:update"
 ABOUT_PATH = "app.view.settings.about:about"
-
-# 导入默认设置
-from app.tools.settings_default import *
-from app.Language.obtain_language import *
-
 
 class basic_settings_page(PageTemplate):
     """创建基础设置页面"""

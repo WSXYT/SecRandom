@@ -3,11 +3,9 @@ from PySide6.QtWidgets import QFrame
 from PySide6.QtCore import QTimer
 
 # 导入页面模板
+from app.Language.obtain_language import get_content_name_async
 from app.page_building.page_template import PageTemplate, PivotPageTemplate
 
-# 导入默认设置
-from app.tools.settings_default import *
-from app.Language.obtain_language import *
 
 # 导入自定义页面内容组件
 from app.view.main.roll_call import roll_call

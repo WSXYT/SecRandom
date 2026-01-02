@@ -25,7 +25,8 @@ from pathlib import Path
 from typing import Union
 from loguru import logger
 
-from app.tools.variable import *
+from app.tools.variable import DEFAULT_FILE_ENCODING, DEFAULT_FONT_FILENAME_PRIMARY, DEFAULT_FONT_NAME_PRIMARY, DEFAULT_SETTINGS_FILENAME
+
 
 
 # ==================================================
@@ -209,7 +210,7 @@ class PathGetter:
         else:
             return self._path_manager.get_absolute_path("data/audio")
 
-    def get_font_path(self, filename: str = DEFAULT_FONT_FILENAME_PRIMARY) -> Path:
+    def get_font_path(self, filename: str = DEFAULT_FONT_NAME_PRIMARY) -> Path:
         """获取字体文件路径
 
         Args:

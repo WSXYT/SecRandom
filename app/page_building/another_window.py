@@ -1,7 +1,10 @@
 # 导入页面模板
 from PySide6.QtCore import QTimer
+from loguru import logger
+from app.Language.obtain_language import get_content_name_async
 from app.page_building.page_template import PageTemplate
 from app.page_building.window_template import SimpleWindowTemplate
+from app.tools.variable import APP_INIT_DELAY
 from app.view.another_window.contributor import contributor_page
 from app.view.another_window.student.import_student_name import ImportStudentNameWindow
 from app.view.another_window.student.set_class_name import SetClassNameWindow
@@ -14,8 +17,6 @@ from app.view.another_window.prize.prize_name_setting import PrizeNameSettingWin
 from app.view.another_window.prize.prize_weight_setting import PrizeWeightSettingWindow
 from app.view.another_window.remaining_list import RemainingListPage
 from app.view.another_window.current_config_viewer import CurrentConfigViewerWindow
-from app.Language.obtain_language import *
-from app.tools.variable import *
 
 # 全局变量，用于保持窗口引用，防止被垃圾回收
 _window_instances = {}

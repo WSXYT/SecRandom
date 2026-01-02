@@ -20,6 +20,7 @@ from queue import Queue, Empty
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 # --------- 第三方库 ---------
+from PySide6.QtWidgets import QApplication
 import edge_tts
 import numpy as np
 import psutil
@@ -27,8 +28,6 @@ import pyttsx3
 import sounddevice as sd
 import soundfile as sf
 from loguru import logger
-from PySide6.QtCore import *
-from PySide6.QtWidgets import *
 
 from edge_tts.exceptions import NoAudioReceived, WebSocketError
 
