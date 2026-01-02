@@ -1,8 +1,11 @@
-from app.tools.variable import *
+
 
 # ==================================================
 # 默认设置列表
 # ==================================================
+from app.tools.variable import DEFAULT_FONT_NAME_PRIMARY, DEFAULT_THEME_COLOR
+
+
 DEFAULT_SETTINGS = {
     "window": {
         "width": {"default_value": 800},

@@ -1,18 +1,17 @@
 # ==================================================
 # 导入模块
 # ==================================================
-from qfluentwidgets import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
-from PySide6.QtCore import *
-from PySide6.QtNetwork import *
 
 import json
+from PySide6.QtGui import QColor, QFontDatabase, QIcon, QPalette, Qt
+from PySide6.QtWidgets import QApplication
 from loguru import logger
+from qfluentwidgets.common.config import Theme
+from qfluentwidgets.common.icon import FluentFontIconBase
 
-from app.tools.variable import *
-from app.tools.path_utils import *
-from app.tools.settings_access import *
+from app.tools.path_utils import get_data_path, get_settings_path, open_file
+from app.tools.settings_access import update_settings
+from app.tools.variable import DEFAULT_ICON_CODEPOINT, FALLBACK_THEME_COLOR
 
 
 # ==================================================
