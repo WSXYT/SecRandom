@@ -64,6 +64,7 @@ if CSHARP_AVAILABLE:
             """
             self.ipc_client: Optional[IpcClient] = None
             self.client_thread: Optional[threading.Thread] = None
+            self.loop: Optional[asyncio.AbstractEventLoop] = None
             self.is_running = False
             self.is_connected = False
             self._disconnect_logged = False  # 跟踪是否已记录断连日志
@@ -80,21 +81,35 @@ if CSHARP_AVAILABLE:
                 return True
 
             try:
+                self.is_running = True
                 self.client_thread = threading.Thread(
                     target=self._run_client, daemon=False
                 )
                 self.client_thread.start()
-                self.is_running = True
                 return True
             except Exception as e:
+                self.is_running = False
                 logger.error(f"启动 C# IPC 客户端失败: {e}")
                 return False
 
         def stop_ipc_client(self):
             """停止 C# IPC 客户端"""
+            logger.debug("正在停止 C# IPC 客户端...")
             self.is_running = False
+            if self.loop and self.loop.is_running():
+                # 获取所有正在运行的任务并取消它们
+                # 这会使 await asyncio.sleep(1) 等操作抛出 CancelledError
+                try:
+                    for task in asyncio.all_tasks(self.loop):
+                        self.loop.call_soon_threadsafe(task.cancel)
+                except Exception as e:
+                    logger.warning(f"取消 IPC 客户端任务时出错: {e}")
+            
             if self.client_thread and self.client_thread.is_alive():
-                self.client_thread.join(timeout=1)
+                # 给一点时间让线程退出，但不阻塞太久
+                # 线程是 daemon 的，所以即使没 join 成功也会随主进程退出
+                self.client_thread.join(timeout=0.5)
+            logger.debug("C# IPC 客户端已停止请求已发出")
 
         def send_notification(
             self,
@@ -216,7 +231,7 @@ if CSHARP_AVAILABLE:
                 )
 
                 task = self.ipc_client.Connect()
-                await loop.run_in_executor(None, lambda: task.Wait())
+                await self.loop.run_in_executor(None, lambda: task.Wait())
                 self.is_connected = True
 
                 while self.is_running:
@@ -229,7 +244,7 @@ if CSHARP_AVAILABLE:
                         self.is_connected = False
 
                         task = self.ipc_client.Connect()
-                        await loop.run_in_executor(None, task.Wait)
+                        await self.loop.run_in_executor(None, lambda: task.Wait())
                         self.is_connected = True
                         self._disconnect_logged = False
 
@@ -237,10 +252,17 @@ if CSHARP_AVAILABLE:
                 self.is_connected = False
 
             # 启动新的 asyncio 事件循环
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(client())
-            loop.close()
+            self.loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self.loop)
+            try:
+                self.loop.run_until_complete(client())
+            except asyncio.CancelledError:
+                pass
+            except Exception as e:
+                logger.error(f"C# IPC 客户端循环出错: {e}")
+            finally:
+                self.loop.close()
+                self.loop = None
 
         def _check_alive(self) -> bool:
             """客户端是否正常连接"""

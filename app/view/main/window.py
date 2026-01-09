@@ -625,17 +625,44 @@ class MainWindow(FluentWindow):
     def close_window_secrandom(self):
         """关闭窗口
         执行安全验证后关闭程序，释放所有资源"""
+        logger.info("程序正在退出 (close_window_secrandom)...")
+
         # 停止课前重置定时器
-        if self.pre_class_reset_timer.isActive():
+        if hasattr(self, "pre_class_reset_timer") and self.pre_class_reset_timer.isActive():
             self.pre_class_reset_timer.stop()
+            logger.debug("课前重置定时器已停止")
 
         # 快速清理快捷键
         self.cleanup_shortcuts()
+        logger.debug("快捷键已清理")
 
-        # 直接退出，不等待日志清理
+        # 停止 IPC 客户端
+        try:
+            CSharpIPCHandler.instance().stop_ipc_client()
+            logger.debug("C# IPC 停止请求已发出")
+        except Exception as e:
+            logger.error(f"停止 IPC 客户端失败: {e}")
+
+        # 显式关闭所有顶层窗口（包括悬浮窗、设置窗口等）
+        try:
+            top_level_widgets = QApplication.topLevelWidgets()
+            logger.debug(f"正在关闭所有顶层窗口，共 {len(top_level_widgets)} 个")
+            for widget in top_level_widgets:
+                if widget != self:
+                    logger.debug(f"正在关闭窗口: {widget.objectName() or widget}")
+                    widget.close()
+                    if hasattr(widget, "hide"):
+                        widget.hide()
+        except Exception as e:
+            logger.error(f"关闭其他窗口时出错: {e}")
+
+        # 最后关闭自己
+        logger.debug("正在关闭主窗口...")
+        self.close()
+
+        # 请求退出应用程序
+        logger.info("已发出 QApplication.quit() 请求")
         QApplication.quit()
-        CSharpIPCHandler.instance().stop_ipc_client()
-        sys.exit(0)
 
     def cleanup_shortcuts(self):
         """清理快捷键"""
