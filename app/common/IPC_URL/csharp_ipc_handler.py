@@ -109,7 +109,7 @@ if CSHARP_AVAILABLE:
                 # 给一点时间让线程退出，但不阻塞太久
                 # 线程是 daemon 的，所以即使没 join 成功也会随主进程退出
                 self.client_thread.join(timeout=0.5)
-            logger.debug("C# IPC 客户端已停止请求已发出")
+            logger.debug("C# IPC 客户端停止请求已发出")
 
         def send_notification(
             self,
