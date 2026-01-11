@@ -32,7 +32,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 ; 取消注释以下行以在非管理安装模式下运行 (仅为当前用户安装)。
-;PrivilegesRequired=lowest
+PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=build
 OutputBaseFilename=SecRandom setup x64
