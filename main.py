@@ -38,8 +38,8 @@ def main():
     logger.remove()
     configure_logging()
 
-    # 仅在开发环境（版本号包含 0.0.0）下初始化 Sentry
-    if VERSION == "v0.0.0":
+    # 仅在开发环境（版本号不包含 0.0.0）下初始化 Sentry
+    if "0.0.0" not in VERSION:
 
         def before_send(event, hint):
             # 如果事件中不包含异常信息（即没有堆栈），则不上传
@@ -58,6 +58,7 @@ def main():
             before_send=before_send,
             release=VERSION,
             send_default_pii=True,
+            enable_logs=True,
         )
 
     wm.app_start_time = time.perf_counter()
