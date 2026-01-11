@@ -485,7 +485,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
             self.current_row = end_row
 
         except Exception as e:
-            logger.error(f"加载学生数据失败: {e}")
+            logger.exception(f"加载学生数据失败: {e}")
 
     def _load_more_sessions_data(self):
         """加载更多会话数据"""
@@ -587,7 +587,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
             self.current_row = end_row
 
         except Exception as e:
-            logger.error(f"加载会话数据失败: {e}")
+            logger.exception(f"加载会话数据失败: {e}")
 
     def _load_more_stats_data(self, student_name):
         """加载更多统计数据"""
@@ -702,7 +702,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
             self.current_row = end_row
 
         except Exception as e:
-            logger.error(f"加载统计数据失败: {e}")
+            logger.exception(f"加载统计数据失败: {e}")
 
     def setup_file_watcher(self):
         """设置文件系统监视器，监控班级历史记录文件夹的变化"""
@@ -866,7 +866,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
                     self.subject_comboBox.show()
 
         except Exception as e:
-            logger.error(f"更新课程列表失败: {e}")
+            logger.exception(f"更新课程列表失败: {e}")
             self.available_subjects = []
 
     def refresh_data(self):
@@ -987,7 +987,7 @@ class roll_call_history_table(GroupHeaderCardWidget):
                 self.table.horizontalHeader().setSortIndicatorShown(True)
 
         except Exception as e:
-            logger.error(f"刷新表格数据失败: {str(e)}")
+            logger.exception(f"刷新表格数据失败: {str(e)}")
         finally:
             self.table.blockSignals(False)
 

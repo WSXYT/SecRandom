@@ -24,7 +24,7 @@ def log_exception(func: Callable[..., T]) -> Callable[..., T]:
             return func(*args, **kwargs)
         except Exception as e:
             func_name = func.__name__
-            logger.error(f"{func_name} 执行失败: {e}", exc_info=True)
+            logger.exception(f"{func_name} 执行失败: {e}", exc_info=True)
             return None
 
     return wrapper
@@ -49,7 +49,7 @@ def activate_window(window: QWidget) -> bool:
         window.activateWindow()
         return True
     except Exception as e:
-        logger.error(f"激活窗口失败: {e}", exc_info=True)
+        logger.exception(f"激活窗口失败: {e}", exc_info=True)
         return False
 
 
@@ -70,7 +70,7 @@ def safe_close_window(window: Optional[QWidget]) -> bool:
         window.deleteLater()
         return True
     except Exception as e:
-        logger.error(f"关闭窗口失败: {e}", exc_info=True)
+        logger.exception(f"关闭窗口失败: {e}", exc_info=True)
         return False
 
 
@@ -94,5 +94,5 @@ def safe_execute(
     try:
         return True, func(*args, **kwargs)
     except Exception as e:
-        logger.error(f"{error_message}: {e}", exc_info=True)
+        logger.exception(f"{error_message}: {e}", exc_info=True)
         return False, None

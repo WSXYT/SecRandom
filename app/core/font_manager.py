@@ -52,7 +52,7 @@ def load_font_by_weight(font_family: str, font_weight: int) -> str:
         font_id = QFontDatabase.addApplicationFont(str(font_path))
 
         if font_id < 0:
-            logger.error(f"加载字体文件失败: {font_path}")
+            logger.exception(f"加载字体文件失败: {font_path}")
             return font_family
 
         font_family = QFontDatabase.applicationFontFamilies(font_id)[0]

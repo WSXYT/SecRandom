@@ -139,7 +139,7 @@ class CurrentConfigViewerWindow(QWidget):
                                 ]
                             )
                 except Exception as e:
-                    logger.error(f"解析文件{file_name}失败: {e}")
+                    logger.exception(f"解析文件{file_name}失败: {e}")
                     data.append(
                         [
                             "",
@@ -188,7 +188,7 @@ class CurrentConfigViewerWindow(QWidget):
                 self.table_widget.setItem(row, 4, teacher_item)
 
         except Exception as e:
-            logger.error(f"加载当前配置失败: {e}")
+            logger.exception(f"加载当前配置失败: {e}")
             self.table_widget.setRowCount(1)
             self.table_widget.setItem(
                 0,

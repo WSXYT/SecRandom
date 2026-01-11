@@ -24,7 +24,7 @@ class CSESParser:
                 self.schedule_data = yaml.safe_load(f)
             return self._validate_schedule()
         except Exception as e:
-            logger.error(f"加载CSES文件失败: {e}")
+            logger.exception(f"加载CSES文件失败: {e}")
             return False
 
     def load_from_content(self, content: str) -> bool:
@@ -40,7 +40,7 @@ class CSESParser:
             self.schedule_data = yaml.safe_load(content)
             return self._validate_schedule()
         except Exception as e:
-            logger.error(f"解析CSES内容失败: {e}")
+            logger.exception(f"解析CSES内容失败: {e}")
             return False
 
     def get_class_times_by_day(self, day_of_week: int) -> Dict[str, str]:
@@ -283,7 +283,7 @@ class CSESParser:
             bool: 数据有效返回True，否则返回False
         """
         if not self.schedule_data:
-            logger.error("课程表数据为空")
+            logger.exception("课程表数据为空")
             return False
 
         schedule = self.schedule_data.get("schedule")
@@ -293,7 +293,7 @@ class CSESParser:
                 logger.warning("缺少'timeslots'字段，将使用空课程表数据")
                 return True
             if not isinstance(timeslots, list):
-                logger.error("'timeslots'字段必须是列表类型")
+                logger.exception("'timeslots'字段必须是列表类型")
                 return False
             for i, timeslot in enumerate(timeslots):
                 if not self._validate_timeslot(timeslot, i):
@@ -343,13 +343,13 @@ class CSESParser:
             bool: 有效返回True，否则返回False
         """
         if not isinstance(timeslot, dict):
-            logger.error(f"时间段{index}必须是字典类型")
+            logger.exception(f"时间段{index}必须是字典类型")
             return False
 
         required_fields = ["name", "start_time", "end_time"]
         for field in required_fields:
             if field not in timeslot:
-                logger.error(f"时间段{index}缺少'{field}'字段")
+                logger.exception(f"时间段{index}缺少'{field}'字段")
                 return False
 
         try:
@@ -357,11 +357,11 @@ class CSESParser:
             end_time = self._parse_time(timeslot["end_time"])
 
             if start_time >= end_time:
-                logger.error(f"时间段{index}的开始时间必须早于结束时间")
+                logger.exception(f"时间段{index}的开始时间必须早于结束时间")
                 return False
 
         except ValueError as e:
-            logger.error(f"时间段{index}时间格式错误: {e}")
+            logger.exception(f"时间段{index}时间格式错误: {e}")
             return False
 
         return True
@@ -387,7 +387,7 @@ class CSESParser:
                     return time(int(parts[0]), int(parts[1]), int(parts[2]))
             raise ValueError(f"无效的时间格式: {time_str}")
         except (ValueError, IndexError):
-            logger.error(f"无法解析时间: {time_str}")
+            logger.exception(f"无法解析时间: {time_str}")
             raise ValueError(f"无法解析时间: {time_str}") from None
 
     def _parse_time_string_to_seconds(self, time_val: str | int) -> int:
@@ -416,7 +416,7 @@ class CSESParser:
                     return int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])
             return int(time_str)
         except (ValueError, IndexError):
-            logger.error(f"无法解析时间字符串: {time_val}")
+            logger.exception(f"无法解析时间字符串: {time_val}")
             raise ValueError(f"无法解析时间字符串: {time_val}") from None
 
     def _format_time_for_secrandom(self, time_val: str | int) -> str:

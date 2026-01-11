@@ -425,7 +425,7 @@ class ImportPrizeNameWindow(QWidget):
             self.fileLoaded.emit(data, columns)
 
         except Exception as e:
-            logger.error(f"加载文件失败: {e}")
+            logger.exception(f"加载文件失败: {e}")
             # 通过信号通知UI线程文件加载失败
             self.fileLoadError.emit(str(e))
 
@@ -637,7 +637,7 @@ class ImportPrizeNameWindow(QWidget):
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"导入数据失败: {e}")
+            logger.exception(f"导入数据失败: {e}")
 
     def __save_prize_data(self, pool_name: str, prize_rows: List[Dict[str, Any]]):
         """保存奖品数据到班级名单文件"""

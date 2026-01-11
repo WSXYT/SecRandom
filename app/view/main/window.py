@@ -163,13 +163,13 @@ class MainWindow(FluentWindow):
                     logger.info(f"IPC服务器已在端口 {new_port} 上重新启动")
                     return True
                 else:
-                    logger.error(f"IPC服务器在端口 {new_port} 上启动失败")
+                    logger.exception(f"IPC服务器在端口 {new_port} 上启动失败")
                     return False
             else:
-                logger.error("无法访问URLHandler实例")
+                logger.exception("无法访问URLHandler实例")
                 return False
         else:
-            logger.error("无法获取url_handler_instance")
+            logger.exception("无法获取url_handler_instance")
             return False
 
     def _position_window(self):
@@ -210,7 +210,7 @@ class MainWindow(FluentWindow):
         try:
             self.show()
         except Exception as e:
-            logger.error(f"加载窗口显示设置失败: {e}")
+            logger.exception(f"加载窗口显示设置失败: {e}")
 
     def createSubInterface(self):
         """创建子界面
@@ -388,7 +388,7 @@ class MainWindow(FluentWindow):
 
         # 确保roll_call_page已经创建
         if not hasattr(self, "roll_call_page") or not self.roll_call_page:
-            logger.error("_handle_quick_draw: roll_call_page未创建")
+            logger.exception("_handle_quick_draw: roll_call_page未创建")
             return
 
         logger.debug("_handle_quick_draw: roll_call_page已创建")
@@ -436,7 +436,7 @@ class MainWindow(FluentWindow):
                         "_handle_quick_draw: 创建contentWidget后获取contentWidget成功"
                     )
                 else:
-                    logger.error("_handle_quick_draw: 无法创建或获取roll_call_widget")
+                    logger.exception("_handle_quick_draw: 无法创建或获取roll_call_widget")
                     return
 
         logger.debug("_handle_quick_draw: 成功获取roll_call_widget")
@@ -661,7 +661,7 @@ class MainWindow(FluentWindow):
             CSharpIPCHandler.instance().stop_ipc_client()
             logger.debug("C# IPC 停止请求已发出")
         except Exception as e:
-            logger.error(f"停止 IPC 客户端失败: {e}")
+            logger.exception(f"停止 IPC 客户端失败: {e}")
 
         # 显式关闭所有顶层窗口（包括悬浮窗、设置窗口等）
         try:
@@ -674,7 +674,7 @@ class MainWindow(FluentWindow):
                     if hasattr(widget, "hide"):
                         widget.hide()
         except Exception as e:
-            logger.error(f"关闭其他窗口时出错: {e}")
+            logger.exception(f"关闭其他窗口时出错: {e}")
 
         # 最后关闭自己
         logger.debug("正在关闭主窗口...")
@@ -849,7 +849,7 @@ class MainWindow(FluentWindow):
                 )
 
         except Exception as e:
-            logger.error(f"启动新进程失败: {e}")
+            logger.exception(f"启动新进程失败: {e}")
             return
 
         # 停止课前重置定时器
@@ -904,7 +904,7 @@ class MainWindow(FluentWindow):
                 self.pre_class_reset_timer.stop()
 
         except Exception as e:
-            logger.error(f"检测课前重置时出错: {e}")
+            logger.exception(f"检测课前重置时出错: {e}")
 
     def _perform_pre_class_reset(self):
         """执行课前重置操作"""
@@ -938,7 +938,7 @@ class MainWindow(FluentWindow):
                     shutil.rmtree(temp_dir, onerror=handle_remove_readonly)
                     logger.info("已清除 TEMP 文件夹")
                 except Exception as e:
-                    logger.error(f"清除 TEMP 文件夹失败: {e}")
+                    logger.exception(f"清除 TEMP 文件夹失败: {e}")
 
             # 刷新点名页面的剩余人数显示
             if self.roll_call_page and hasattr(
@@ -957,7 +957,7 @@ class MainWindow(FluentWindow):
             logger.info("课前重置完成")
 
         except Exception as e:
-            logger.error(f"执行课前重置时出错: {e}")
+            logger.exception(f"执行课前重置时出错: {e}")
 
     def _init_pre_class_reset(self):
         """初始化课前重置功能"""
@@ -986,4 +986,4 @@ class MainWindow(FluentWindow):
                     logger.debug("课前重置定时器已启动（CSES模式）")
 
         except Exception as e:
-            logger.error(f"初始化课前重置功能时出错: {e}")
+            logger.exception(f"初始化课前重置功能时出错: {e}")

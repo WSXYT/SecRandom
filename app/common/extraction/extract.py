@@ -66,7 +66,7 @@ def _get_break_assignment_class_info() -> Dict:
         return {}
 
     except Exception as e:
-        logger.error(f"获取课间归属课程信息失败: {e}")
+        logger.exception(f"获取课间归属课程信息失败: {e}")
         return {}
 
 
@@ -140,7 +140,7 @@ def _is_non_class_time() -> bool:
         return not is_in_class_time
 
     except Exception as e:
-        logger.error(f"检测非上课时间失败: {e}")
+        logger.exception(f"检测非上课时间失败: {e}")
         return False
 
 
@@ -219,7 +219,7 @@ def _is_time_in_ranges(current_seconds: int, time_ranges: Dict[str, str]) -> boo
                 return True
 
         except Exception as e:
-            logger.error(f"解析时间段失败: {range_name} = {time_range}, 错误: {e}")
+            logger.exception(f"解析时间段失败: {range_name} = {time_range}, 错误: {e}")
             continue
 
     return False
@@ -245,13 +245,13 @@ def _get_cses_parser() -> CSESParser | None:
 
         parser = CSESParser()
         if not parser.load_from_file(cses_file_path):
-            logger.error(f"加载CSES文件失败: {cses_file_path}")
+            logger.exception(f"加载CSES文件失败: {cses_file_path}")
             return None
 
         return parser
 
     except Exception as e:
-        logger.error(f"获取CSES解析器失败: {e}")
+        logger.exception(f"获取CSES解析器失败: {e}")
         return None
 
 
@@ -328,7 +328,7 @@ def _get_current_class_info() -> Dict:
         return {}
 
     except Exception as e:
-        logger.error(f"获取当前课程信息失败: {e}")
+        logger.exception(f"获取当前课程信息失败: {e}")
         return {}
 
 
@@ -359,7 +359,7 @@ def _get_seconds_to_next_class() -> int:
                 start_total_seconds = _parse_time_string_to_seconds(start_time_str)
                 time_ranges.append((start_total_seconds, range_name))
             except Exception as e:
-                logger.error(f"解析时间段失败: {range_name} = {time_range}, 错误: {e}")
+                logger.exception(f"解析时间段失败: {range_name} = {time_range}, 错误: {e}")
                 continue
 
         # 按开始时间排序
@@ -374,7 +374,7 @@ def _get_seconds_to_next_class() -> int:
         return 0
 
     except Exception as e:
-        logger.error(f"计算距离下一节课时间失败: {e}")
+        logger.exception(f"计算距离下一节课时间失败: {e}")
         return 0
 
 
@@ -420,7 +420,7 @@ def _save_non_class_times_to_settings(non_class_times: Dict[str, str]) -> bool:
         return True
 
     except Exception as e:
-        logger.error(f"保存非上课时间段失败: {e}")
+        logger.exception(f"保存非上课时间段失败: {e}")
         return False
 
 
@@ -463,7 +463,7 @@ def import_cses_schedule(file_path: str) -> Tuple[bool, str]:
             return True, import_success_msg
 
     except Exception as e:
-        logger.error(f"导入CSES文件失败: {e}")
+        logger.exception(f"导入CSES文件失败: {e}")
         return False, get_content_name_async("course_settings", "import_failed").format(
             str(e)
         )
@@ -498,7 +498,7 @@ def import_cses_schedule_from_content(content: str) -> Tuple[bool, str]:
         )
 
     except Exception as e:
-        logger.error(f"导入CSES内容失败: {e}")
+        logger.exception(f"导入CSES内容失败: {e}")
         return False, get_content_name_async("course_settings", "import_failed").format(
             str(e)
         )

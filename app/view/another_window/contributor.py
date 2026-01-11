@@ -283,7 +283,7 @@ class contributor_page(QWidget):
 
             return card
         except RuntimeError as e:
-            logger.error(f"创建贡献者卡片时出错: {e}")
+            logger.exception(f"创建贡献者卡片时出错: {e}")
             return None
 
     def resizeEvent(self, event):
@@ -304,7 +304,7 @@ class contributor_page(QWidget):
                 if self.isVisible():
                     self.update_layout()
         except RuntimeError as e:
-            logger.error(f"延迟布局更新错误: {e}")
+            logger.exception(f"延迟布局更新错误: {e}")
 
     def closeEvent(self, event):
         """窗口关闭事件"""

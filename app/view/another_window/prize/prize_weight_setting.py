@@ -129,7 +129,7 @@ class PrizeWeightSettingWindow(QWidget):
             return weights
 
         except Exception as e:
-            logger.error(f"加载奖品权重失败: {str(e)}")
+            logger.exception(f"加载奖品权重失败: {str(e)}")
             self.initial_weights = []
             return []
 
@@ -315,7 +315,7 @@ class PrizeWeightSettingWindow(QWidget):
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"保存奖品权重失败: {e}")
+            logger.exception(f"保存奖品权重失败: {e}")
 
     def __cancel(self):
         """取消操作"""

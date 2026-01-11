@@ -119,7 +119,7 @@ class URLCommandHandler(QObject):
             return result
 
         except Exception as e:
-            logger.error(f"URL命令处理失败: {e}")
+            logger.exception(f"URL命令处理失败: {e}")
             return {
                 "status": "error",
                 "message": f"命令处理失败: {str(e)}",
@@ -163,7 +163,7 @@ class URLCommandHandler(QObject):
                 }
 
         except Exception as e:
-            logger.error(f"IPC命令处理失败: {e}")
+            logger.exception(f"IPC命令处理失败: {e}")
             return {"status": "error", "message": f"IPC命令处理失败: {str(e)}"}
 
     def _parse_url(self, url: str) -> tuple:
@@ -318,7 +318,7 @@ class URLCommandHandler(QObject):
                 logger.debug(f"验证后执行命令完成: {command}, 结果: {result}")
                 return result
             except Exception as e:
-                logger.error(f"验证后执行命令失败: {command}, 错误: {e}")
+                logger.exception(f"验证后执行命令失败: {command}, 错误: {e}")
 
         # 调用验证窗口
         create_verify_password_window(on_verified=execute_command, operation_type=op)
@@ -345,7 +345,7 @@ class URLCommandHandler(QObject):
                     logger.debug(f"命令执行成功: {command}, 结果: {result}")
                     return result
                 except Exception as e:
-                    logger.error(f"命令执行失败: {command}, 错误: {e}")
+                    logger.exception(f"命令执行失败: {command}, 错误: {e}")
                     return {
                         "status": "error",
                         "message": f"命令执行失败: {str(e)}",
@@ -365,7 +365,7 @@ class URLCommandHandler(QObject):
                         )
                         return result
                     except Exception as e:
-                        logger.error(
+                        logger.exception(
                             f"模糊匹配命令执行失败: {matched_command}, 错误: {e}"
                         )
                         return {
@@ -383,7 +383,7 @@ class URLCommandHandler(QObject):
             }
 
         except Exception as e:
-            logger.error(f"命令执行失败: {e}")
+            logger.exception(f"命令执行失败: {e}")
             return {
                 "status": "error",
                 "message": f"命令执行失败: {str(e)}",
@@ -724,7 +724,7 @@ class URLCommandHandler(QObject):
         )
 
         if not self.security_verifier:
-            logger.error("安全验证器未配置")
+            logger.exception("安全验证器未配置")
             return {"success": False, "error": "安全验证器未配置"}
 
         # 执行安全验证

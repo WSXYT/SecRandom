@@ -164,7 +164,7 @@ class cses_import_settings(GroupHeaderCardWidget):
                                 class_info = parser.get_class_info()
                                 total_class_periods += len(class_info)
                         except Exception as e:
-                            logger.error(f"解析文件{file_name}失败: {e}")
+                            logger.exception(f"解析文件{file_name}失败: {e}")
 
             # 判断是否有课程表数据
             if total_class_periods > 0:
@@ -182,7 +182,7 @@ class cses_import_settings(GroupHeaderCardWidget):
                 )
 
         except Exception as e:
-            logger.error(f"更新课程表信息失败: {e}")
+            logger.exception(f"更新课程表信息失败: {e}")
             self.schedule_info_label.setText("获取课程表信息失败")
 
     def on_import_file_clicked(self):
@@ -238,7 +238,7 @@ class cses_import_settings(GroupHeaderCardWidget):
                 )
 
         except Exception as e:
-            logger.error(f"导入CSES文件失败: {e}")
+            logger.exception(f"导入CSES文件失败: {e}")
             import_error_msg = get_content_name_async("course_settings", "import_error")
             if "{}" in import_error_msg:
                 error_content = import_error_msg.format(str(e))
@@ -274,7 +274,7 @@ class cses_import_settings(GroupHeaderCardWidget):
             create_current_config_viewer_window()
 
         except Exception as e:
-            logger.error(f"显示当前配置失败: {e}")
+            logger.exception(f"显示当前配置失败: {e}")
             InfoBar.error(
                 title=get_content_name_async("course_settings", "import_failed"),
                 content=f"无法显示当前配置: {str(e)}",

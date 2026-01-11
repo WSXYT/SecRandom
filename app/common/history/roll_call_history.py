@@ -233,5 +233,5 @@ def save_roll_call_history(
         return save_history_data("roll_call", class_name, history_data)
 
     except Exception as e:
-        logger.error(f"保存点名历史记录失败: {e}")
+        logger.exception(f"保存点名历史记录失败: {e}")
         return False

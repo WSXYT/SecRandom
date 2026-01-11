@@ -157,7 +157,7 @@ class QuickDrawAnimation(QObject):
         """独立的随机学生抽取逻辑，不依赖roll_call_widget的状态"""
         class_name = readme_settings_async("quick_draw_settings", "default_class")
         if not class_name:
-            logger.error("draw_random_students: 未设置默认抽取名单")
+            logger.exception("draw_random_students: 未设置默认抽取名单")
             return False
 
         group_index = 0
@@ -243,7 +243,7 @@ class QuickDrawAnimation(QObject):
                 self.animation_finished.emit()
 
         except Exception as e:
-            logger.error(f"execute_quick_draw: 执行闪抽流程失败: {e}")
+            logger.exception(f"execute_quick_draw: 执行闪抽流程失败: {e}")
             self.stop_animation()
 
     def display_final_result(self, quick_draw_settings):
@@ -288,7 +288,7 @@ class QuickDrawAnimation(QObject):
                 )
 
         except Exception as e:
-            logger.error(f"display_final_result: 显示最终结果失败: {e}")
+            logger.exception(f"display_final_result: 显示最终结果失败: {e}")
 
     def _record_drawn_student(self, quick_draw_settings):
         """记录已抽取的学生
@@ -309,7 +309,7 @@ class QuickDrawAnimation(QObject):
             )
 
         except Exception as e:
-            logger.error(f"_record_drawn_student: 记录已抽取学生失败: {e}")
+            logger.exception(f"_record_drawn_student: 记录已抽取学生失败: {e}")
 
     def _update_floating_notification(self):
         """更新浮窗通知内容
@@ -330,7 +330,7 @@ class QuickDrawAnimation(QObject):
                 )
 
         except Exception as e:
-            logger.error(f"_update_floating_notification: 更新浮窗通知失败: {e}")
+            logger.exception(f"_update_floating_notification: 更新浮窗通知失败: {e}")
 
     def display_result_animated(
         self, selected_students, class_name, display_settings, draw_count

@@ -4,6 +4,7 @@ import time
 import gc
 
 import sentry_sdk
+from sentry_sdk.integrations.loguru import LoguruIntegration, LoggingLevels
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication
 from loguru import logger
@@ -37,17 +38,24 @@ def main():
     logger.remove()
     configure_logging()
 
+    def before_send(event, hint):
+        # 如果事件中不包含异常信息（即没有堆栈），则不上传
+        if "exception" not in event:
+            return None
+        return event
+
     sentry_sdk.init(
         dsn="https://f079219d4004591e72e6e4e4155023fe@o4510689230192640.ingest.us.sentry.io/4510689241071616",
+        integrations=[
+            LoguruIntegration(
+                level=LoggingLevels.INFO.value,
+                event_level=LoggingLevels.ERROR.value,
+            ),
+        ],
+        before_send=before_send,
         send_default_pii=True,
+        enable_logs=True,
     )
-
-    def sentry_handler(message):
-        record = message.record
-        if record["level"].name == "ERROR":
-            sentry_sdk.capture_message(message, level=record["level"].name)
-
-    logger.add(sentry_handler, level="ERROR")
 
     wm.app_start_time = time.perf_counter()
 
@@ -90,7 +98,7 @@ def main():
     )
 
     if not local_server:
-        logger.error("无法启动本地服务器，程序将退出")
+        logger.exception("无法启动本地服务器，程序将退出")
         shared_memory.detach()
         sys.exit(1)
 
@@ -132,7 +140,7 @@ def main():
         sys.stderr.flush()
         os._exit(0)
     except Exception as e:
-        logger.error(f"程序退出过程中发生异常: {e}")
+        logger.exception(f"程序退出过程中发生异常: {e}")
         if "shared_memory" in locals():
             shared_memory.detach()
         if "local_server" in locals() and local_server:

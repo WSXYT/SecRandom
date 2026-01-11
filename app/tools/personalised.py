@@ -43,7 +43,7 @@ def load_custom_font():
         load_custom_font._font_cache = font_family
         return font_family
     except Exception as e:
-        logger.error(f"读取自定义设置失败，使用默认字体: {e}")
+        logger.exception(f"读取自定义设置失败，使用默认字体: {e}")
         font_family = _load_default_font()
         load_custom_font._font_cache = font_family
         return font_family
@@ -67,7 +67,7 @@ def _get_font_family_setting(settings_path):
             personal_settings = settings.get("personal", {})
             return personal_settings.get("font_family", "")
     except Exception as e:
-        logger.error(f"读取字体设置失败: {e}")
+        logger.exception(f"读取字体设置失败: {e}")
         return ""
 
 
@@ -97,7 +97,7 @@ def _load_font_by_setting(font_family_setting):
         font_id = QFontDatabase.addApplicationFont(str(font_path))
 
         if font_id < 0:
-            logger.error(f"加载自定义字体失败: {font_path}")
+            logger.exception(f"加载自定义字体失败: {font_path}")
             return None
 
         font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
@@ -108,7 +108,7 @@ def _load_font_by_setting(font_family_setting):
         font_id = QFontDatabase.addApplicationFont(str(font_path))
 
         if font_id < 0:
-            logger.error(f"加载自定义字体失败: {font_path}")
+            logger.exception(f"加载自定义字体失败: {font_path}")
             return None
 
         font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
@@ -136,7 +136,7 @@ def _load_default_font():
     font_id = QFontDatabase.addApplicationFont(str(font_path))
 
     if font_id < 0:
-        logger.error(f"加载默认字体失败: {font_path}")
+        logger.exception(f"加载默认字体失败: {font_path}")
         return None
 
     font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
@@ -185,7 +185,7 @@ def _get_icon_map():
             with open(map_path, "r", encoding="utf-8") as f:
                 _icon_map_cache = json.load(f)
         except Exception as e:
-            logger.error(f"加载图标映射表失败: {e}")
+            logger.exception(f"加载图标映射表失败: {e}")
             _icon_map_cache = {}
     return _icon_map_cache
 
@@ -229,7 +229,7 @@ def get_theme_icon(icon_name):
             _icon_cache[icon_name] = icon
         return icon
     except Exception as e:
-        logger.error(f"加载图标{icon_name}出错: {str(e)}")
+        logger.exception(f"加载图标{icon_name}出错: {str(e)}")
         # 返回默认图标
         try:
             # 尝试使用码点创建默认图标
@@ -238,7 +238,7 @@ def get_theme_icon(icon_name):
             _icon_cache[icon_name] = default_icon
             return default_icon
         except Exception as default_error:
-            logger.error(f"加载默认图标也失败: {str(default_error)}")
+            logger.exception(f"加载默认图标也失败: {str(default_error)}")
             # 返回空的QIcon作为最后备选
             return QIcon()
 
@@ -309,7 +309,7 @@ def themeColor():
         # 获取当前主题色
         return themeColor.value
     except Exception as e:
-        logger.error(f"获取主题色失败: {e}")
+        logger.exception(f"获取主题色失败: {e}")
         # 返回默认主题色
         return FALLBACK_THEME_COLOR
 
@@ -337,8 +337,8 @@ def _convert_color_to_hex(color):
             if qcolor.isValid():
                 return qcolor.name()
             else:
-                logger.error(f"无效的颜色名称: {color}")
+                logger.exception(f"无效的颜色名称: {color}")
                 return None
     else:
-        logger.error(f"不支持的颜色类型: {type(color)}")
+        logger.exception(f"不支持的颜色类型: {type(color)}")
         return None

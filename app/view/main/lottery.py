@@ -96,7 +96,7 @@ class Lottery(QWidget):
             if hasattr(self, "press_timer"):
                 self.press_timer.stop()
         except Exception as e:
-            logger.error(f"清理文件监控器失败: {e}")
+            logger.exception(f"清理文件监控器失败: {e}")
         super().closeEvent(event)
 
     def initUI(self):
@@ -378,7 +378,7 @@ class Lottery(QWidget):
                 if is_enabled:
                     layout.addWidget(widget, alignment=Qt.AlignmentFlag.AlignCenter)
         except Exception as e:
-            logger.error(f"添加控件 {setting_name} 时出错: {e}")
+            logger.exception(f"添加控件 {setting_name} 时出错: {e}")
             # 出错时默认添加控件
             layout.addWidget(widget, alignment=Qt.AlignmentFlag.AlignCenter)
 
@@ -446,7 +446,7 @@ class Lottery(QWidget):
             ):
                 QTimer.singleShot(APP_INIT_DELAY, self._update_remaining_list_delayed)
         except Exception as e:
-            logger.error(f"切换奖池时发生错误: {e}")
+            logger.exception(f"切换奖池时发生错误: {e}")
 
     def on_class_changed(self):
         """当班级选择改变时，更新范围选择、性别选择"""
@@ -490,7 +490,7 @@ class Lottery(QWidget):
                 self.range_combobox.setEnabled(True)
                 self.gender_combobox.setEnabled(True)
         except Exception as e:
-            logger.error(f"切换班级时发生错误: {e}")
+            logger.exception(f"切换班级时发生错误: {e}")
         finally:
             self.range_combobox.blockSignals(False)
             self.gender_combobox.blockSignals(False)
@@ -510,7 +510,7 @@ class Lottery(QWidget):
             ):
                 QTimer.singleShot(APP_INIT_DELAY, self._update_remaining_list_delayed)
         except Exception as e:
-            logger.error(f"切换筛选条件时发生错误: {e}")
+            logger.exception(f"切换筛选条件时发生错误: {e}")
 
     def _update_remaining_list_delayed(self):
         """延迟更新剩余名单窗口的方法"""
@@ -556,7 +556,7 @@ class Lottery(QWidget):
                             self.remaining_count
                         )
         except Exception as e:
-            logger.error(f"延迟更新剩余名单时发生错误: {e}")
+            logger.exception(f"延迟更新剩余名单时发生错误: {e}")
 
     def _do_start_draw(self):
         """实际执行开始抽取的逻辑"""
@@ -794,7 +794,7 @@ class Lottery(QWidget):
                 class_name=self.pool_list_combobox.currentText(),
             )
         except Exception as e:
-            logger.error(f"播放语音失败: {e}", exc_info=True)
+            logger.exception(f"播放语音失败: {e}", exc_info=True)
 
     def animate_result(self):
         """动画过程中更新显示"""
@@ -863,7 +863,7 @@ class Lottery(QWidget):
                     paired.append((pid, display_name, pexist))
                 self.final_selected_students = paired
             except Exception as e:
-                logger.error(f"奖池跟随学生拼接失败: {e}")
+                logger.exception(f"奖池跟随学生拼接失败: {e}")
 
         if self.is_animating:
             self.display_result_animated(
@@ -1068,7 +1068,7 @@ class Lottery(QWidget):
                         source="lottery",
                     )
             except Exception as e:
-                logger.error(f"更新剩余名单窗口内容失败: {e}")
+                logger.exception(f"更新剩余名单窗口内容失败: {e}")
 
     def show_remaining_list(self):
         """显示剩余名单窗口"""
@@ -1088,7 +1088,7 @@ class Lottery(QWidget):
                     self.update_remaining_list_window()
                     return
             except Exception as e:
-                logger.error(f"激活剩余名单窗口失败: {e}")
+                logger.exception(f"激活剩余名单窗口失败: {e}")
                 # 如果激活失败，继续创建新窗口
 
         # 创建新窗口
@@ -1139,7 +1139,7 @@ class Lottery(QWidget):
             self.file_watcher.fileChanged.connect(self.on_file_changed)
 
         except Exception as e:
-            logger.error(f"设置文件监控器失败: {e}")
+            logger.exception(f"设置文件监控器失败: {e}")
 
     def on_directory_changed(self, path):
         """当文件夹内容发生变化时触发"""
@@ -1148,7 +1148,7 @@ class Lottery(QWidget):
             self._sync_watcher_files()
             QTimer.singleShot(500, self.refresh_pool_list)
         except Exception as e:
-            logger.error(f"处理文件夹变化事件失败: {e}")
+            logger.exception(f"处理文件夹变化事件失败: {e}")
 
     def on_file_changed(self, path):
         """当文件内容发生变化时触发"""
@@ -1156,7 +1156,7 @@ class Lottery(QWidget):
             # 文件内容变化同样刷新下拉框
             QTimer.singleShot(500, self.refresh_pool_list)
         except Exception as e:
-            logger.error(f"处理文件变化事件失败: {e}")
+            logger.exception(f"处理文件变化事件失败: {e}")
 
     def _sync_watcher_files(self):
         """同步奖池目录下的文件到文件监控器"""
@@ -1182,7 +1182,7 @@ class Lottery(QWidget):
                     except Exception:
                         pass
         except Exception as e:
-            logger.error(f"同步奖池文件监控失败: {e}")
+            logger.exception(f"同步奖池文件监控失败: {e}")
 
     def refresh_pool_list(self):
         """刷新奖池列表下拉框"""
@@ -1208,7 +1208,7 @@ class Lottery(QWidget):
             self.on_class_changed()
 
         except Exception as e:
-            logger.error(f"刷新奖池列表失败: {e}")
+            logger.exception(f"刷新奖池列表失败: {e}")
 
     def populate_lists(self):
         """在后台填充奖池/范围/性别下拉框并更新奖数统计"""
@@ -1301,7 +1301,7 @@ class Lottery(QWidget):
             self._adjustControlWidgetWidths()
 
         except Exception as e:
-            logger.error(f"延迟填充列表失败: {e}")
+            logger.exception(f"延迟填充列表失败: {e}")
 
     def setupSettingsListener(self):
         """设置设置监听器，监听页面管理设置变化"""

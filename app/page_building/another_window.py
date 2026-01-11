@@ -470,7 +470,7 @@ def create_remaining_list_window(
             return window, get_page_callback
         except Exception as e:
             # 如果窗口已损坏，从字典中移除并创建新窗口
-            logger.error(f"激活剩余名单窗口失败: {e}")
+            logger.exception(f"激活剩余名单窗口失败: {e}")
             _window_instances.pop("remaining_list", None)
 
     # 创建新窗口

@@ -35,7 +35,7 @@ class WindowManager:
             self._create_main_window_impl, error_message="创建主窗口失败"
         )
         if not success:
-            logger.error("主窗口创建失败", exc_info=True)
+            logger.exception("主窗口创建失败", exc_info=True)
 
     def _create_main_window_impl(self) -> None:
         """创建主窗口的实现"""
@@ -176,7 +176,7 @@ class WindowManager:
             is_preview,
             error_message="创建设置窗口失败",
         ):
-            logger.error("设置窗口创建失败", exc_info=True)
+            logger.exception("设置窗口创建失败", exc_info=True)
 
     def _create_settings_window_impl(self, is_preview: bool) -> None:
         """创建设置窗口的实现
@@ -203,7 +203,7 @@ class WindowManager:
             is_preview,
             error_message="显示设置窗口失败",
         ):
-            logger.error("设置窗口显示失败", exc_info=True)
+            logger.exception("设置窗口显示失败", exc_info=True)
 
     def _show_settings_window_impl(self, page_name: str, is_preview: bool) -> None:
         """显示设置窗口的实现
@@ -280,7 +280,7 @@ class WindowManager:
         if not safe_execute(
             self._create_float_window_impl, error_message="创建浮窗失败"
         ):
-            logger.error("浮窗创建失败", exc_info=True)
+            logger.exception("浮窗创建失败", exc_info=True)
 
     def _create_float_window_impl(self) -> None:
         """创建浮窗的实现"""
@@ -294,7 +294,7 @@ class WindowManager:
             self._show_float_window_impl, error_message="显示浮窗失败"
         )
         if not success:
-            logger.error("浮窗显示失败", exc_info=True)
+            logger.exception("浮窗显示失败", exc_info=True)
 
     def _show_float_window_impl(self) -> None:
         """显示浮窗的实现"""

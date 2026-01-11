@@ -487,7 +487,7 @@ class basic_settings_function(GroupHeaderCardWidget):
                         parent=self.window(),
                     )
         except Exception as e:
-            logger.error(f"URL协议设置错误: {e}")
+            logger.exception(f"URL协议设置错误: {e}")
             # 发生错误时恢复原状态
             self.url_protocol_switch.setChecked(not checked)
 
@@ -541,7 +541,7 @@ class basic_settings_function(GroupHeaderCardWidget):
                 if success:
                     logger.info(f"IPC服务器已成功重启，使用新端口: {new_port}")
                 else:
-                    logger.error(f"重启IPC服务器失败，端口: {new_port}")
+                    logger.exception(f"重启IPC服务器失败，端口: {new_port}")
                     show_notification(
                         NotificationType.ERROR,
                         NotificationConfig(
@@ -557,7 +557,7 @@ class basic_settings_function(GroupHeaderCardWidget):
             else:
                 logger.warning("无法获取主窗口实例，无法重启IPC服务器")
         except Exception as e:
-            logger.error(f"重启IPC服务器时发生错误: {e}")
+            logger.exception(f"重启IPC服务器时发生错误: {e}")
             show_notification(
                 NotificationType.ERROR,
                 NotificationConfig(

@@ -160,7 +160,7 @@ class SettingsWindow(FluentWindow):
         try:
             self.show()
         except Exception as e:
-            logger.error(f"加载窗口显示设置失败: {e}")
+            logger.exception(f"加载窗口显示设置失败: {e}")
 
     def _handle_main_page_requested(self, page_name: str):
         """处理主页面请求
@@ -519,9 +519,9 @@ class SettingsWindow(FluentWindow):
                         f"设置页面已按需创建: {name}, 预览模式: {self.is_preview}"
                     )
                 except Exception as e:
-                    logger.error(f"延迟创建设置页面 {name} 失败: {e}")
+                    logger.exception(f"延迟创建设置页面 {name} 失败: {e}")
         except Exception as e:
-            logger.error(f"处理堆叠窗口改变失败: {e}")
+            logger.exception(f"处理堆叠窗口改变失败: {e}")
 
     def _unload_inactive_pages(self, current_page: str):
         """卸载不活动的页面以释放内存
@@ -645,7 +645,7 @@ class SettingsWindow(FluentWindow):
         except RuntimeError as e:
             logger.warning(f"卸载设置页面 {page_name} 时出现警告: {e}")
         except Exception as e:
-            logger.error(f"卸载设置页面 {page_name} 失败: {e}")
+            logger.exception(f"卸载设置页面 {page_name} 失败: {e}")
 
     def _background_warmup_pages(
         self,
@@ -679,7 +679,7 @@ class SettingsWindow(FluentWindow):
             # 所有页面都将在用户首次访问时按需创建
             pass
         except Exception as e:
-            logger.error(f"后台预热非 pivot 页面失败: {e}")
+            logger.exception(f"后台预热非 pivot 页面失败: {e}")
 
     def _create_deferred_page(self, name: str):
         """根据名字创建对应延迟工厂并把结果加入占位容器"""
@@ -724,20 +724,20 @@ class SettingsWindow(FluentWindow):
             try:
                 real_page = factory(is_preview=self.is_preview)
             except RuntimeError as e:
-                logger.error(f"创建延迟页面 {name} 失败（父容器可能已销毁）: {e}")
+                logger.exception(f"创建延迟页面 {name} 失败（父容器可能已销毁）: {e}")
                 return
             except Exception as e:
-                logger.error(f"创建延迟页面 {name} 失败: {e}")
+                logger.exception(f"创建延迟页面 {name} 失败: {e}")
                 return
 
             try:
                 layout.addWidget(real_page)
                 logger.debug(f"后台预热创建设置页面: {name}")
             except RuntimeError as e:
-                logger.error(f"将延迟页面 {name} 插入容器失败（容器可能已销毁）: {e}")
+                logger.exception(f"将延迟页面 {name} 插入容器失败（容器可能已销毁）: {e}")
                 return
         except Exception as e:
-            logger.error(f"_create_deferred_page 失败: {e}")
+            logger.exception(f"_create_deferred_page 失败: {e}")
 
     def initNavigation(self):
         """初始化导航系统
@@ -915,7 +915,7 @@ class SettingsWindow(FluentWindow):
                 self.switchTo(self.basicSettingsInterface)
                 logger.debug("已自动导航到基础设置页面")
         except Exception as e:
-            logger.error(f"加载默认页面失败: {e}")
+            logger.exception(f"加载默认页面失败: {e}")
 
     def closeEvent(self, event):
         """窗口关闭事件处理

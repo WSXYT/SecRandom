@@ -48,7 +48,7 @@ def require_permission(permission: str):
             # 示例：检查当前用户是否有使用TTS的权限
             has_perm = True  # 实际实现时替换为真实权限检查
             if not has_perm:
-                logger.error(f"权限不足，无法执行 {func.__name__}")
+                logger.exception(f"权限不足，无法执行 {func.__name__}")
                 return
             return func(self, *args, **kwargs)
 
@@ -78,7 +78,7 @@ class VoicePlaybackSystem:
         """设置播放音量，范围0.0-1.0"""
         # 输入验证
         if not isinstance(volume, (int, float)):
-            logger.error(f"无效的音量值: {volume}")
+            logger.exception(f"无效的音量值: {volume}")
             return
         self._volume = max(0.0, min(1.0, float(volume)))
 
@@ -86,7 +86,7 @@ class VoicePlaybackSystem:
         """设置播放语速，范围0-200"""
         # 输入验证
         if not isinstance(speed, int):
-            logger.error(f"无效的语速值: {speed}")
+            logger.exception(f"无效的语速值: {speed}")
             return
         self._speed = max(0, min(200, speed))
 
@@ -126,14 +126,14 @@ class VoicePlaybackSystem:
                         logger.debug(f"读取文件成功: 数据长度={len(data)}, 采样率={fs}")
                         self._safe_play(data, fs)
                     except Exception as e:
-                        logger.error(f"读取音频文件失败: {e}", exc_info=True)
+                        logger.exception(f"读取音频文件失败: {e}", exc_info=True)
 
             except Empty:
                 # 队列为空时，短暂休息避免CPU占用过高
                 time.sleep(0.1)
                 continue
             except Exception as e:
-                logger.error(f"播放线程异常: {e}", exc_info=True)
+                logger.exception(f"播放线程异常: {e}", exc_info=True)
                 # 短暂休息后继续，避免异常风暴
                 time.sleep(0.5)
 
@@ -202,12 +202,12 @@ class VoicePlaybackSystem:
                 self._is_playing = False  # 播放结束
 
         except sd.PortAudioError as e:
-            logger.error(f"PortAudio错误：{e}", exc_info=True)
+            logger.exception(f"PortAudio错误：{e}", exc_info=True)
             # 处理PortAudio特定错误，避免程序崩溃
             with self._is_playing_lock:
                 self._is_playing = False
         except Exception as e:
-            logger.error(f"播放音频失败：{e}", exc_info=True)
+            logger.exception(f"播放音频失败：{e}", exc_info=True)
             # 确保播放状态正确重置，避免死锁
             with self._is_playing_lock:
                 self._is_playing = False
@@ -219,7 +219,7 @@ class VoicePlaybackSystem:
                     stream.close()
                     logger.debug("音频流已关闭")
                 except Exception as e:
-                    logger.error(f"关闭音频流失败：{e}", exc_info=True)
+                    logger.exception(f"关闭音频流失败：{e}", exc_info=True)
 
             # 播放完成后回收内存
             try:
@@ -232,7 +232,7 @@ class VoicePlaybackSystem:
                 gc.collect()
                 logger.debug("播放完成，已回收内存")
             except Exception as e:
-                logger.error(f"内存回收失败: {e}")
+                logger.exception(f"内存回收失败: {e}")
 
     def add_task(self, task: Union[Tuple[np.ndarray, int], str]) -> bool:
         """添加播放任务（线程安全）"""
@@ -240,24 +240,24 @@ class VoicePlaybackSystem:
             # 输入验证
             if isinstance(task, tuple):  # 内存数据
                 if len(task) != 2:
-                    logger.error(f"无效的任务格式: {task}")
+                    logger.exception(f"无效的任务格式: {task}")
                     return False
                 data, fs = task
                 if not isinstance(data, np.ndarray) or not isinstance(fs, int):
-                    logger.error("无效的内存数据格式")
+                    logger.exception("无效的内存数据格式")
                     return False
             else:  # 文件路径
                 if not isinstance(task, str) or not task:
-                    logger.error("无效的文件路径")
+                    logger.exception("无效的文件路径")
                     return False
 
             self.play_queue.put_nowait(task)
             return True
         except queue.Full:
-            logger.error("播放队列已满，丢弃新任务")
+            logger.exception("播放队列已满，丢弃新任务")
             return False
         except Exception as e:
-            logger.error(f"添加播放任务失败: {e}")
+            logger.exception(f"添加播放任务失败: {e}")
             return False
 
     def stop(self) -> None:
@@ -314,10 +314,10 @@ class VoiceCacheManager:
         """获取语音数据（自动缓存）"""
         # 输入验证
         if not isinstance(text, str) or not text:
-            logger.error(f"无效的文本: {text}")
+            logger.exception(f"无效的文本: {text}")
             raise ValueError("文本不能为空")
         if not isinstance(voice, str) or not voice:
-            logger.error(f"无效的语音名称: {voice}")
+            logger.exception(f"无效的语音名称: {voice}")
             raise ValueError("语音名称不能为空")
 
         logger.debug(f"获取语音: text='{text}', voice='{voice}'")
@@ -347,7 +347,7 @@ class VoiceCacheManager:
                 self._add_to_memory_cache(cache_key, data, fs)
                 return data, fs
             except Exception as e:
-                logger.error(f"读取缓存失败: {e}")
+                logger.exception(f"读取缓存失败: {e}")
         else:
             logger.debug(f"未命中缓存，生成新语音: {cache_key}")
 
@@ -396,28 +396,28 @@ class VoiceCacheManager:
                 return data, fs
             except NoAudioReceived as e:
                 retry_count += 1
-                logger.error(
+                logger.exception(
                     f"生成语音失败，未接收到音频数据，重试{retry_count}/{max_retries}: {type(e).__name__} {e}"
                 )
                 if retry_count < max_retries:
                     await asyncio.sleep(1)
             except WebSocketError as e:
                 retry_count += 1
-                logger.error(
+                logger.exception(
                     f"生成语音失败，WebSocket通信错误，重试{retry_count}/{max_retries}: {type(e).__name__} {e}"
                 )
                 if retry_count < max_retries:
                     await asyncio.sleep(1)
             except Exception as e:
                 retry_count += 1
-                logger.error(
+                logger.exception(
                     f"生成语音失败，重试{retry_count}/{max_retries}: {type(e).__name__} {e}"
                 )
                 if retry_count < max_retries:
                     await asyncio.sleep(1)
 
         # 最终失败时的降级处理
-        logger.error("生成语音失败，已达到最大重试次数")
+        logger.exception("生成语音失败，已达到最大重试次数")
         raise RuntimeError("生成语音失败")
 
     def _generate_cache_key(self, text: str, voice: str) -> str:
@@ -481,7 +481,7 @@ class VoiceCacheManager:
             with self._disk_cache_lock:
                 sf.write(file_path, data, fs)
         except Exception as e:
-            logger.error(f"保存缓存失败: {e}")
+            logger.exception(f"保存缓存失败: {e}")
 
     def _check_and_cleanup(self) -> None:
         """检查并执行缓存清理"""
@@ -507,7 +507,7 @@ class VoiceCacheManager:
             logger.info("缓存清理：本地音频文件不会过期，跳过文件删除")
             # 可以在这里添加其他清理逻辑，如日志清理等
         except Exception as e:
-            logger.error(f"缓存清理失败: {e}")
+            logger.exception(f"缓存清理失败: {e}")
 
 
 class LoadBalancer:
@@ -560,11 +560,11 @@ class LoadBalancer:
                 or cpu_percent < 0
                 or cpu_percent > 100
             ):
-                logger.error("CPU使用率异常，使用基础队列大小")
+                logger.exception("CPU使用率异常，使用基础队列大小")
                 return self.BASE_QUEUE_SIZE
 
             if not isinstance(mem_available, (int, float)) or mem_available < 0:
-                logger.error("内存信息异常，使用基础队列大小")
+                logger.exception("内存信息异常，使用基础队列大小")
                 return self.BASE_QUEUE_SIZE
 
             # 计算基于CPU的队列大小调整系数
@@ -605,7 +605,7 @@ class LoadBalancer:
             return queue_size
         except Exception as e:
             # 异常处理，确保方法总是返回有效值
-            logger.error(f"获取系统负载信息失败: {e}，使用基础队列大小")
+            logger.exception(f"获取系统负载信息失败: {e}，使用基础队列大小")
             return self.BASE_QUEUE_SIZE
 
 
@@ -658,7 +658,7 @@ class TTSHandler:
                     )
                     logger.info("Windows系统TTS引擎初始化成功")
                 else:
-                    logger.error(
+                    logger.exception(
                         "Windows系统TTS引擎需要Windows 10及以上系统且非x86架构"
                     )
 
@@ -686,17 +686,17 @@ class TTSHandler:
                         )
                         logger.info("Linux系统TTS引擎初始化成功 (使用espeak)")
                     else:
-                        logger.error(
+                        logger.exception(
                             "Linux系统TTS引擎需要安装espeak: sudo apt-get install espeak"
                         )
                 except Exception as e:
-                    logger.error(f"Linux系统TTS引擎初始化失败: {e}")
+                    logger.exception(f"Linux系统TTS引擎初始化失败: {e}")
 
             else:
-                logger.error(f"不支持的操作系统: {system}，系统TTS功能不可用")
+                logger.exception(f"不支持的操作系统: {system}，系统TTS功能不可用")
 
         except Exception as e:
-            logger.error(f"TTS引擎初始化失败: {e}")
+            logger.exception(f"TTS引擎初始化失败: {e}")
             self.voice_engine = None
 
     @require_permission("tts.use")
@@ -711,16 +711,16 @@ class TTSHandler:
         """主入口函数"""
         # 输入验证
         if not isinstance(config, dict):
-            logger.error(f"无效的配置: {config}")
+            logger.exception(f"无效的配置: {config}")
             return
         if not isinstance(student_names, list):
-            logger.error(f"无效的学生名单: {student_names}")
+            logger.exception(f"无效的学生名单: {student_names}")
             return
         if engine_type not in [0, 1]:
-            logger.error(f"无效的引擎类型: {engine_type}")
+            logger.exception(f"无效的引擎类型: {engine_type}")
             return
         if not isinstance(voice_name, str):
-            logger.error(f"无效的语音名称: {voice_name}")
+            logger.exception(f"无效的语音名称: {voice_name}")
             return
 
         try:
@@ -786,7 +786,7 @@ class TTSHandler:
                 logger.info("Edge TTS播报")
 
         except Exception as e:
-            logger.error(f"语音播报失败: {e}", exc_info=True)
+            logger.exception(f"语音播报失败: {e}", exc_info=True)
 
     def _handle_system_tts(
         self, student_names: List[str], config: Dict[str, Any]
@@ -806,19 +806,19 @@ class TTSHandler:
                 if isinstance(system_volume_size, (int, str)):
                     restore_volume(int(system_volume_size))
         except Exception as e:
-            logger.error(f"系统音量控制处理失败: {e}")
+            logger.exception(f"系统音量控制处理失败: {e}")
             # 继续执行，不影响语音播报
 
         with self.system_tts_lock:
             if self.voice_engine is None:
-                logger.error("系统TTS引擎未初始化，无法播放语音")
+                logger.exception("系统TTS引擎未初始化，无法播放语音")
                 return
             for name in student_names:
                 try:
                     self.voice_engine.say(f"{name}")
                     self.voice_engine.iterate()
                 except Exception as e:
-                    logger.error(f"处理{name}失败: {e}")
+                    logger.exception(f"处理{name}失败: {e}")
 
     def _init_system_tts(self, config: Dict[str, Any]) -> Optional[Any]:
         """初始化系统TTS引擎（跨平台支持）"""
@@ -844,7 +844,7 @@ class TTSHandler:
             return engine
 
         except Exception as e:
-            logger.error(f"初始化系统TTS引擎失败: {e}")
+            logger.exception(f"初始化系统TTS引擎失败: {e}")
             return None
 
     def _handle_edge_tts(
@@ -874,7 +874,7 @@ class TTSHandler:
                 if isinstance(system_volume_size, (int, str)):
                     restore_volume(int(system_volume_size))
         except Exception as e:
-            logger.error(f"系统音量控制处理失败: {e}")
+            logger.exception(f"系统音量控制处理失败: {e}")
             # 继续执行，不影响语音播报
 
         # 设置播放音量，转换为0.0-1.0范围
@@ -888,9 +888,9 @@ class TTSHandler:
                 data, fs = self.cache_manager.get_voice(name, voice_name)
                 # 提交播放任务
                 if not self.playback_system.add_task((data, fs)):
-                    logger.error(f"提交播放任务失败: {name}")
+                    logger.exception(f"提交播放任务失败: {name}")
             except Exception as e:
-                logger.error(f"处理{name}失败: {e}")
+                logger.exception(f"处理{name}失败: {e}")
 
         logger.debug("所有语音播放任务已提交，将异步播放")
 
@@ -908,4 +908,4 @@ class TTSHandler:
                 try:
                     self.voice_engine.stop()
                 except Exception as e:
-                    logger.error(f"停止系统TTS引擎失败: {e}")
+                    logger.exception(f"停止系统TTS引擎失败: {e}")

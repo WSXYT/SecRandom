@@ -92,7 +92,7 @@ class SetPoolNameWindow(QWidget):
                 self.text_edit.setPlainText("\n".join(pool_names))
                 self.initial_pool_names = pool_names.copy()  # 保存初始奖池列表
         except Exception as e:
-            logger.error(f"加载奖池名称失败: {str(e)}")
+            logger.exception(f"加载奖池名称失败: {str(e)}")
             self.initial_pool_names = []  # 出错时设为空列表
 
         input_layout.addWidget(self.text_edit)
@@ -178,7 +178,7 @@ class SetPoolNameWindow(QWidget):
                 # 更新初始奖池列表为当前列表，避免重复提示
                 self.initial_pool_names = current_pool_names.copy()
         except Exception as e:
-            logger.error(f"检测奖池变化失败: {e}")
+            logger.exception(f"检测奖池变化失败: {e}")
 
     def __save_pool_names(self):
         """保存奖池名称"""
@@ -342,7 +342,7 @@ class SetPoolNameWindow(QWidget):
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"保存奖池名称失败: {e}")
+            logger.exception(f"保存奖池名称失败: {e}")
 
     def __cancel(self):
         """取消操作"""

@@ -418,7 +418,7 @@ class lottery_history_table(GroupHeaderCardWidget):
             self.current_row = end_row
 
         except Exception as e:
-            logger.error(f"加载奖品数据失败: {e}")
+            logger.exception(f"加载奖品数据失败: {e}")
             Dialog("错误", f"加载奖品数据失败: {e}", self).exec()
 
     def _load_more_sessions_data(self):
@@ -496,7 +496,7 @@ class lottery_history_table(GroupHeaderCardWidget):
             self.current_row = end_row
 
         except Exception as e:
-            logger.error(f"加载会话数据失败: {e}")
+            logger.exception(f"加载会话数据失败: {e}")
             Dialog("错误", f"加载会话数据失败: {e}", self).exec()
 
     def _load_more_stats_data(self, lottery_name):
@@ -573,7 +573,7 @@ class lottery_history_table(GroupHeaderCardWidget):
             self.current_row = end_row
 
         except Exception as e:
-            logger.error(f"加载统计数据失败: {e}")
+            logger.exception(f"加载统计数据失败: {e}")
             Dialog("错误", f"加载统计数据失败: {e}", self).exec()
 
     def setup_file_watcher(self):
@@ -774,7 +774,7 @@ class lottery_history_table(GroupHeaderCardWidget):
                 self.table.horizontalHeader().setSortIndicatorShown(True)
 
         except Exception as e:
-            logger.error(f"刷新表格数据失败: {str(e)}")
+            logger.exception(f"刷新表格数据失败: {str(e)}")
         finally:
             self.table.blockSignals(False)
 
@@ -886,5 +886,5 @@ class lottery_history_table(GroupHeaderCardWidget):
                     self.subject_comboBox.show()
 
         except Exception as e:
-            logger.error(f"更新课程列表失败: {e}")
+            logger.exception(f"更新课程列表失败: {e}")
             self.available_subjects = []

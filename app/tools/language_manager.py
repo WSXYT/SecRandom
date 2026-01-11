@@ -70,7 +70,7 @@ class SimpleLanguageManager:
                         (module_name, None) for module_name in sorted(discovered)
                     )
             except Exception as e:
-                logger.error(f"枚举语言模块失败: {e}")
+                logger.exception(f"枚举语言模块失败: {e}")
 
         # 扫描所有模块，收集语言代码
         for module_name, file_path in module_entries:
@@ -202,7 +202,7 @@ class SimpleLanguageManager:
                 else:
                     logger.warning("未能通过 pkgutil.walk_packages 发现语言模块")
             except Exception as discovery_error:
-                logger.error(f"枚举语言模块失败: {discovery_error}")
+                logger.exception(f"枚举语言模块失败: {discovery_error}")
 
         if not module_entries:
             logger.warning("未找到任何语言模块，返回空语言数据")
@@ -257,7 +257,7 @@ class SimpleLanguageManager:
                             merged[attr_name] = zh_cn_data
 
             except Exception as e:
-                logger.error(f"导入语言模块 {file_path} 时出错: {e}")
+                logger.exception(f"导入语言模块 {file_path} 时出错: {e}")
                 continue
 
         return merged
@@ -288,10 +288,10 @@ class SimpleLanguageManager:
                             language_data = json.load(f)
                             self._loaded_languages[language_code] = language_data
                     except Exception as e:
-                        logger.error(f"加载语言文件 {filename} 时出错: {e}")
+                        logger.exception(f"加载语言文件 {filename} 时出错: {e}")
 
         except Exception as e:
-            logger.error(f"加载语言文件夹时出错: {e}")
+            logger.exception(f"加载语言文件夹时出错: {e}")
 
     def get_current_language(self) -> str:
         """获取当前语言代码

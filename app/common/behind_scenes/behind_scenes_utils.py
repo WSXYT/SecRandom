@@ -39,7 +39,7 @@ class BehindScenesUtils:
             BehindScenesUtils._cache_timestamp = current_time
             return settings
         except Exception as e:
-            logger.error(f"读取内幕设置失败: {e}")
+            logger.exception(f"读取内幕设置失败: {e}")
             return {}
 
     @staticmethod
@@ -79,7 +79,7 @@ class BehindScenesUtils:
                         return {"enabled": False, "probability": 1.0}
             return {"enabled": False, "probability": 1.0}
         except Exception as e:
-            logger.error(f"获取概率设置失败: {e}")
+            logger.exception(f"获取概率设置失败: {e}")
             return {"enabled": False, "probability": 1.0}
 
     @staticmethod
@@ -176,7 +176,7 @@ class BehindScenesUtils:
 
             return filtered_students, weights
         except Exception as e:
-            logger.error(f"应用内幕设置失败: {e}")
+            logger.exception(f"应用内幕设置失败: {e}")
             return students_dict_list, [1.0] * len(students_dict_list)
 
     @staticmethod
@@ -239,7 +239,7 @@ class BehindScenesUtils:
 
             return filtered_items, weights
         except Exception as e:
-            logger.error(f"应用内幕设置失败: {e}")
+            logger.exception(f"应用内幕设置失败: {e}")
             return items, [1.0] * len(items)
 
     @staticmethod
@@ -271,5 +271,5 @@ class BehindScenesUtils:
 
             return None
         except Exception as e:
-            logger.error(f"确保必中人员失败: {e}")
+            logger.exception(f"确保必中人员失败: {e}")
             return None

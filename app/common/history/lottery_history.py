@@ -92,5 +92,5 @@ def save_lottery_history(
 
         return save_history_data("lottery", pool_name, history_data)
     except Exception as e:
-        logger.error(f"保存抽奖历史失败: {e}")
+        logger.exception(f"保存抽奖历史失败: {e}")
         return False

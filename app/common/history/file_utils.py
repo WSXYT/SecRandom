@@ -52,7 +52,7 @@ def load_history_data(history_type: str, file_name: str) -> Dict[str, Any]:
         with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        logger.error(f"加载历史记录数据失败: {e}")
+        logger.exception(f"加载历史记录数据失败: {e}")
         return {}
 
 
@@ -73,7 +73,7 @@ def save_history_data(history_type: str, file_name: str, data: Dict[str, Any]) -
             json.dump(data, f, ensure_ascii=False, indent=4)
         return True
     except Exception as e:
-        logger.error(f"保存历史记录数据失败: {e}")
+        logger.exception(f"保存历史记录数据失败: {e}")
     return False
 
 
@@ -95,5 +95,5 @@ def get_all_history_names(history_type: str) -> List[str]:
         names.sort()
         return names
     except Exception as e:
-        logger.error(f"获取历史记录名称列表失败: {e}")
+        logger.exception(f"获取历史记录名称列表失败: {e}")
         return []

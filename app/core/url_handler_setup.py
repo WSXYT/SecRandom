@@ -19,5 +19,5 @@ def create_url_handler():
         logger.debug("URL处理器初始化完成")
         return url_handler
     except Exception as e:
-        logger.error(f"初始化URL处理器失败: {e}")
+        logger.exception(f"初始化URL处理器失败: {e}")
         return None

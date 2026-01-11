@@ -63,11 +63,11 @@ class LoadDataWorker(QThread):
                         p.get("name", "") for p in prizes if p.get("exist", True)
                     ]
                 except Exception as e:
-                    logger.error(f"获取奖品列表失败: {e}")
+                    logger.exception(f"获取奖品列表失败: {e}")
 
             self.finished.emit(students, prob_data, prize_list)
         except Exception as e:
-            logger.error(f"后台加载数据失败: {e}")
+            logger.exception(f"后台加载数据失败: {e}")
             self.finished.emit([], {}, [])
 
 
@@ -373,9 +373,9 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
             if hasattr(self, "table") and self.table is not None:
                 self.refresh_data()
         except RuntimeError as e:
-            logger.error(f"刷新名单列表时发生错误: {e}")
+            logger.exception(f"刷新名单列表时发生错误: {e}")
         except Exception as e:
-            logger.error(f"刷新名单列表时发生未知错误: {e}")
+            logger.exception(f"刷新名单列表时发生未知错误: {e}")
 
     def refresh_data(self):
         """刷新表格数据"""
@@ -393,7 +393,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         try:
             list_name = self.list_comboBox.currentText()
         except RuntimeError:
-            logger.error("名单下拉框已被销毁")
+            logger.exception("名单下拉框已被销毁")
             return
 
         if not list_name:
@@ -551,7 +551,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
                 )
 
         except Exception as e:
-            logger.error(f"刷新表格数据失败: {str(e)}")
+            logger.exception(f"刷新表格数据失败: {str(e)}")
         finally:
             self.table.blockSignals(False)
 
@@ -560,7 +560,7 @@ class behind_scenes_settings_table(GroupHeaderCardWidget):
         try:
             write_behind_scenes_settings(self.probability_data)
         except Exception as e:
-            logger.error(f"保存概率设置数据失败: {e}")
+            logger.exception(f"保存概率设置数据失败: {e}")
 
     def save_table_data(self, row, col):
         """保存表格编辑的数据"""

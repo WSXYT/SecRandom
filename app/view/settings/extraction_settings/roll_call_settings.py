@@ -645,4 +645,4 @@ class roll_call_student_image_settings(GroupHeaderCardWidget):
         if folder_path:
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder_path)))
         else:
-            logger.error("无法获取学生图片文件夹路径")
+            logger.exception("无法获取学生图片文件夹路径")

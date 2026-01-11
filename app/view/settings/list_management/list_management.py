@@ -152,9 +152,9 @@ class roll_call_list(GroupHeaderCardWidget):
                         readme_settings_async("roll_call_list", "select_class_name")
                     )
         except RuntimeError as e:
-            logger.error(f"初始化班级列表时发生错误: {e}")
+            logger.exception(f"初始化班级列表时发生错误: {e}")
         except Exception as e:
-            logger.error(f"初始化班级列表时发生未知错误: {e}")
+            logger.exception(f"初始化班级列表时发生未知错误: {e}")
         if hasattr(self, "class_name_combo") and self.class_name_combo is not None:
             try:
                 self.class_name_combo.currentIndexChanged.connect(
@@ -165,9 +165,9 @@ class roll_call_list(GroupHeaderCardWidget):
                     )
                 )
             except RuntimeError as e:
-                logger.error(f"连接班级下拉框信号时发生错误: {e}")
+                logger.exception(f"连接班级下拉框信号时发生错误: {e}")
             except Exception as e:
-                logger.error(f"连接班级下拉框信号时发生未知错误: {e}")
+                logger.exception(f"连接班级下拉框信号时发生未知错误: {e}")
 
         # 设置文件系统监视器
         self.setup_file_watcher()
@@ -371,7 +371,7 @@ class roll_call_list(GroupHeaderCardWidget):
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"学生名单导出失败: {message}")
+            logger.exception(f"学生名单导出失败: {message}")
 
     def setup_file_watcher(self):
         """设置文件系统监视器，监控班级名单文件夹的变化 - 使用共享监视器"""
@@ -452,9 +452,9 @@ class roll_call_list(GroupHeaderCardWidget):
                 except RuntimeError:
                     pass  # 按钮已删除，跳过设置
         except RuntimeError as e:
-            logger.error(f"更新按钮状态时发生错误: {e}")
+            logger.exception(f"更新按钮状态时发生错误: {e}")
         except Exception as e:
-            logger.error(f"更新按钮状态时发生未知错误: {e}")
+            logger.exception(f"更新按钮状态时发生未知错误: {e}")
 
     def cleanup_file_watcher(self):
         """清理文件系统监视器"""
@@ -523,9 +523,9 @@ class roll_call_list(GroupHeaderCardWidget):
 
             # logger.debug(f"班级列表已刷新，共 {len(class_list)} 个班级")
         except RuntimeError as e:
-            logger.error(f"刷新班级列表时发生错误: {e}")
+            logger.exception(f"刷新班级列表时发生错误: {e}")
         except Exception as e:
-            logger.error(f"刷新班级列表时发生未知错误: {e}")
+            logger.exception(f"刷新班级列表时发生未知错误: {e}")
 
 
 class lottery_list(GroupHeaderCardWidget):
@@ -629,9 +629,9 @@ class lottery_list(GroupHeaderCardWidget):
                         get_content_name_async("lottery_list", "select_pool_name")
                     )
         except RuntimeError as e:
-            logger.error(f"初始化奖池列表时发生错误: {e}")
+            logger.exception(f"初始化奖池列表时发生错误: {e}")
         except Exception as e:
-            logger.error(f"初始化奖池列表时发生未知错误: {e}")
+            logger.exception(f"初始化奖池列表时发生未知错误: {e}")
         if hasattr(self, "pool_name_combo") and self.pool_name_combo is not None:
             try:
                 self.pool_name_combo.currentIndexChanged.connect(
@@ -642,9 +642,9 @@ class lottery_list(GroupHeaderCardWidget):
                     )
                 )
             except RuntimeError as e:
-                logger.error(f"连接奖池下拉框信号时发生错误: {e}")
+                logger.exception(f"连接奖池下拉框信号时发生错误: {e}")
             except Exception as e:
-                logger.error(f"连接奖池下拉框信号时发生未知错误: {e}")
+                logger.exception(f"连接奖池下拉框信号时发生未知错误: {e}")
 
         # 设置文件系统监视器
         self.setup_file_watcher()
@@ -833,7 +833,7 @@ class lottery_list(GroupHeaderCardWidget):
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"奖品名单导出失败: {message}")
+            logger.exception(f"奖品名单导出失败: {message}")
 
     def setup_file_watcher(self):
         """设置文件系统监视器，监控奖池名单文件夹的变化 - 使用共享监视器"""
@@ -906,9 +906,9 @@ class lottery_list(GroupHeaderCardWidget):
                 except RuntimeError:
                     pass  # 按钮已删除，跳过设置
         except RuntimeError as e:
-            logger.error(f"更新奖池按钮状态时发生错误: {e}")
+            logger.exception(f"更新奖池按钮状态时发生错误: {e}")
         except Exception as e:
-            logger.error(f"更新奖池按钮状态时发生未知错误: {e}")
+            logger.exception(f"更新奖池按钮状态时发生未知错误: {e}")
 
     def cleanup_file_watcher(self):
         """清理文件系统监视器"""
@@ -977,6 +977,6 @@ class lottery_list(GroupHeaderCardWidget):
 
             # logger.debug(f"奖池列表已刷新，共 {len(pool_list)} 个奖池")
         except RuntimeError as e:
-            logger.error(f"刷新奖池列表时发生错误: {e}")
+            logger.exception(f"刷新奖池列表时发生错误: {e}")
         except Exception as e:
-            logger.error(f"刷新奖池列表时发生未知错误: {e}")
+            logger.exception(f"刷新奖池列表时发生未知错误: {e}")

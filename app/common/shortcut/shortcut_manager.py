@@ -93,10 +93,10 @@ class ShortcutManager(QObject):
                 else:
                     logger.debug(f"快捷键热键为空: {config_key} = {shortcut_str}")
             except Exception as e:
-                logger.error(f"注册快捷键失败 {config_key}: {e}")
+                logger.exception(f"注册快捷键失败 {config_key}: {e}")
                 import traceback
 
-                logger.error(traceback.format_exc())
+                logger.exception(traceback.format_exc())
         else:
             logger.debug(f"快捷键未设置: {config_key}")
 
@@ -129,7 +129,7 @@ class ShortcutManager(QObject):
             try:
                 keyboard.remove_hotkey(hotkey)
             except Exception as e:
-                logger.error(f"注销快捷键失败 {config_key}: {e}")
+                logger.exception(f"注销快捷键失败 {config_key}: {e}")
 
         self.shortcuts.clear()
 
@@ -149,7 +149,7 @@ class ShortcutManager(QObject):
                 keyboard.remove_hotkey(old_hotkey)
                 del self.shortcuts[config_key]
             except Exception as e:
-                logger.error(f"注销快捷键失败 {config_key}: {e}")
+                logger.exception(f"注销快捷键失败 {config_key}: {e}")
 
         if shortcut_str and self._enabled:
             try:
@@ -168,7 +168,7 @@ class ShortcutManager(QObject):
                             f"快捷键已更新: {config_key} = {shortcut_str}, 热键: {hotkey}"
                         )
             except Exception as e:
-                logger.error(f"更新快捷键失败 {config_key}: {e}")
+                logger.exception(f"更新快捷键失败 {config_key}: {e}")
 
     def _get_signal_for_key(self, config_key: str) -> Signal:
         """根据配置键获取对应的信号
@@ -207,7 +207,7 @@ class ShortcutManager(QObject):
                 try:
                     keyboard.remove_hotkey(hotkey)
                 except Exception as e:
-                    logger.error(f"注销快捷键失败 {config_key}: {e}")
+                    logger.exception(f"注销快捷键失败 {config_key}: {e}")
             self.shortcuts.clear()
             logger.info("快捷键已禁用")
 
@@ -227,5 +227,5 @@ class ShortcutManager(QObject):
             keyboard.unhook_all()
             logger.debug("已清理所有 keyboard 钩子")
         except Exception as e:
-            logger.error(f"清理 keyboard 钩子失败: {e}")
+            logger.exception(f"清理 keyboard 钩子失败: {e}")
         self.shortcuts.clear()

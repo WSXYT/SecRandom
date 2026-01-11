@@ -42,7 +42,7 @@ def get_roll_call_student_list(
                 )
         return cleaned_students
     except Exception as e:
-        logger.error(f"获取班级学生列表失败: {e}")
+        logger.exception(f"获取班级学生列表失败: {e}")
         return []
 
 
@@ -65,7 +65,7 @@ def get_roll_call_history_data(
         with open_file(history_file, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        logger.error(f"获取点名历史记录数据失败: {e}")
+        logger.exception(f"获取点名历史记录数据失败: {e}")
         return {}
 
 
@@ -365,7 +365,7 @@ def get_lottery_pool_list(
                 )
         return cleaned_lotterys
     except Exception as e:
-        logger.error(f"获取奖池奖品列表失败: {e}")
+        logger.exception(f"获取奖池奖品列表失败: {e}")
         return []
 
 
@@ -388,7 +388,7 @@ def get_lottery_history_data(
         with open_file(history_file, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        logger.error(f"获取抽奖历史记录数据失败: {e}")
+        logger.exception(f"获取抽奖历史记录数据失败: {e}")
         return {}
 
 

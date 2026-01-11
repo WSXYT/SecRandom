@@ -93,7 +93,7 @@ def manage_settings_file():
             with open_file(settings_file, "r", encoding="utf-8") as f:
                 current_settings = json.load(f)
         except Exception as e:
-            logger.error(f"读取设置文件失败: {e}，将重新创建默认设置文件")
+            logger.exception(f"读取设置文件失败: {e}，将重新创建默认设置文件")
             flat_settings = {}
             for first_level_key, first_level_value in default_settings.items():
                 flat_settings[first_level_key] = {}
@@ -184,4 +184,4 @@ def manage_settings_file():
             pass
 
     except Exception as e:
-        logger.error(f"管理设置文件时发生错误: {e}")
+        logger.exception(f"管理设置文件时发生错误: {e}")

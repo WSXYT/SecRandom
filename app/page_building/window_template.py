@@ -177,7 +177,7 @@ class SimpleWindowTemplate(FramelessWindow):
         try:
             qconfig.themeChanged.connect(self._on_theme_changed)
         except Exception as e:
-            logger.error(f"连接信号时发生未知错误: {e}")
+            logger.exception(f"连接信号时发生未知错误: {e}")
 
     def _on_theme_changed(self) -> None:
         """主题变化时自动更新窗口背景"""
@@ -186,7 +186,7 @@ class SimpleWindowTemplate(FramelessWindow):
             self._apply_current_theme()
             pass
         except Exception as e:
-            logger.error(f"主题变化时更新窗口背景失败: {e}")
+            logger.exception(f"主题变化时更新窗口背景失败: {e}")
 
     def _apply_current_theme(self) -> None:
         """应用当前主题设置到窗口"""
@@ -232,7 +232,7 @@ class SimpleWindowTemplate(FramelessWindow):
 
             logger.debug(f"窗口主题已更新为: {current_theme}")
         except Exception as e:
-            logger.error(f"应用主题时出错: {e}")
+            logger.exception(f"应用主题时出错: {e}")
             # 设置默认的浅色背景作为备选
             self.setStyleSheet("background-color: #ffffff;")
             self.default_page.setStyleSheet("background-color: transparent;")
@@ -287,7 +287,7 @@ class SimpleWindowTemplate(FramelessWindow):
                 f"标题栏颜色已设置: 文字色={title_color}, 背景色={background_color}"
             )
         except Exception as e:
-            logger.error(f"设置标题栏颜色失败: {e}")
+            logger.exception(f"设置标题栏颜色失败: {e}")
 
     def create_ui_components(self) -> None:
         """创建UI组件"""
@@ -300,7 +300,7 @@ class SimpleWindowTemplate(FramelessWindow):
             # 添加默认页面到堆叠窗口
             self.stacked_widget.addWidget(self.default_page)
         except Exception as e:
-            logger.error(f"创建UI组件时出错: {e}")
+            logger.exception(f"创建UI组件时出错: {e}")
             raise
 
     def add_page_from_template(
@@ -319,7 +319,7 @@ class SimpleWindowTemplate(FramelessWindow):
         """
         # 输入验证
         if not page_name or not isinstance(page_name, str):
-            logger.error("页面名称必须是非空字符串")
+            logger.exception("页面名称必须是非空字符串")
             return None
 
         if page_name in self.page_instances:
@@ -341,7 +341,7 @@ class SimpleWindowTemplate(FramelessWindow):
             self.pages[page_name] = page_class
             return page_instance
         except Exception as e:
-            logger.error(f"创建页面 {page_name} 时出错: {e}")
+            logger.exception(f"创建页面 {page_name} 时出错: {e}")
             return None
 
     def add_page_from_widget(self, page_name: str, widget: QWidget) -> QWidget:
@@ -377,7 +377,7 @@ class SimpleWindowTemplate(FramelessWindow):
             self.page_instances[page_name] = widget
             return widget
         except Exception as e:
-            logger.error(f"添加页面 {page_name} 到堆叠窗口时出错: {e}")
+            logger.exception(f"添加页面 {page_name} 到堆叠窗口时出错: {e}")
             raise
 
     def get_page(self, page_name: str) -> Optional[QWidget]:
@@ -413,7 +413,7 @@ class SimpleWindowTemplate(FramelessWindow):
         """
         # 输入验证
         if not page_name or not isinstance(page_name, str):
-            logger.error("页面名称必须是非空字符串")
+            logger.exception("页面名称必须是非空字符串")
             return False
 
         if page_name not in self.page_instances:
@@ -441,7 +441,7 @@ class SimpleWindowTemplate(FramelessWindow):
                 del self.pages[page_name]
             return True
         except Exception as e:
-            logger.error(f"移除页面 {page_name} 时出错: {e}")
+            logger.exception(f"移除页面 {page_name} 时出错: {e}")
             return False
 
     def switch_to_page(self, page_name: str) -> bool:
@@ -456,7 +456,7 @@ class SimpleWindowTemplate(FramelessWindow):
         """
         # 输入验证
         if not page_name or not isinstance(page_name, str):
-            logger.error("页面名称必须是非空字符串")
+            logger.exception("页面名称必须是非空字符串")
             return False
 
         if page_name not in self.page_instances:
@@ -475,7 +475,7 @@ class SimpleWindowTemplate(FramelessWindow):
             self.stacked_widget.setCurrentWidget(target_page)
             return True
         except Exception as e:
-            logger.error(f"切换到页面 {page_name} 时出错: {e}")
+            logger.exception(f"切换到页面 {page_name} 时出错: {e}")
             return False
 
     def closeEvent(self, event) -> None:

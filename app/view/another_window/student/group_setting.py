@@ -131,7 +131,7 @@ class GroupSettingWindow(QWidget):
             return groups
 
         except Exception as e:
-            logger.error(f"加载小组失败: {str(e)}")
+            logger.exception(f"加载小组失败: {str(e)}")
             self.initial_groups = []
             return []
 
@@ -309,7 +309,7 @@ class GroupSettingWindow(QWidget):
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"保存小组失败: {e}")
+            logger.exception(f"保存小组失败: {e}")
 
     def __cancel(self):
         """取消操作"""

@@ -470,7 +470,7 @@ class update(QWidget):
                         expected_file_path.unlink()
                         logger.debug(f"已删除损坏的文件: {expected_file_path}")
                     except Exception as e:
-                        logger.error(f"删除损坏文件失败: {e}")
+                        logger.exception(f"删除损坏文件失败: {e}")
 
         # 如果文件完整且存在，直接使用，不需要下载
         if file_exists_and_same_version:
@@ -662,7 +662,7 @@ class update(QWidget):
                     )
                     self.on_complete(file_path)
                 except Exception as e:
-                    logger.error(f"下载任务执行失败: {e}")
+                    logger.exception(f"下载任务执行失败: {e}")
                     # 确保即使发生异常也会调用完成回调
                     self.on_complete(None)
 

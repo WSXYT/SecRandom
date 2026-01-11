@@ -18,5 +18,5 @@ def create_cs_ipc_handler():
         logger.debug("C# IPC 处理器初始化完成")
         return cs_ipc_handler
     except Exception as e:
-        logger.error(f"初始化 C# IPC 处理器失败: {e}")
+        logger.exception(f"初始化 C# IPC 处理器失败: {e}")
         return None

@@ -216,7 +216,7 @@ class BindUsbWindow(QWidget):
                 f"{get_content_name_async('basic_safety_settings', 'usb_bind_success')}: {text}"
             )
         except Exception as e:
-            logger.error(f"绑定设备失败：{device}, 错误：{e}")
+            logger.exception(f"绑定设备失败：{device}, 错误：{e}")
             self._notify_error(str(e))
 
     def __cancel(self):

@@ -20,7 +20,7 @@ class EdgeTTSWorker(QThread):
             voices = self.get_voices()
             self.voices_fetched.emit(voices)
         except Exception as e:
-            logger.error(f"获取Edge TTS语音列表失败: {e}")
+            logger.exception(f"获取Edge TTS语音列表失败: {e}")
             self.error_occurred.emit(str(e))
 
     def get_voices(self):
@@ -94,7 +94,7 @@ class EdgeTTSWorker(QThread):
 
             return filtered_voices
         except Exception as e:
-            logger.error(f"获取Edge TTS语音列表失败: {e}")
+            logger.exception(f"获取Edge TTS语音列表失败: {e}")
             # 返回默认语音列表
             return self.get_default_voices()
 

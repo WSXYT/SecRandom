@@ -175,9 +175,9 @@ class roll_call_table(GroupHeaderCardWidget):
             if hasattr(self, "table") and self.table is not None:
                 self.refresh_data()
         except RuntimeError as e:
-            logger.error(f"刷新班级列表时发生错误: {e}")
+            logger.exception(f"刷新班级列表时发生错误: {e}")
         except Exception as e:
-            logger.error(f"刷新班级列表时发生未知错误: {e}")
+            logger.exception(f"刷新班级列表时发生未知错误: {e}")
 
     def refresh_data(self):
         """刷新表格数据"""
@@ -192,7 +192,7 @@ class roll_call_table(GroupHeaderCardWidget):
         try:
             class_name = self.class_comboBox.currentText()
         except RuntimeError:
-            logger.error("班级下拉框已被销毁")
+            logger.exception("班级下拉框已被销毁")
             return
 
         if not class_name:
@@ -258,7 +258,7 @@ class roll_call_table(GroupHeaderCardWidget):
                 )
 
         except Exception as e:
-            logger.error(f"刷新表格数据失败: {str(e)}")
+            logger.exception(f"刷新表格数据失败: {str(e)}")
         finally:
             # 恢复信号
             self.table.blockSignals(False)
@@ -289,7 +289,7 @@ class roll_call_table(GroupHeaderCardWidget):
             with open_file(student_file, "r", encoding="utf-8") as f:
                 student_data = json.load(f, object_pairs_hook=OrderedDict)
         except Exception as e:
-            logger.error(f"加载学生数据失败: {str(e)}")
+            logger.exception(f"加载学生数据失败: {str(e)}")
             return
 
         # 通过学号找到对应的学生键
@@ -303,7 +303,7 @@ class roll_call_table(GroupHeaderCardWidget):
                 break
 
         if not matched_key:
-            logger.error(f"未找到学号为 {student_id} 的学生，学生姓名: {student_name}")
+            logger.exception(f"未找到学号为 {student_id} 的学生，学生姓名: {student_name}")
             return
 
         # 根据列索引更新相应的字段
@@ -344,7 +344,7 @@ class roll_call_table(GroupHeaderCardWidget):
                 )
             self.table.blockSignals(False)
         except Exception as e:
-            logger.error(f"保存学生数据失败: {str(e)}")
+            logger.exception(f"保存学生数据失败: {str(e)}")
             # 如果保存失败，恢复原来的值
             self.table.blockSignals(True)  # 阻止信号，避免递归调用
             if col == 2:  # 姓名列

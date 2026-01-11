@@ -92,7 +92,7 @@ class SetClassNameWindow(QWidget):
                 self.text_edit.setPlainText("\n".join(class_names))
                 self.initial_class_names = class_names.copy()  # 保存初始班级列表
         except Exception as e:
-            logger.error(f"加载班级名称失败: {str(e)}")
+            logger.exception(f"加载班级名称失败: {str(e)}")
             self.initial_class_names = []  # 出错时设为空列表
 
         input_layout.addWidget(self.text_edit)
@@ -178,7 +178,7 @@ class SetClassNameWindow(QWidget):
                 # 更新初始班级列表为当前列表，避免重复提示
                 self.initial_class_names = current_class_names.copy()
         except Exception as e:
-            logger.error(f"检测班级变化失败: {e}")
+            logger.exception(f"检测班级变化失败: {e}")
 
     def __save_class_names(self):
         """保存班级名称"""
@@ -347,7 +347,7 @@ class SetClassNameWindow(QWidget):
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"保存班级名称失败: {e}")
+            logger.exception(f"保存班级名称失败: {e}")
 
     def __close_window(self):
         """关闭窗口"""

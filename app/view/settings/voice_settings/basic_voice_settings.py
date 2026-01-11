@@ -172,11 +172,11 @@ class basic_settings_voice_engine(GroupHeaderCardWidget):
 
             logger.debug(f"Edge TTS语音列表已更新，共{len(voices)}个语音")
         except Exception as e:
-            logger.error(f"处理Edge TTS语音列表失败: {e}")
+            logger.exception(f"处理Edge TTS语音列表失败: {e}")
 
     def on_voices_fetch_error(self, error):
         """语音列表获取失败后的处理"""
-        logger.error(f"获取Edge TTS语音列表失败: {error}")
+        logger.exception(f"获取Edge TTS语音列表失败: {error}")
 
     def __del__(self):
         """析构函数，确保worker正确终止"""

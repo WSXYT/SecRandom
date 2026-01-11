@@ -96,10 +96,10 @@ class MusicPlayer:
 
             music_path = get_audio_path(f"music/{music_file}")
             if not music_path.exists():
-                logger.error(f"音乐文件不存在: {music_path}")
+                logger.exception(f"音乐文件不存在: {music_path}")
                 return False
         except Exception as e:
-            logger.error(f"获取音乐文件路径失败: {e}")
+            logger.exception(f"获取音乐文件路径失败: {e}")
             return False
 
         # 从设置中获取音量和渐入渐出时长
@@ -125,7 +125,7 @@ class MusicPlayer:
             )
             self._fade_out_duration = fade_out_ms / 1000.0
         except Exception as e:
-            logger.error(f"获取音乐设置失败: {e}")
+            logger.exception(f"获取音乐设置失败: {e}")
             self._volume = 1.0
             self._fade_in_duration = 0.0
             self._fade_out_duration = 0.0
@@ -208,7 +208,7 @@ class MusicPlayer:
                     data = np.mean(data, axis=1)
                 data = data.astype(np.float32)
             except Exception as e:
-                logger.error(f"读取音乐文件失败: {e}")
+                logger.exception(f"读取音乐文件失败: {e}")
                 return
 
             # 初始化音频流（只初始化一次）
@@ -221,7 +221,7 @@ class MusicPlayer:
                 )
                 stream.start()
             except Exception as e:
-                logger.error(f"初始化音频流失败: {e}")
+                logger.exception(f"初始化音频流失败: {e}")
                 return
 
             # 计算渐入步数
@@ -254,7 +254,7 @@ class MusicPlayer:
                     try:
                         stream.write(chunk)
                     except Exception as e:
-                        logger.error(f"写入音频流失败: {e}")
+                        logger.exception(f"写入音频流失败: {e}")
                         break
 
                 # 如果不循环或者收到停止信号，退出循环
@@ -262,7 +262,7 @@ class MusicPlayer:
                     break
 
         except Exception as e:
-            logger.error(f"音乐播放工作线程异常: {e}")
+            logger.exception(f"音乐播放工作线程异常: {e}")
         finally:
             # 确保音频流关闭
             if stream:
@@ -270,7 +270,7 @@ class MusicPlayer:
                     stream.stop()
                     stream.close()
                 except Exception as e:
-                    logger.error(f"关闭音频流失败: {e}")
+                    logger.exception(f"关闭音频流失败: {e}")
             self._is_playing = False
             logger.debug("音乐播放工作线程结束")
 

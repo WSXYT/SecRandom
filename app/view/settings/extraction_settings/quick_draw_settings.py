@@ -192,7 +192,7 @@ class quick_draw_extraction_function(GroupHeaderCardWidget):
                     data = self.fn()
                     self.signals.loaded.emit(data)
                 except Exception as e:
-                    logger.error(f"后台加载 quick_draw_settings 数据失败: {e}")
+                    logger.exception(f"后台加载 quick_draw_settings 数据失败: {e}")
 
         def _collect():
             data = {}
@@ -224,7 +224,7 @@ class quick_draw_extraction_function(GroupHeaderCardWidget):
                     "quick_draw_settings", "default_class"
                 )
             except Exception as e:
-                logger.error(f"收集 quick_draw_settings 初始数据失败: {e}")
+                logger.exception(f"收集 quick_draw_settings 初始数据失败: {e}")
             return data
 
         signals = _Signals()
@@ -262,7 +262,7 @@ class quick_draw_extraction_function(GroupHeaderCardWidget):
 
             self.on_draw_mode_changed()
         except Exception as e:
-            logger.error(f"回填 quick_draw_settings 数据失败: {e}")
+            logger.exception(f"回填 quick_draw_settings 数据失败: {e}")
 
     def on_draw_mode_changed(self):
         """当抽取模式改变时的处理逻辑"""
@@ -706,4 +706,4 @@ class quick_draw_student_image_settings(GroupHeaderCardWidget):
         if folder_path:
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder_path)))
         else:
-            logger.error("无法获取学生图片文件夹路径")
+            logger.exception("无法获取学生图片文件夹路径")

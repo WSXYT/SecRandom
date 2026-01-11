@@ -89,7 +89,7 @@ if CSHARP_AVAILABLE:
                 return True
             except Exception as e:
                 self.is_running = False
-                logger.error(f"启动 C# IPC 客户端失败: {e}")
+                logger.exception(f"启动 C# IPC 客户端失败: {e}")
                 return False
 
         def stop_ipc_client(self):
@@ -195,7 +195,7 @@ if CSHARP_AVAILABLE:
 
                 return total_seconds
             except Exception as e:
-                logger.error(f"获取距离上课时间失败: {e}")
+                logger.exception(f"获取距离上课时间失败: {e}")
                 return 0
 
         def get_current_class_info(self) -> dict:
@@ -230,7 +230,7 @@ if CSHARP_AVAILABLE:
                 return {"name": class_name}
 
             except Exception as e:
-                logger.error(f"从 ClassIsland 获取课程信息失败: {e}")
+                logger.exception(f"从 ClassIsland 获取课程信息失败: {e}")
                 return {}
 
         def get_next_class_info(self) -> dict:
@@ -265,7 +265,7 @@ if CSHARP_AVAILABLE:
                 return {"name": class_name}
 
             except Exception as e:
-                logger.error(f"从 ClassIsland 获取下一节课信息失败: {e}")
+                logger.exception(f"从 ClassIsland 获取下一节课信息失败: {e}")
                 return {}
 
         @staticmethod
@@ -335,7 +335,7 @@ if CSHARP_AVAILABLE:
             except asyncio.CancelledError:
                 pass
             except Exception as e:
-                logger.error(f"C# IPC 客户端循环出错: {e}")
+                logger.exception(f"C# IPC 客户端循环出错: {e}")
             finally:
                 self.loop.close()
                 self.loop = None

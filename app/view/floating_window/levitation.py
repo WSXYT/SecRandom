@@ -1474,7 +1474,7 @@ class LevitationWindow(QWidget):
                 self.arrow_button.setIcon(icon)
                 self.arrow_button.setIconSize(self._storage_icon_size)
             except Exception as e:
-                logger.error(f"加载图标失败: {e}")
+                logger.exception(f"加载图标失败: {e}")
                 # 回退到箭头模式
                 if direction == "right":
                     self.arrow_button.setText(">")
@@ -1757,7 +1757,7 @@ class DraggableWidget(QWidget):
         try:
             self.raise_()  # 将窗口提升到最前面
         except Exception as e:
-            logger.error(f"保持窗口置顶失败: {e}")
+            logger.exception(f"保持窗口置顶失败: {e}")
 
     def closeEvent(self, event):
         """窗口关闭事件 - 清理所有定时器资源"""

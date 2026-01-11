@@ -146,7 +146,7 @@ class lottery_extraction_function(GroupHeaderCardWidget):
                     data = self.fn()
                     self.signals.loaded.emit(data)
                 except Exception as e:
-                    logger.error(f"后台加载 lottery_settings 数据失败: {e}")
+                    logger.exception(f"后台加载 lottery_settings 数据失败: {e}")
 
         def _collect():
             data = {}
@@ -167,7 +167,7 @@ class lottery_extraction_function(GroupHeaderCardWidget):
                     "lottery_settings", "half_repeat"
                 )
             except Exception as e:
-                logger.error(f"收集 lottery_settings 初始数据失败: {e}")
+                logger.exception(f"收集 lottery_settings 初始数据失败: {e}")
             return data
 
         signals = _Signals()
@@ -190,7 +190,7 @@ class lottery_extraction_function(GroupHeaderCardWidget):
 
             self.on_draw_mode_changed()
         except Exception as e:
-            logger.error(f"回填 lottery_settings 数据失败: {e}")
+            logger.exception(f"回填 lottery_settings 数据失败: {e}")
 
     def setup_file_watcher(self):
         """设置文件系统监视器，监控奖池名单文件夹的变化"""
@@ -645,4 +645,4 @@ class lottery_lottery_image_settings(GroupHeaderCardWidget):
         if folder_path:
             QDesktopServices.openUrl(QUrl.fromLocalFile(str(folder_path)))
         else:
-            logger.error("无法获取奖品图片文件夹路径")
+            logger.exception("无法获取奖品图片文件夹路径")

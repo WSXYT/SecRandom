@@ -498,7 +498,7 @@ class PivotPageTemplate(QFrame):
                 self.stacked_widget.setCurrentWidget(scroll_area)
 
         except (ImportError, AttributeError) as e:
-            logger.error(f"无法导入页面组件 {page_name}: {e}")
+            logger.exception(f"无法导入页面组件 {page_name}: {e}")
 
             # 清除加载提示（安全地移除所有子项）
             try:
@@ -627,7 +627,7 @@ class PivotPageTemplate(QFrame):
             info["widget"] = None
             info["loaded"] = False
         except Exception as e:
-            logger.error(f"卸载页面 {page_name} 失败: {e}")
+            logger.exception(f"卸载页面 {page_name} 失败: {e}")
 
     def load_all_pages(self, interval_ms: int = 50, max_per_tick: int = 5):
         """

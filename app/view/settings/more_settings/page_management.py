@@ -63,7 +63,7 @@ class page_management(QWidget):
                 # 使用QTimer.singleShot创建定时器
                 QTimer.singleShot(150 * i, lambda n=name: self._safe_create_deferred(n))
         except Exception as e:
-            logger.error(f"调度延迟创建子组件失败: {e}")
+            logger.exception(f"调度延迟创建子组件失败: {e}")
 
     def _safe_create_deferred(self, name: str):
         """安全地创建延迟注册的子组件，使用弱引用避免访问已销毁的对象"""
@@ -84,10 +84,10 @@ class page_management(QWidget):
                 logger.debug(f"对象已销毁，取消创建子组件 {name}")
                 return
             else:
-                logger.error(f"创建子组件 {name} 时发生运行时错误: {e}")
+                logger.exception(f"创建子组件 {name} 时发生运行时错误: {e}")
                 return
         except Exception as e:
-            logger.error(f"创建子组件 {name} 时发生未知错误: {e}")
+            logger.exception(f"创建子组件 {name} 时发生未知错误: {e}")
             return
 
     def _create_deferred(self, name: str):
@@ -114,7 +114,7 @@ class page_management(QWidget):
             real_widget = factory()
             elapsed = time.perf_counter() - start
         except Exception as e:
-            logger.error(f"创建子组件 {name} 失败: {e}")
+            logger.exception(f"创建子组件 {name} 失败: {e}")
             return
 
         # 再次检查对象是否仍然有效
@@ -139,7 +139,7 @@ class page_management(QWidget):
                 setattr(self, name, real_widget)
                 logger.debug(f"延迟创建子组件 {name} 耗时: {elapsed:.3f}s")
             except RuntimeError as e:
-                logger.error(f"将子组件 {name} 插入主布局失败: {e}")
+                logger.exception(f"将子组件 {name} 插入主布局失败: {e}")
             return
 
         # 尝试获取占位符的布局
@@ -161,7 +161,7 @@ class page_management(QWidget):
                 setattr(self, name, real_widget)
                 logger.debug(f"延迟创建子组件 {name} 耗时: {elapsed:.3f}s")
             except RuntimeError as e:
-                logger.error(f"绑定子组件 {name} 到占位容器失败: {e}")
+                logger.exception(f"绑定子组件 {name} 到占位容器失败: {e}")
         else:
             # 没有布局，尝试替换占位符
             try:
@@ -187,7 +187,7 @@ class page_management(QWidget):
                     setattr(self, name, real_widget)
                     logger.debug(f"延迟创建子组件 {name} 耗时: {elapsed:.3f}s")
             except RuntimeError as e:
-                logger.error(f"替换占位 {name} 失败: {e}")
+                logger.exception(f"替换占位 {name} 失败: {e}")
 
 
 class page_management_roll_call(GroupHeaderCardWidget):

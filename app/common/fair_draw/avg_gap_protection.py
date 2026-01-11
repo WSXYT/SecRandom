@@ -234,7 +234,7 @@ def apply_avg_gap_protection(
             pool_initial = _sort_candidates_by_count(pool_initial, student_counts)
 
     except Exception as e:
-        logger.error(f"应用平均值差值保护时发生错误: {e}", exc_info=True)
+        logger.exception(f"应用平均值差值保护时发生错误: {e}", exc_info=True)
         # 发生错误时，返回原始候选列表，确保系统可用性
         return candidates
 

@@ -50,7 +50,7 @@ def _run_async_func(async_func: Any, *args: Any, **kwargs: Any) -> Any:
     try:
         return asyncio.run(async_func(*args, **kwargs))
     except Exception as e:
-        logger.error(f"运行异步函数失败: {e}")
+        logger.exception(f"运行异步函数失败: {e}")
         return None
 
 
@@ -68,13 +68,13 @@ def check_zip_integrity(zip_path: str) -> bool:
 
         # 检查文件是否存在
         if not Path(zip_path).exists():
-            logger.error(f"ZIP文件不存在: {zip_path}")
+            logger.exception(f"ZIP文件不存在: {zip_path}")
             return False
 
         # 检查文件大小
         file_size = Path(zip_path).stat().st_size
         if file_size == 0:
-            logger.error(f"ZIP文件大小为0: {zip_path}")
+            logger.exception(f"ZIP文件大小为0: {zip_path}")
             return False
 
         # 尝试打开并测试ZIP文件
@@ -82,22 +82,22 @@ def check_zip_integrity(zip_path: str) -> bool:
             # 测试ZIP文件的完整性
             bad_file = zip_ref.testzip()
             if bad_file is not None:
-                logger.error(f"ZIP文件损坏，损坏的文件: {bad_file}")
+                logger.exception(f"ZIP文件损坏，损坏的文件: {bad_file}")
                 return False
 
             # 检查ZIP文件是否为空
             file_list = zip_ref.namelist()
             if not file_list:
-                logger.error(f"ZIP文件为空: {zip_path}")
+                logger.exception(f"ZIP文件为空: {zip_path}")
                 return False
 
         logger.debug(f"ZIP文件完整性检查通过: {zip_path}")
         return True
     except zipfile.BadZipFile as e:
-        logger.error(f"ZIP文件格式错误: {e}")
+        logger.exception(f"ZIP文件格式错误: {e}")
         return False
     except Exception as e:
-        logger.error(f"检查ZIP文件完整性失败: {e}")
+        logger.exception(f"检查ZIP文件完整性失败: {e}")
         return False
 
 
@@ -115,13 +115,13 @@ def check_deb_integrity(deb_path: str) -> bool:
 
         # 检查文件是否存在
         if not Path(deb_path).exists():
-            logger.error(f"DEB文件不存在: {deb_path}")
+            logger.exception(f"DEB文件不存在: {deb_path}")
             return False
 
         # 检查文件大小
         file_size = Path(deb_path).stat().st_size
         if file_size == 0:
-            logger.error(f"DEB文件大小为0: {deb_path}")
+            logger.exception(f"DEB文件大小为0: {deb_path}")
             return False
 
         # DEB包实际上是ar归档格式
@@ -130,7 +130,7 @@ def check_deb_integrity(deb_path: str) -> bool:
             # 检查ar文件签名
             magic = f.read(8)
             if not magic.startswith(b"!<arch>"):
-                logger.error(f"DEB文件格式错误，不是有效的ar归档: {deb_path}")
+                logger.exception(f"DEB文件格式错误，不是有效的ar归档: {deb_path}")
                 return False
 
             # 读取ar文件内容
@@ -139,21 +139,21 @@ def check_deb_integrity(deb_path: str) -> bool:
 
             # 检查是否包含必要的文件（debian-binary, control.tar.gz, data.tar.gz）
             if b"debian-binary" not in content:
-                logger.error(f"DEB文件缺少debian-binary: {deb_path}")
+                logger.exception(f"DEB文件缺少debian-binary: {deb_path}")
                 return False
 
             if b"control.tar" not in content:
-                logger.error(f"DEB文件缺少control.tar: {deb_path}")
+                logger.exception(f"DEB文件缺少control.tar: {deb_path}")
                 return False
 
             if b"data.tar" not in content:
-                logger.error(f"DEB文件缺少data.tar: {deb_path}")
+                logger.exception(f"DEB文件缺少data.tar: {deb_path}")
                 return False
 
         logger.debug(f"DEB包完整性检查通过: {deb_path}")
         return True
     except Exception as e:
-        logger.error(f"检查DEB包完整性失败: {e}")
+        logger.exception(f"检查DEB包完整性失败: {e}")
         return False
 
 
@@ -176,7 +176,7 @@ def check_update_file_integrity(file_path: str, file_type: str = None) -> bool:
             elif file_ext == ".deb":
                 file_type = "deb"
             else:
-                logger.error(f"不支持的更新文件类型: {file_ext}")
+                logger.exception(f"不支持的更新文件类型: {file_ext}")
                 return False
 
         # 根据文件类型调用相应的检查函数
@@ -185,10 +185,10 @@ def check_update_file_integrity(file_path: str, file_type: str = None) -> bool:
         elif file_type == "deb":
             return check_deb_integrity(file_path)
         else:
-            logger.error(f"不支持的文件类型: {file_type}")
+            logger.exception(f"不支持的文件类型: {file_type}")
             return False
     except Exception as e:
-        logger.error(f"检查更新文件完整性失败: {e}")
+        logger.exception(f"检查更新文件完整性失败: {e}")
         return False
 
 
@@ -238,7 +238,7 @@ def extract_zip(zip_path: str, target_dir: str | Path, overwrite: bool = True) -
         logger.debug(f"文件解压完成: {zip_path} 到 {target_dir}")
         return True
     except Exception as e:
-        logger.error(f"解压文件失败: {e}")
+        logger.exception(f"解压文件失败: {e}")
         return False
 
 
@@ -338,7 +338,7 @@ async def get_best_source() -> dict:
 
         return best_source
     except Exception as e:
-        logger.error(f"获取最佳镜像源失败: {e}")
+        logger.exception(f"获取最佳镜像源失败: {e}")
         return UPDATE_SOURCES[0]  # 返回默认源
 
 
@@ -359,7 +359,7 @@ def get_update_source_url() -> str:
         else:
             return "https://github.com"
     except Exception as e:
-        logger.error(f"获取更新源 URL 失败: {e}")
+        logger.exception(f"获取更新源 URL 失败: {e}")
         return "https://github.com"
 
 
@@ -379,7 +379,7 @@ async def get_update_source_url_async() -> str:
         else:
             return "https://github.com"
     except Exception as e:
-        logger.error(f"获取更新源 URL 失败: {e}")
+        logger.exception(f"获取更新源 URL 失败: {e}")
         return "https://github.com"
 
 
@@ -508,7 +508,7 @@ async def get_metadata_info_async() -> dict | None:
                 continue
 
         # 所有镜像源都失败了
-        logger.error("所有镜像源都获取 metadata.yaml 文件失败")
+        logger.exception("所有镜像源都获取 metadata.yaml 文件失败")
         return None
     else:
         # 使用指定的更新源
@@ -543,12 +543,12 @@ async def get_metadata_info_async() -> dict | None:
                         )
                         return metadata
             except Exception as e:
-                logger.error(
+                logger.exception(
                     f"使用指定的更新源 {source['name']} 获取 metadata.yaml 失败: {e}"
                 )
                 return None
         else:
-            logger.error(f"无效的更新源索引: {source_index}")
+            logger.exception(f"无效的更新源索引: {source_index}")
             return None
 
 
@@ -601,7 +601,7 @@ async def get_latest_version_async(channel: int | None = None) -> dict | None:
         )
         return {"version": version, "version_no": version_no}
     except Exception as e:
-        logger.error(f"获取最新版本信息失败: {e}")
+        logger.exception(f"获取最新版本信息失败: {e}")
         return None
 
 
@@ -633,7 +633,7 @@ def compare_versions(current_version: str, latest_version: str) -> int:
     try:
         # 检查版本号是否为空
         if not current_version or not latest_version:
-            logger.error(
+            logger.exception(
                 f"比较版本号失败: 版本号为空，current={current_version}, latest={latest_version}"
             )
             return -1
@@ -692,7 +692,7 @@ def compare_versions(current_version: str, latest_version: str) -> int:
 
         return 0  # 版本号完全相同
     except Exception as e:
-        logger.error(f"比较版本号失败: {e}")
+        logger.exception(f"比较版本号失败: {e}")
         return -1
 
 
@@ -740,7 +740,7 @@ def get_update_download_url(
         logger.debug(f"生成更新下载 URL 成功: {download_url}")
         return download_url
     except Exception as e:
-        logger.error(f"生成更新下载 URL 失败: {e}")
+        logger.exception(f"生成更新下载 URL 失败: {e}")
         # 返回默认的 GitHub 下载 URL
         return f"https://github.com/SECTL/SecRandom/releases/download/{version}/SecRandom-{system}-{version}-{arch}-{struct}.zip"
 
@@ -789,7 +789,7 @@ async def get_update_download_url_async(
         logger.debug(f"生成更新下载 URL 成功: {download_url}")
         return download_url
     except Exception as e:
-        logger.error(f"生成更新下载 URL 失败: {e}")
+        logger.exception(f"生成更新下载 URL 失败: {e}")
         # 返回默认的 GitHub 下载 URL
         return f"https://github.com/SECTL/SecRandom/releases/download/{version}/SecRandom-{system}-{version}-{arch}-{struct}.zip"
 
@@ -906,7 +906,7 @@ async def download_update_async(
                         file_path.unlink()
                         logger.info(f"已删除损坏的文件: {file_path}")
                     except Exception as unlink_error:
-                        logger.error(f"删除损坏文件失败: {unlink_error}")
+                        logger.exception(f"删除损坏文件失败: {unlink_error}")
                 # 继续尝试下一个镜像源
                 continue
 
@@ -920,11 +920,11 @@ async def download_update_async(
                     file_path.unlink()
                     logger.info(f"已删除部分下载文件: {file_path}")
                 except Exception as unlink_error:
-                    logger.error(f"删除部分下载文件失败: {unlink_error}")
+                    logger.exception(f"删除部分下载文件失败: {unlink_error}")
             continue
 
     # 所有镜像源都失败了
-    logger.error("所有镜像源都下载更新文件失败")
+    logger.exception("所有镜像源都下载更新文件失败")
     return None
 
 
@@ -982,18 +982,18 @@ async def install_update_async(file_path: str) -> bool:
 
         # 验证更新文件存在
         if not Path(file_path).exists():
-            logger.error(f"更新文件不存在: {file_path}")
+            logger.exception(f"更新文件不存在: {file_path}")
             return False
 
         # 检查更新文件完整性
         if not check_update_file_integrity(file_path):
-            logger.error(f"更新文件不完整或已损坏: {file_path}")
+            logger.exception(f"更新文件不完整或已损坏: {file_path}")
             # 删除损坏的文件
             try:
                 Path(file_path).unlink()
                 logger.info(f"已删除损坏的更新文件: {file_path}")
             except Exception as e:
-                logger.error(f"删除损坏的更新文件失败: {e}")
+                logger.exception(f"删除损坏的更新文件失败: {e}")
             return False
 
         # 判断是否是开发环境
@@ -1026,12 +1026,12 @@ async def install_update_async(file_path: str) -> bool:
                     Path(file_path).unlink()
                     logger.info(f"更新文件已删除: {file_path}")
                 except Exception as e:
-                    logger.error(f"删除更新文件失败: {e}")
+                    logger.exception(f"删除更新文件失败: {e}")
 
                 logger.info(f"开发环境更新文件安装成功: {file_path}")
                 return True
             else:
-                logger.error(f"开发环境更新文件安装失败: {file_path}")
+                logger.exception(f"开发环境更新文件安装失败: {file_path}")
                 return False
         else:
             # 生产环境：新开进程安装，主进程关闭
@@ -1040,7 +1040,7 @@ async def install_update_async(file_path: str) -> bool:
             # 获取根目录
             root_dir = get_app_root()
             if not Path(root_dir).exists():
-                logger.error(f"应用根目录不存在: {root_dir}")
+                logger.exception(f"应用根目录不存在: {root_dir}")
                 return False
 
             # 创建临时安装脚本
@@ -1132,7 +1132,7 @@ def extract_zip(zip_path, target_dir, overwrite=True):
         logger.info(f"文件解压完成: {zip_path} 到 {target_dir}")
         return True
     except Exception as e:
-        logger.error(f"解压文件失败: {e}")
+        logger.exception(f"解压文件失败: {e}")
         return False
 
 
@@ -1151,7 +1151,7 @@ def restart_application(root_dir):
                 break
 
         if not main_program:
-            logger.error("未找到主程序文件")
+            logger.exception("未找到主程序文件")
             return False
 
         logger.info(f"找到主程序文件: {main_program}")
@@ -1181,7 +1181,7 @@ def restart_application(root_dir):
         logger.info("应用程序重启成功")
         return True
     except Exception as e:
-        logger.error(f"重启应用程序失败: {e}")
+        logger.exception(f"重启应用程序失败: {e}")
         return False
 
 
@@ -1197,11 +1197,11 @@ if __name__ == '__main__':
 
         # 验证参数
         if not Path(update_file).exists():
-            logger.error(f"更新文件不存在: {update_file}")
+            logger.exception(f"更新文件不存在: {update_file}")
             sys.exit(1)
 
         if not Path(root_dir).exists():
-            logger.error(f"根目录不存在: {root_dir}")
+            logger.exception(f"根目录不存在: {root_dir}")
             sys.exit(1)
 
         # 等待一段时间，确保主进程已关闭（可配置）
@@ -1224,13 +1224,13 @@ if __name__ == '__main__':
                 Path(update_file).unlink()
                 logger.info(f"更新文件已删除: {update_file}")
             except Exception as e:
-                logger.error(f"删除更新文件失败: {e}")
+                logger.exception(f"删除更新文件失败: {e}")
         else:
-            logger.error("更新安装失败")
+            logger.exception("更新安装失败")
             sys.exit(1)
 
     except Exception as e:
-        logger.error(f"更新安装脚本执行失败: {e}")
+        logger.exception(f"更新安装脚本执行失败: {e}")
         sys.exit(1)
 """
 
@@ -1243,7 +1243,7 @@ if __name__ == '__main__':
                     temp_script_path = temp_script.name
                     logger.debug(f"临时脚本已创建: {temp_script_path}")
             except Exception as e:
-                logger.error(f"创建临时脚本失败: {e}")
+                logger.exception(f"创建临时脚本失败: {e}")
                 return False
 
             try:
@@ -1266,12 +1266,12 @@ if __name__ == '__main__':
                 logger.info("生产环境更新进程已启动，主进程将关闭")
                 sys.exit(0)
             except Exception as e:
-                logger.error(f"启动更新进程失败: {e}")
+                logger.exception(f"启动更新进程失败: {e}")
                 return False
 
             return True
     except Exception as e:
-        logger.error(f"安装更新文件失败: {e}")
+        logger.exception(f"安装更新文件失败: {e}")
         return False
     finally:
         # 说明：
@@ -1618,7 +1618,7 @@ class UpdateCheckThread(QThread):
                     if success:
                         logger.debug("自动安装更新成功")
                     else:
-                        logger.error("自动安装更新失败")
+                        logger.exception("自动安装更新失败")
                     return
                 else:
                     # 文件损坏，需要重新下载
@@ -1630,7 +1630,7 @@ class UpdateCheckThread(QThread):
                         expected_file_path.unlink()
                         logger.debug(f"已删除损坏的文件: {expected_file_path}")
                     except Exception as e:
-                        logger.error(f"删除损坏文件失败: {e}")
+                        logger.exception(f"删除损坏文件失败: {e}")
                     # 继续执行下载流程
 
             if compare_result == 1:
@@ -1698,7 +1698,7 @@ class UpdateCheckThread(QThread):
                                 expected_file_path.unlink()
                                 logger.debug(f"已删除损坏的文件: {expected_file_path}")
                             except Exception as e:
-                                logger.error(f"删除损坏文件失败: {e}")
+                                logger.exception(f"删除损坏文件失败: {e}")
                             # 继续执行下载流程
 
                     # 通知更新页面开始下载
@@ -1776,7 +1776,7 @@ class UpdateCheckThread(QThread):
                         # 更新全局状态
                         update_status_manager.set_download_cancelled()
                     else:
-                        logger.error("自动下载更新失败")
+                        logger.exception("自动下载更新失败")
                         # 通知更新页面下载失败
                         safe_call_update_interface("set_download_failed")
                         # 更新全局状态
@@ -1795,7 +1795,7 @@ class UpdateCheckThread(QThread):
             # 更新上次检查时间
             safe_call_update_interface("update_last_check_time")
         except Exception as e:
-            logger.error(f"启动时检查更新失败: {e}")
+            logger.exception(f"启动时检查更新失败: {e}")
             # 通知更新页面检查失败
             safe_call_update_interface("set_check_failed")
         finally:

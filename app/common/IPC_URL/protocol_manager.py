@@ -39,7 +39,7 @@ class ProtocolManager:
         elif self.is_linux:
             return self._register_linux_protocol()
         else:
-            logger.error(f"不支持的操作系统: {sys.platform}")
+            logger.exception(f"不支持的操作系统: {sys.platform}")
             return False
 
     def unregister_protocol(self) -> bool:
@@ -54,7 +54,7 @@ class ProtocolManager:
         elif self.is_linux:
             return self._unregister_linux_protocol()
         else:
-            logger.error(f"不支持的操作系统: {sys.platform}")
+            logger.exception(f"不支持的操作系统: {sys.platform}")
             return False
 
     def is_protocol_registered(self) -> bool:
@@ -81,7 +81,7 @@ class ProtocolManager:
             return self._register_windows_protocol_current_user(exe_path)
 
         except Exception as e:
-            logger.error(f"Windows协议注册失败: {e}")
+            logger.exception(f"Windows协议注册失败: {e}")
             return False
 
     def _register_windows_protocol_current_user(self, exe_path: str) -> bool:
@@ -105,7 +105,7 @@ class ProtocolManager:
             return True
 
         except Exception as e:
-            logger.error(f"Windows当前用户协议注册失败: {e}")
+            logger.exception(f"Windows当前用户协议注册失败: {e}")
             return False
 
     def _unregister_windows_protocol(self) -> bool:
@@ -115,7 +115,7 @@ class ProtocolManager:
             return self._unregister_windows_protocol_current_user()
 
         except Exception as e:
-            logger.error(f"Windows协议注销失败: {e}")
+            logger.exception(f"Windows协议注销失败: {e}")
             return False
 
     def _unregister_windows_protocol_current_user(self) -> bool:
@@ -138,7 +138,7 @@ class ProtocolManager:
             return True
 
         except Exception as e:
-            logger.error(f"Windows当前用户协议注销失败: {e}")
+            logger.exception(f"Windows当前用户协议注销失败: {e}")
             return False
 
     def _is_windows_protocol_registered(self) -> bool:
@@ -177,7 +177,7 @@ class ProtocolManager:
             return True
 
         except Exception as e:
-            logger.error(f"Linux协议注册失败: {e}")
+            logger.exception(f"Linux协议注册失败: {e}")
             return False
 
     def _unregister_linux_protocol(self) -> bool:
@@ -194,7 +194,7 @@ class ProtocolManager:
             return True
 
         except Exception as e:
-            logger.error(f"Linux协议注销失败: {e}")
+            logger.exception(f"Linux协议注销失败: {e}")
             return False
 
     def _is_linux_protocol_registered(self) -> bool:

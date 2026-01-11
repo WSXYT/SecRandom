@@ -74,9 +74,9 @@ class lottery_table(GroupHeaderCardWidget):
                 )
                 self.lottery_comboBox.currentTextChanged.connect(self.refresh_data)
             except RuntimeError as e:
-                logger.error(f"连接抽奖名单下拉框信号时发生错误: {e}")
+                logger.exception(f"连接抽奖名单下拉框信号时发生错误: {e}")
             except Exception as e:
-                logger.error(f"连接抽奖名单下拉框信号时发生未知错误: {e}")
+                logger.exception(f"连接抽奖名单下拉框信号时发生未知错误: {e}")
 
         self.addGroup(
             get_theme_icon("ic_fluent_class_20_filled"),
@@ -180,9 +180,9 @@ class lottery_table(GroupHeaderCardWidget):
             if hasattr(self, "table") and self.table is not None:
                 self.refresh_data()
         except RuntimeError as e:
-            logger.error(f"刷新抽奖名单列表时发生错误: {e}")
+            logger.exception(f"刷新抽奖名单列表时发生错误: {e}")
         except Exception as e:
-            logger.error(f"刷新抽奖名单列表时发生未知错误: {e}")
+            logger.exception(f"刷新抽奖名单列表时发生未知错误: {e}")
 
     def refresh_data(self):
         """刷新抽奖名单数据"""
@@ -197,7 +197,7 @@ class lottery_table(GroupHeaderCardWidget):
         try:
             pool_name = self.lottery_comboBox.currentText()
         except RuntimeError:
-            logger.error("抽奖名单下拉框已被销毁")
+            logger.exception("抽奖名单下拉框已被销毁")
             return
 
         if not pool_name:
@@ -258,7 +258,7 @@ class lottery_table(GroupHeaderCardWidget):
                 )
 
         except Exception as e:
-            logger.error(f"刷新抽奖名单表格数据失败: {str(e)}")
+            logger.exception(f"刷新抽奖名单表格数据失败: {str(e)}")
         finally:
             # 恢复信号
             self.table.blockSignals(False)
@@ -288,7 +288,7 @@ class lottery_table(GroupHeaderCardWidget):
             with open_file(pool_file, "r", encoding="utf-8") as f:
                 pool_data = json.load(f, object_pairs_hook=OrderedDict)
         except Exception as e:
-            logger.error(f"加载抽奖池数据失败: {str(e)}")
+            logger.exception(f"加载抽奖池数据失败: {str(e)}")
             return
 
         # 通过奖品ID找到对应的奖品键
@@ -302,7 +302,7 @@ class lottery_table(GroupHeaderCardWidget):
                 break
 
         if not matched_key:
-            logger.error(f"未找到奖品ID为 {item_id} 的奖品，奖品名称: {item_name}")
+            logger.exception(f"未找到奖品ID为 {item_id} 的奖品，奖品名称: {item_name}")
             return
 
         # 根据列索引更新相应的字段
@@ -341,7 +341,7 @@ class lottery_table(GroupHeaderCardWidget):
                 )
             self.table.blockSignals(False)
         except Exception as e:
-            logger.error(f"保存抽奖池数据失败: {str(e)}")
+            logger.exception(f"保存抽奖池数据失败: {str(e)}")
             # 如果保存失败，恢复原来的值
             self.table.blockSignals(True)  # 阻止信号，避免递归调用
             if col == 2:  # 奖品名称列

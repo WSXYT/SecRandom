@@ -52,7 +52,7 @@ class URLIPCHandler:
         try:
             return self.protocol_manager.register_protocol()
         except Exception as e:
-            logger.error(f"注册URL协议失败: {e}")
+            logger.exception(f"注册URL协议失败: {e}")
             return False
 
     def unregister_url_protocol(self) -> bool:
@@ -65,7 +65,7 @@ class URLIPCHandler:
         try:
             return self.protocol_manager.unregister_protocol()
         except Exception as e:
-            logger.error(f"注销URL协议失败: {e}")
+            logger.exception(f"注销URL协议失败: {e}")
             return False
 
     def is_protocol_registered(self) -> bool:
@@ -97,7 +97,7 @@ class URLIPCHandler:
             self.is_running = True
             return True
         except Exception as e:
-            logger.error(f"启动IPC服务器失败: {e}")
+            logger.exception(f"启动IPC服务器失败: {e}")
             return False
 
     def stop_ipc_server(self):
@@ -140,11 +140,11 @@ class URLIPCHandler:
                     continue
                 except Exception as e:
                     if self.is_running:
-                        logger.error(f"IPC服务器错误: {e}")
+                        logger.exception(f"IPC服务器错误: {e}")
                     break
 
         except Exception as e:
-            logger.error(f"IPC服务器启动错误: {e}")
+            logger.exception(f"IPC服务器启动错误: {e}")
         finally:
             if "server_socket" in locals():
                 server_socket.close()
@@ -158,7 +158,7 @@ class URLIPCHandler:
                 response = self._process_message(message)
                 client_socket.send(json.dumps(response).encode("utf-8"))
         except Exception as e:
-            logger.error(f"处理IPC消息错误: {e}")
+            logger.exception(f"处理IPC消息错误: {e}")
         finally:
             client_socket.close()
 
@@ -188,7 +188,7 @@ class URLIPCHandler:
                     "type": message_type,
                     "error": str(e),
                 }
-                logger.error(f"消息处理失败 - 类型: {message_type}, 错误: {e}")
+                logger.exception(f"消息处理失败 - 类型: {message_type}, 错误: {e}")
                 return error_response
         else:
             unknown_response = {
@@ -224,7 +224,7 @@ class URLIPCHandler:
             logger.info(f"URL命令执行成功: {url}, 结果: {result}")
             return {"success": True, "result": result}
         except Exception as e:
-            logger.error(f"URL命令执行失败: {url}, 错误: {e}")
+            logger.exception(f"URL命令执行失败: {url}, 错误: {e}")
             return {"success": False, "error": str(e)}
 
     def register_message_handler(self, message_type: str, handler: Callable):
@@ -262,7 +262,7 @@ class URLIPCHandler:
             return json.loads(response_data)
 
         except Exception as e:
-            logger.error(f"发送IPC消息失败: {e}")
+            logger.exception(f"发送IPC消息失败: {e}")
             return None
 
     def _save_port_config(self, port: int):
@@ -286,7 +286,7 @@ class URLIPCHandler:
                     config = json.load(f)
                     return config.get("port")
             except Exception as e:
-                logger.error(f"加载端口配置失败: {e}")
+                logger.exception(f"加载端口配置失败: {e}")
 
         return None
 
@@ -328,7 +328,7 @@ class URLIPCHandler:
             return result
 
         except Exception as e:
-            logger.error(f"URL参数解析失败: {url}, 错误: {e}")
+            logger.exception(f"URL参数解析失败: {url}, 错误: {e}")
             return {"success": False, "error": str(e)}
 
     def execute_url_command(
@@ -361,7 +361,7 @@ class URLIPCHandler:
             logger.info(f"URL命令执行成功: {url}, 结果: {result}")
             return {"success": True, "result": result}
         except Exception as e:
-            logger.error(f"URL命令执行失败: {url}, 错误: {e}")
+            logger.exception(f"URL命令执行失败: {url}, 错误: {e}")
             return {"success": False, "error": str(e)}
 
     def get_available_commands(self) -> Dict[str, Any]:

@@ -114,7 +114,7 @@ class SecurityVerifier(QObject):
             return result
 
         except Exception as e:
-            logger.error(f"验证过程出错: {e}")
+            logger.exception(f"验证过程出错: {e}")
             return False
 
     def _check_attempt_limit(self, command: str) -> bool:
@@ -451,7 +451,7 @@ class CompositeVerifier(SecurityVerifier):
                 result = verifier.verify(verification_data)
                 results.append(result)
             except Exception as e:
-                logger.error(f"验证器执行失败: {e}")
+                logger.exception(f"验证器执行失败: {e}")
                 results.append(False)
 
         if self.require_all:

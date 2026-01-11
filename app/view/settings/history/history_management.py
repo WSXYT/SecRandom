@@ -200,7 +200,7 @@ class roll_call_history(GroupHeaderCardWidget):
                     position=InfoBarPosition.TOP,
                 )
             except Exception as e:
-                logger.error(f"清除点名历史记录失败: {e}")
+                logger.exception(f"清除点名历史记录失败: {e}")
                 # 显示错误通知
                 show_error_notification(
                     title=get_content_name_async(
@@ -430,7 +430,7 @@ class lottery_history(GroupHeaderCardWidget):
                     position=InfoBarPosition.TOP,
                 )
             except Exception as e:
-                logger.error(f"清除抽奖历史记录失败: {e}")
+                logger.exception(f"清除抽奖历史记录失败: {e}")
                 # 显示错误通知
                 show_error_notification(
                     title=get_content_name_async(

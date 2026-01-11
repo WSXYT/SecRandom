@@ -40,7 +40,7 @@ def get_all_names(history_type: str, list_name: str) -> list:
     except Exception as e:
         from loguru import logger
 
-        logger.error(f"获取历史记录中所有名称失败: {e}")
+        logger.exception(f"获取历史记录中所有名称失败: {e}")
         return []
 
 

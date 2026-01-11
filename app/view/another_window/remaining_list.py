@@ -648,7 +648,7 @@ class RemainingListPage(QWidget):
             if self.isVisible() and self.cards:
                 self._update_grid_layout()
         except RuntimeError as e:
-            logger.error(f"延迟布局更新错误: {e}")
+            logger.exception(f"延迟布局更新错误: {e}")
 
     # ------------------------------------------------------------------
     # 外部接口

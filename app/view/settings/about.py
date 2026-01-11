@@ -76,7 +76,7 @@ class about_banner(QWidget):
             data = read_behind_scenes_settings()
             return data.get("banner_click_count", 0)
         except Exception as e:
-            logger.error(f"加载横幅点击次数失败: {e}")
+            logger.exception(f"加载横幅点击次数失败: {e}")
             return 0
 
     def _save_click_count(self, count):
@@ -86,7 +86,7 @@ class about_banner(QWidget):
             data["banner_click_count"] = count
             write_behind_scenes_settings(data)
         except Exception as e:
-            logger.error(f"保存横幅点击次数失败: {e}")
+            logger.exception(f"保存横幅点击次数失败: {e}")
 
     def _on_banner_clicked(self, event):
         """横幅点击事件"""

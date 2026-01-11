@@ -20,7 +20,7 @@ def check_single_instance() -> Tuple[Optional[QSharedMemory], bool]:
             _activate_existing_instance()
             return shared_memory, False
         else:
-            logger.error("无法附加到共享内存")
+            logger.exception("无法附加到共享内存")
             return shared_memory, False
 
     logger.info("单实例检查通过，可以安全启动程序")
@@ -74,7 +74,7 @@ def setup_local_server(
     """
     server = QLocalServer()
     if not server.listen(SHARED_MEMORY_KEY):
-        logger.error(f"无法启动本地服务器: {server.errorString()}")
+        logger.exception(f"无法启动本地服务器: {server.errorString()}")
         return None
 
     server.newConnection.connect(

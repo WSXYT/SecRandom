@@ -294,7 +294,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
             item_type = "学生" if self.current_mode == 0 else "奖品"
             logger.debug(f"已更新{item_type} {name_field} 的语音播报设置")
         except Exception as e:
-            logger.error(f"更新语音播报设置失败: {e}")
+            logger.exception(f"更新语音播报设置失败: {e}")
 
     def setup_file_watcher(self):
         """设置文件系统监视器，监控历史记录文件夹的变化"""
@@ -462,7 +462,7 @@ class voice_announcement_main(GroupHeaderCardWidget):
                 self.original_items.append(row_items)
 
         except Exception as e:
-            logger.error(f"刷新表格数据失败: {str(e)}")
+            logger.exception(f"刷新表格数据失败: {str(e)}")
         finally:
             # 恢复信号
             self.table.blockSignals(False)

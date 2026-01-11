@@ -131,7 +131,7 @@ class GenderSettingWindow(QWidget):
             return genders
 
         except Exception as e:
-            logger.error(f"加载性别失败: {str(e)}")
+            logger.exception(f"加载性别失败: {str(e)}")
             self.initial_genders = []
             return []
 
@@ -311,7 +311,7 @@ class GenderSettingWindow(QWidget):
                 duration=3000,
             )
             show_notification(NotificationType.ERROR, config, parent=self)
-            logger.error(f"保存性别失败: {e}")
+            logger.exception(f"保存性别失败: {e}")
 
     def __cancel(self):
         """取消操作"""
