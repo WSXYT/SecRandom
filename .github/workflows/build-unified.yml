@@ -178,6 +178,31 @@ jobs:
           Compress-Archive -Path zip_dist/SecRandom/* -DestinationPath $outputZip -Force
           echo "目录模式打包完成: $outputZip"
 
+      # Inno Setup 打包
+      - name: Inno Setup 打包
+        if: matrix.platform == 'windows'
+        run: |
+          echo "开始 Inno Setup 打包..."
+          
+          # 确保构建输出目录存在
+          if (!(Test-Path "build")) {
+            mkdir build
+          }
+          
+          # 运行 Inno Setup 编译器
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" SRsetup.iss
+          
+          # 检查安装程序是否生成并移动到 zip 目录
+          if (Test-Path "build/SecRandom setup x64.exe") {
+            # 修改文件名以包含版本号，方便识别
+            $setupName = "SecRandom-setup-${{ github.ref_name }}-${{ matrix.arch }}.exe"
+            Move-Item "build/SecRandom setup x64.exe" "zip/$setupName"
+            echo "Inno Setup 打包完成: zip/$setupName"
+          } else {
+            echo "错误：Inno Setup 安装程序未生成"
+            exit 1
+          }
+
       # Linux 打包操作
       - name: Linux 打包操作
         if: matrix.platform == 'linux'
