@@ -39,7 +39,7 @@ def main():
     logger.remove()
     configure_logging()
 
-    # 仅在非开发环境（版本号不包含 0.0.0）下初始化 Sentry
+    # 仅在 非开发 环境（版本号不包含 0.0.0）下初始化 Sentry
     if "0.0.0" not in VERSION:
 
         def before_send(event, hint):
