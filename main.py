@@ -202,8 +202,10 @@ def main():
         logger.debug("垃圾回收已完成")
 
         logger.info("程序退出流程已完成，正在结束进程")
-        sys.stdout.flush()
-        sys.stderr.flush()
+        if sys.stdout:
+            sys.stdout.flush()
+        if sys.stderr:
+            sys.stderr.flush()
 
         if exit_code == EXIT_CODE_RESTART:
             logger.info("检测到重启信号，正在重启应用程序...")
@@ -255,8 +257,10 @@ def main():
             shared_memory.detach()
         if "local_server" in locals() and local_server:
             local_server.close()
-        sys.stdout.flush()
-        sys.stderr.flush()
+        if sys.stdout:
+            sys.stdout.flush()
+        if sys.stderr:
+            sys.stderr.flush()
         os._exit(1)
 
 
