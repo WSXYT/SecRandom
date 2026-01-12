@@ -60,6 +60,8 @@ def main():
             release=VERSION,
             send_default_pii=True,
             enable_logs=True,
+            # 先1.0（100%上报）试试
+            traces_sample_rate=1.0,
         )
 
     wm.app_start_time = time.perf_counter()
