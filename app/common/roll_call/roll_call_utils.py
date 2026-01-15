@@ -504,6 +504,11 @@ class RollCallUtils:
             group_filter: 小组过滤器
         """
         reset_drawn_record(window, class_name, gender_filter, group_filter)
+        
+        # 清除缓存，确保下次抽取时重新读取记录
+        record_key = f"{class_name}_{gender_filter}_{group_filter}"
+        if record_key in RollCallUtils._drawn_record_cache:
+            del RollCallUtils._drawn_record_cache[record_key]
 
     @staticmethod
     def update_start_button_state(button, total_count):
@@ -637,6 +642,11 @@ class RollCallUtils:
                 group=group_filter,
                 student_name=selected_students,
             )
+            
+            # 清除缓存，确保下次抽取时重新读取最新的已抽取记录
+            record_key = f"{class_name}_{gender_filter}_{group_filter}"
+            if record_key in RollCallUtils._drawn_record_cache:
+                del RollCallUtils._drawn_record_cache[record_key]
 
         if selected_students_dict:
             save_roll_call_history(
